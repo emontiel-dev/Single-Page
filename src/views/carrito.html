@@ -1,0 +1,206 @@
+<div id="carrito-container" class="pos-footer">
+    <style>
+        /* Estilos específicos para el Carrito (Inyectados por carrito.html) */
+
+        /* Contenedor principal del carrito (usa pos-footer) */
+        #carrito-container {
+            /* pos-footer ya define position: fixed, bottom, left, right, padding, border-top, box-shadow, display: flex, gap, z-index */
+            flex-direction: column; /* Apilar contenido verticalmente */
+            align-items: stretch; /* Estirar los elementos hijos */
+            padding-top: var(--espacio-s); /* Ajustar padding superior */
+            padding-bottom: var(--espacio-s); /* Ajustar padding inferior */
+        }
+
+        /* Sección de resumen del carrito (tabla o lista) */
+        .carrito-resumen {
+            width: 100%; /* Ocupar todo el ancho disponible */
+            margin-bottom: var(--espacio-s); /* Espacio entre el resumen y los botones */
+            background-color: var(--blanco); /* Fondo blanco para el resumen */
+            border-radius: var(--radio-borde-m); /* Bordes redondeados */
+            overflow: hidden; /* Asegura que los bordes redondeados se apliquen a la tabla interna */
+            border: 1px solid var(--gris-borde-sutil); /* Borde sutil */
+            /* Añadir altura máxima y scroll vertical para la tabla si es necesario */
+            max-height: 150px; /* Altura máxima para el resumen, ajusta si es necesario */
+            overflow-y: auto; /* Añadir scroll vertical si excede la altura máxima */
+        }
+
+        .carrito-resumen table {
+            width: 100%;
+            border-collapse: collapse; /* Eliminar espacio entre celdas */
+        }
+
+        .carrito-resumen th,
+        .carrito-resumen td {
+            padding: var(--espacio-s) var(--espacio-m); /* Padding interno de celdas */
+            text-align: left;
+            font-size: 0.9em;
+            border-bottom: 1px solid var(--gris-borde-sutil); /* Separador entre filas */
+        }
+
+        .carrito-resumen th {
+            background-color: var(--gris-hover-sutil); /* Fondo para el encabezado */
+            color: var(--gris-texto-secundario);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8em;
+            position: sticky; /* Hacer el encabezado pegajoso */
+            top: 0; /* Pegar en la parte superior del contenedor con scroll */
+            background-color: var(--gris-hover-sutil); /* Asegurar que el fondo sea visible */
+            z-index: 1; /* Asegurar que esté por encima de las filas */
+        }
+
+        .carrito-resumen td {
+            color: var(--negro-azabache);
+        }
+
+        .carrito-resumen tbody tr:last-child td {
+            border-bottom: none; /* Eliminar borde inferior de la última fila */
+        }
+
+        .carrito-resumen .item-nombre {
+            font-weight: 600;
+        }
+
+        .carrito-resumen .item-detalle {
+            font-size: 0.8em;
+            color: var(--gris-texto-secundario);
+        }
+
+        .carrito-resumen .item-subtotal {
+            font-weight: 700;
+            text-align: right; /* Alinear subtotal a la derecha */
+            white-space: nowrap; /* Evitar que el subtotal se envuelva */
+        }
+
+        /* Estilo específico para la celda de acciones */
+        .carrito-resumen td.item-acciones {
+            text-align: center; /* Centrar el botón de eliminar */
+            padding: var(--espacio-s); /* Reducir padding para el botón */
+            width: 40px; /* Ancho fijo para la columna de acciones */
+        }
+
+        /* Estilo para el botón de eliminar item */
+        .remove-item-btn {
+            background: none;
+            border: none;
+            color: var(--rojo-peligro-texto); /* Color rojo para indicar peligro */
+            cursor: pointer;
+            font-size: 1.1em;
+            padding: 0; /* Eliminar padding */
+            line-height: 1;
+            transition: color var(--transicion-rapida);
+        }
+
+        .remove-item-btn:hover {
+            color: darken(var(--rojo-peligro-texto), 10%);
+        }
+
+
+        /* Mensaje "Ver todos los items" */
+        .ver-todos-mensaje {
+            text-align: center;
+            font-size: 0.8em;
+            color: var(--gris-texto-secundario);
+            margin-top: var(--espacio-xs);
+            margin-bottom: var(--espacio-s);
+            cursor: pointer; /* Indicar que es clickeable */
+        }
+
+        .ver-todos-mensaje:hover {
+            text-decoration: underline;
+        }
+
+
+        /* Sección de total */
+        .carrito-total {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: var(--espacio-s) var(--espacio-m); /* Padding similar a las celdas */
+            font-size: 1em;
+            font-weight: 700;
+            color: var(--negro-azabache);
+            background-color: var(--blanco); /* Fondo blanco */
+            border-radius: var(--radio-borde-m); /* Bordes redondeados */
+            border: 1px solid var(--gris-borde-sutil); /* Borde sutil */
+            margin-bottom: var(--espacio-s); /* Espacio entre total y botones */
+        }
+
+        .carrito-total span:first-child {
+            color: var(--gris-texto-secundario); /* Color secundario para la etiqueta "Total" */
+        }
+
+
+        /* Contenedor de botones de acción */
+        .carrito-acciones {
+            display: flex;
+            gap: var(--espacio-s); /* Espacio entre los botones */
+            width: 100%; /* Ocupar todo el ancho */
+        }
+
+        .carrito-acciones .btn {
+            flex-grow: 1; /* Permite que los botones se expandan */
+            margin-bottom: 0; /* Eliminar margen inferior de los botones */
+            padding: var(--espacio-m) var(--espacio-s); /* Ajustar padding de botones */
+            font-size: 0.9em; /* Ajustar tamaño de fuente */
+        }
+
+        /* Estilos específicos para los botones */
+        .btn-ver-items {
+            background-color: var(--amarillo-polleria); /* Color naranja/amarillo */
+            color: var(--texto-sobre-amarillo);
+        }
+
+        .btn-cobrar {
+            background-color: var(--verde-accion); /* Color verde */
+            color: var(--texto-sobre-verde);
+        }
+
+        .btn-guardar-pedido {
+            background-color: var(--azul-info); /* Color azul */
+            color: var(--blanco);
+        }
+
+        /* Ocultar el carrito por defecto */
+        #carrito-container:not(.visible) {
+            display: none; /* Ocultar completamente si no tiene la clase visible */
+        }
+
+
+    </style>
+
+    <!-- Aquí se renderizará el resumen de los items del carrito -->
+    <div class="carrito-resumen">
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Subtotal</th>
+                    <th></th> <!-- Columna para acciones -->
+                </tr>
+            </thead>
+            <tbody id="carrito-items-list">
+                <!-- Los items del carrito se renderizarán aquí -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Mensaje para ver todos los items -->
+    <div id="ver-todos-mensaje" class="ver-todos-mensaje hidden">
+        Ver todos los items (<span id="item-count">0</span>)
+    </div>
+
+
+    <!-- Aquí se mostrará el total -->
+    <div class="carrito-total">
+        <span>Total:</span>
+        <span id="carrito-total-value">$0.00</span>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="carrito-acciones">
+        <button class="btn btn-ver-items" id="btn-ver-items">Ver todos los items</button>
+        <button class="btn btn-cobrar" id="btn-cobrar">Cobrar</button>
+        <button class="btn btn-guardar-pedido" id="btn-guardar-pedido">Guardar Pedido</button>
+    </div>
+</div>

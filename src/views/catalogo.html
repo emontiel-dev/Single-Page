@@ -1,0 +1,224 @@
+<div class="catalogo-container">
+    <style>
+        /* Estilos específicos para el Catálogo (Inyectados por catalogo.html) */
+        .catalogo-container {
+            padding: var(--espacio-m); /* Ejemplo de padding */
+            background-color: var(--gris-elemento-claro);
+            border: 1px solid var(--gris-borde-sutil); /* Aplicar borde sutil */
+            border-radius: var(--radio-borde-l); /* Aplicar borde redondeado grande */
+            margin-bottom: var(--espacio-l); /* Espacio debajo del contenedor completo */
+        }
+
+        /* Estilos para la sección de acciones rápidas */
+        .acciones-rapidas {
+            display: grid; /* Usamos grid para controlar las columnas */
+            grid-template-columns: repeat(5, 1fr); /* 5 columnas de igual ancho fraccional */
+            gap: var(--espacio-s); /* Espacio entre los botones */
+            margin-bottom: var(--espacio-m); /* Reducir el espacio debajo de esta sección */
+            /* Eliminamos flex-wrap, overflow-x, padding-bottom, -webkit-overflow-scrolling */
+            /* ya que grid con 1fr manejará el ajuste */
+        }
+
+        /* Estilos base para todos los botones dentro de acciones-rapidas */
+        .acciones-rapidas .btn-accion {
+            /* Eliminamos flex-grow, flex-basis, min-width, flex-shrink */
+            /* ya que el tamaño lo controla grid-template-columns */
+            display: flex; /* Mantenemos flexbox para alinear el contenido interno (icono y texto) */
+            flex-direction: column; /* Icono arriba, texto abajo */
+            justify-content: center;
+            align-items: center;
+            padding: var(--espacio-s);
+            height: 70px; /* Altura fija */
+            font-size: 0.8em;
+            line-height: 1.2;
+            border: 1px solid var(--gris-borde-input);
+            background: var(--gris-elemento-claro); /* Fondo claro por defecto */
+            color: var(--negro-azabache); /* Color de texto oscuro por defecto */
+            border-radius: var(--radio-borde-l);
+            cursor: pointer;
+            transition: var(--transicion-suave);
+            text-align: center;
+        }
+
+        .acciones-rapidas .btn-accion:hover {
+            background-color: var(--gris-hover-sutil); /* Fondo ligeramente más oscuro al pasar el ratón */
+            box-shadow: var(--sombra-sm); /* Sombra sutil */
+        }
+
+        .acciones-rapidas .btn-accion svg {
+            width: 20px; /* Tamaño del icono */
+            height: 20px; /* Tamaño del icono */
+            stroke: currentColor; /* Usa el color del texto del padre */
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+            margin-bottom: 4px; /* Espacio entre icono y texto */
+        }
+
+        .acciones-rapidas .btn-accion.btn-accion-success svg {
+             width: 24px; /* Icono PA ligeramente más grande */
+             height: 24px;
+        }
+
+
+        .acciones-rapidas .btn-accion span {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: currentColor; /* Usa el color del texto del padre */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Estilo específico para el botón de Producto Adicional (PA) */
+        .acciones-rapidas .btn-accion.btn-accion-success {
+            border-color: var(--verde-accion); /* Borde del color de acción */
+            background: var(--verde-accion); /* Fondo verde */
+            color: var(--texto-sobre-verde); /* Texto blanco */
+        }
+
+        .acciones-rapidas .btn-accion.btn-accion-success:hover {
+             background-color: darken(var(--verde-accion), 10%); /* Oscurecer un poco al pasar el ratón */
+             border-color: darken(var(--verde-accion), 10%);
+        }
+
+
+        /* Estilos para el grid de productos */
+        .product-grid {
+            display: grid;
+            /* Define 5 columnas. auto-fill intentará llenar el espacio con columnas de al menos 100px. */
+            /* repeat(5, 1fr) crearía exactamente 5 columnas de igual ancho. */
+            /* Usaremos repeat(auto-fill, minmax(80px, 1fr)) para que se adapte mejor a 5 columnas en móvil */
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: var(--espacio-s); /* Espacio entre los botones del grid */
+            margin-top: var(--espacio-m); /* Añadir espacio superior para separar del div de acciones rápidas */
+        }
+
+        /* Estilos para los botones de producto normales */
+        .product-btn {
+            padding: var(--espacio-s);
+            font-size: .8em;
+            height: 80px; /* Altura fija para los botones */
+            display: flex;
+            flex-direction: column; /* Imagen arriba, texto abajo */
+            justify-content: center; /* Centra verticalmente */
+            align-items: center; /* Centra horizontalmente */
+            line-height: 1.2;
+            border: 1px solid var(--gris-borde-input);
+            background: var(--blanco);
+            border-radius: var(--radio-borde-m);
+            cursor: pointer;
+            transition: var(--transicion-suave);
+            text-align: center; /* Asegura que el texto esté centrado */
+        }
+
+        .product-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--sombra-md);
+        }
+
+        .product-btn img {
+            max-width: 100%; /* Asegura que la imagen no se desborde */
+            max-height: 40px; /* Altura máxima para la imagen */
+            object-fit: contain; /* Asegura que la imagen se ajuste sin distorsionarse */
+            margin-bottom: var(--espacio-xs); /* Espacio entre imagen y texto */
+        }
+
+        .product-btn span {
+            font-size: 0.9em; /* Tamaño de fuente para el nombre del producto */
+            font-weight: 600; /* Peso de fuente semi-negrita */
+            color: var(--negro-azabache); /* Color de texto oscuro */
+            overflow: hidden; /* Oculta texto que se desborde */
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Eliminamos el estilo .product-btn-adicional ya que usaremos .btn-accion.btn-accion-success */
+        /*
+        .product-btn-adicional { ... }
+        .product-btn-adicional:hover { ... }
+        .product-btn-adicional svg { ... }
+        .product-btn-adicional span { ... }
+        */
+
+        .hidden {display: none;} /* Aseguramos que la clase hidden funcione */
+
+    </style>
+
+    <!-- Aquí podrías añadir elementos de filtro o búsqueda si fueran necesarios -->
+    <div class="acciones-rapidas">
+        <button class="btn-accion">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+            <span>Envio</span>
+        </button>
+
+        <button class="btn-accion">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+            <span>Cargo</span>
+        </button>
+
+        <button class="btn-accion">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+            <span>Descuento</span>
+        </button>
+
+        <button class="btn-accion">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+            <span>Cliente</span>
+        </button>
+
+        <button class="btn-accion btn-accion-success">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-square"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            <span>PA</span>
+        </button>
+
+    </div>
+    <div class="product-grid">
+        <!-- Ejemplo de un botón de producto -->
+        <button class="product-btn" data-product-id="PECH">
+            <img src="src/images/catalogo/PECH.png" alt="Pechuga">
+            <span>PECH</span>
+        </button>
+
+        <button class="product-btn" data-product-id="AL">
+            <img src="src/images/catalogo/AL.png" alt="Ala">
+            <span>AL</span>
+        </button>
+
+        <button class="product-btn" data-product-id="RTZ">
+            <img src="src/images/catalogo/RTZ.png" alt="Retazo">
+            <span>RTZ</span>
+        </button>
+
+        <button class="product-btn" data-product-id="PM">
+            <img src="src/images/catalogo/PM.png" alt="Pierna con Muslo">
+            <span>PM</span>
+        </button>
+
+        <button class="product-btn" data-product-id="PT">
+            <img src="src/images/catalogo/PT.png" alt="Patas">
+            <span>PT</span>
+        </button>
+
+        <button class="product-btn" data-product-id="MHG">
+            <img src="src/images/catalogo/MLJ.png" alt="Molleja con Hígado">
+            <span>MHG</span>
+        </button>
+
+         <button class="product-btn" data-product-id="PE">
+            <img src="src/images/catalogo/PE.png" alt="Pollo Entero">
+            <span>PE</span>
+        </button>
+
+        <button class="product-btn" data-product-id="SRT">
+            <img src="src/images/catalogo/SRT.png" alt="Surtida">
+            <span>SRT</span>
+        </button>
+
+         <button class="product-btn" data-product-id="DSP">
+            <img src="src/images/catalogo/DSP.png" alt="Desperdicio">
+            <span>DSP</span>
+        </button>
+    </div>
+</div>
