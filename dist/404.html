@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Redirigiendo...</title>
+    <!-- Script para redirigir a index.html manteniendo la ruta -->
+    <script type="text/javascript">
+        // Obtiene la ruta completa actual
+        var fullPath = window.location.pathname;
+        var search = window.location.search;
+        var hash = window.location.hash;
+
+        // Determina la URL base. Para sitios de proyecto de GitHub Pages,
+        // es el primer segmento de la ruta (el nombre del repositorio).
+        // Ejemplo: /Single-Page/some/path -> base es /Single-Page
+        var pathSegments = fullPath.split('/').filter(Boolean); // Elimina segmentos vacíos
+        var baseUrl = '';
+        if (window.location.hostname.endsWith('.github.io') && pathSegments.length > 0 && !window.location.hostname.startsWith(pathSegments[0])) {
+             // Si es un sitio de proyecto (usuario.github.io/repo), el primer segmento es el nombre del repo
+             baseUrl = '/' + pathSegments[0];
+        }
+        // Si no es un sitio de proyecto (usuario.github.io o dominio personalizado), baseUrl será ''
+
+        // Construye la URL de destino: URL base + /index.html + ruta original + query + hash
+        // Esto redirige a la página principal de la SPA, y el router de JS leerá la ruta original.
+        var targetUrl = window.location.protocol + "//" + window.location.host + baseUrl + '/index.html' + search + hash;
+
+        // Redirige
+        window.location.replace(targetUrl);
+
+    </script>
+</head>
+<body>
+    <p>Redirigiendo...</p>
+</body>
+</html>
