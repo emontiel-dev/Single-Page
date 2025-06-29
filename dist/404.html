@@ -1,3 +1,4 @@
+<!-- filepath: dist/404.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,28 +6,60 @@
     <title>Redirigiendo...</title>
     <!-- Script para redirigir a index.html manteniendo la ruta -->
     <script type="text/javascript">
-        // Obtiene la ruta completa actual
-        var fullPath = window.location.pathname;
-        var search = window.location.search;
-        var hash = window.location.hash;
+        // Obtiene la ruta actual (sin el nombre del dominio)
+        var path = window.location.pathname;
+        // Construye la URL completa de index.html en la raíz del sitio de GitHub Pages
+        // Asegúrate de ajustar '/nombre-del-repositorio/' si tu sitio no está en la raíz del dominio de GitHub Pages
+        // Si tu sitio es https://<username>.github.io/<repo-name>/, necesitas incluir /<repo-name>/
+        // Si tu sitio es https://<username>.github.io/ o un dominio personalizado, usa '/'
+        var redirectUrl = '/'; // Ajusta esto si tu repo no está en la raíz del dominio
 
-        // Determina la URL base. Para sitios de proyecto de GitHub Pages,
-        // es el primer segmento de la ruta (el nombre del repositorio).
-        // Ejemplo: /Single-Page/some/path -> base es /Single-Page
-        var pathSegments = fullPath.split('/').filter(Boolean); // Elimina segmentos vacíos
-        var baseUrl = '';
+        // Si estás usando un repositorio de proyecto (no un sitio de usuario/organización en la raíz),
+        // necesitas obtener el nombre del repositorio de la URL.
+        // Ejemplo: https://<username>.github.io/my-repo/some/path
+        // La ruta sería /my-repo/some/path
+        // Necesitamos redirigir a /my-repo/index.html
+        // Una forma simple es redirigir siempre a la raíz del sitio de GitHub Pages y dejar que el router maneje el resto.
+        // La siguiente línea asume que tu sitio está en la raíz (usuario/organización o dominio personalizado).
+        // Si es un sitio de proyecto (https://<username>.github.io/repo-name/), la URL base será /repo-name/
+        // Puedes obtener la URL base de Vite si la configuraste, o determinarla manualmente.
+        // Para la mayoría de los casos de SPA en GitHub Pages (sitios de proyecto), la URL base es '/nombre-del-repositorio/'
+        // Si tu repo se llama 'Single-Page', la URL base sería '/Single-Page/'
+        // Vamos a asumir que necesitas la URL base del repositorio.
+        // Puedes obtenerla de window.location.pathname si no estás en la raíz.
+        // Una forma más robusta es usar la URL base configurada en Vite si la tienes.
+        // Si no configuraste base en vite.config.js, por defecto es '/'
+        // Si tu sitio es https://<username>.github.io/Single-Page/, la base es '/Single-Page/'
+        // Si tu sitio es https://mycustomdomain.com/, la base es '/'
+
+        // Vamos a intentar detectar la URL base si no es la raíz.
+        // Esto es una simplificación; una configuración de base en Vite es más fiable.
+        // Si tu sitio es https://<username>.github.io/repo-name/, la ruta 404 será /repo-name/some/path
+        // Necesitamos redirigir a /repo-name/index.html
+        var segmentCount = (window.location.pathname.split('/').length - 1);
+        var baseSegments = 0; // Ajusta esto si tu SPA no está en la raíz del repo (ej: /docs)
+        var repoName = ''; // Si tu sitio es de proyecto, el nombre del repo es parte de la URL
+
+        // Intenta determinar el nombre del repositorio si no es un sitio de usuario/organización raíz
+        // Esto es una heurística simple y puede fallar en casos complejos.
+        // Si tu URL es https://<username>.github.io/repo-name/..., repoName será 'repo-name'
+        // Si tu URL es https://<username>.github.io/ o dominio personalizado, repoName será ''
+        var pathSegments = window.location.pathname.split('/').filter(Boolean); // Elimina segmentos vacíos
         if (window.location.hostname.endsWith('.github.io') && pathSegments.length > 0 && !window.location.hostname.startsWith(pathSegments[0])) {
-             // Si es un sitio de proyecto (usuario.github.io/repo), el primer segmento es el nombre del repo
-             baseUrl = '/' + pathSegments[0];
+             repoName = '/' + pathSegments[0];
         }
-        // Si no es un sitio de proyecto (usuario.github.io o dominio personalizado), baseUrl será ''
 
-        // Construye la URL de destino: URL base + /index.html + ruta original + query + hash
-        // Esto redirige a la página principal de la SPA, y el router de JS leerá la ruta original.
-        var targetUrl = window.location.protocol + "//" + window.location.host + baseUrl + '/index.html' + search + hash;
 
-        // Redirige
-        window.location.replace(targetUrl);
+        // Redirige a la URL base + index.html
+        // Esto asume que index.html está en la raíz de la URL base.
+        // Si tu sitio es https://<username>.github.io/Single-Page/, redirige a /Single-Page/index.html
+        // Si tu sitio es https://<username>.github.io/, redirige a /index.html
+        // Si tu sitio es https://mycustomdomain.com/, redirige a /index.html
+        window.location.replace(window.location.protocol + "//" + window.location.host + repoName + '/index.html' + window.location.search + window.location.hash);
+
+        // Una alternativa más simple que a veces funciona:
+        // window.location.replace('/'); // Esto redirige a la raíz del dominio, no a la raíz del *sitio* de GitHub Pages si es un sitio de proyecto.
+        // La primera opción es generalmente más fiable para sitios de proyecto.
 
     </script>
 </head>
