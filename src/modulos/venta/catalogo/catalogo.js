@@ -3,6 +3,8 @@
 // Este archivo se encarga de renderizar la vista del catálogo de productos.
 
 import { openCatalogoModal } from './catalogo.modal.js'; // Importamos la función para abrir el modal
+import { openEnvioModal } from '../envio/envio.modal.js'; // Importamos la función para abrir el modal de envío
+
 
 export async function renderCatalogo(container) {
     try {
@@ -22,11 +24,21 @@ export async function renderCatalogo(container) {
             button.addEventListener('click', () => {
                 const productId = button.dataset.productId;
                 if (productId) {
-                    // Cuando se hace clic en un botón de producto, abrimos el modal
+                    // Cuando se hace clic en un botón de producto, abrimos el modal del catálogo
                     openCatalogoModal(productId);
                 }
             });
         });
+
+        // Añadir event listener al botón de "Envio" en acciones rápidas
+        const envioButton = container.querySelector('.acciones-rapidas .btn-accion:nth-child(1)'); // Asumiendo que es el primer botón
+         if (envioButton) {
+             envioButton.addEventListener('click', () => {
+                 console.log('Botón de Envío clicado.');
+                 openEnvioModal(); // Abrir el modal de envío
+             });
+         }
+
 
     } catch (error) {
         console.error('Error loading catalogo:', error);

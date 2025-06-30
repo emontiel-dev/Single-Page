@@ -5,7 +5,7 @@
 // No necesitamos importar carrito.detalle.js si eliminamos el modal de detalle
 // import { openCarritoDetalleModal } from './carrito.detalle.js';
 
-let cartItems = []; // Array para almacenar los items del carrito
+export let cartItems = []; // Array para almacenar los items del carrito - AHORA EXPORTADO
 
 // Función para renderizar la plantilla HTML del carrito
 export async function renderCarrito(container) {
@@ -21,19 +21,20 @@ export async function renderCarrito(container) {
         container.innerHTML = carritoHtml;
 
         // Añadir event listeners a los botones de acción
-        // Eliminamos la referencia a btnVerItems y verTodosMensaje
-        // const btnVerItems = container.querySelector('#btn-ver-items');
+        // Ahora obtenemos la referencia al botón 'Ver todo'
+        const btnVerItems = container.querySelector('#btn-ver-items');
         const btnCobrar = container.querySelector('#btn-cobrar');
         const btnGuardarPedido = container.querySelector('#btn-guardar-pedido');
+        // Eliminamos la referencia a verTodosMensaje
         // const verTodosMensaje = container.querySelector('#ver-todos-mensaje'); // Obtener el elemento del mensaje
         const itemsListBody = container.querySelector('#carrito-items-list'); // Get the tbody for item list
 
 
-        // if (btnVerItems) btnVerItems.addEventListener('click', handleVerItems); // Eliminamos el listener
+        // Si decides re-implementar la funcionalidad de "Ver todo" (ej. modal), descomenta esta línea
+        // if (btnVerItems) btnVerItems.addEventListener('click', handleVerItems);
         if (btnCobrar) btnCobrar.addEventListener('click', handleCobrar);
         if (btnGuardarPedido) btnGuardarPedido.addEventListener('click', handleGuardarPedido);
-        // El mensaje "Ver todos los items" ahora es menos relevante ya que la tabla es scrollable.
-        // Podríamos eliminarlo o cambiar su propósito. Por ahora, lo ocultamos.
+        // Eliminamos el listener del div verTodosMensaje
         // if (verTodosMensaje) verTodosMensaje.addEventListener('click', handleVerItems); // Add listener to the message too
 
 
@@ -93,19 +94,21 @@ function removeItemFromCart(index) {
 
 
 // Función para actualizar la visualización del carrito
-function updateCarritoDisplay() {
+export function updateCarritoDisplay() { // <-- Añadido 'export' aquí
     const carritoContainer = document.getElementById('carrito-container');
     const itemsListBody = document.getElementById('carrito-items-list');
     const totalValueSpan = document.getElementById('carrito-total-value');
     const mainContent = document.getElementById('main-content'); // Obtener el contenedor principal del contenido
-    // Eliminamos referencias a verTodosMensaje, itemCountSpan, btnVerItems
+    // Obtener referencias al span del contador (ahora dentro del botón)
+    // Eliminamos la referencia a verTodosMensaje
     // const verTodosMensaje = document.getElementById('ver-todos-mensaje'); // Obtener el elemento del mensaje
-    // const itemCountSpan = document.getElementById('item-count'); // Obtener el span para el contador
+    const itemCountSpan = document.getElementById('item-count'); // Obtener el span para el contador
     // const btnVerItems = document.getElementById('btn-ver-items'); // Get the 'Ver todos los items' button
 
 
     // Ajustamos la verificación de elementos encontrados
-    if (!itemsListBody || !totalValueSpan || !carritoContainer || !mainContent) {
+    // Eliminamos la verificación de verTodosMensaje
+    if (!itemsListBody || !totalValueSpan || !carritoContainer || !mainContent || !itemCountSpan) {
         console.error('Elementos del carrito o main content no encontrados en el DOM.');
         return;
     }
@@ -121,53 +124,30 @@ function updateCarritoDisplay() {
             const row = document.createElement('tr');
             row.dataset.itemIndex = index; // Add data attribute for index
 
-            // Celda de Producto
-            const productCell = document.createElement('td');
-            // Usar item.optionName si está disponible, de lo contrario item.optionId
-            const optionNameDisplay = item.optionName || item.optionId;
-            // Asegurarse de que item.optionId exista y sea diferente del productId para mostrar el detalle del ID si es una variante/subproducto
-            const optionDetailId = item.optionId && item.optionId !== item.productId ? ` (${item.optionId})` : ''; // Incluir paréntesis aquí
+            // Celda de Producto (renderizada por función auxiliar)
+            let productCell;
 
-            // Construir el string de personalizaciones
-            let personalizationsString = '';
-            if (item.personalizations) {
-                // Aplanar todos los nombres de personalización de todos los grupos
-                const allPersonalizations = Object.values(item.personalizations).flat();
-                if (allPersonalizations.length > 0) {
-                    // Unir las personalizaciones con coma y espacio, y encerrarlas en paréntesis
-                    personalizationsString = ` (${allPersonalizations.join(', ')})`;
-                }
+            // --- DETECCIÓN Y RENDERIZADO POR TIPO DE ITEM ---
+            if (item.productId === 'ENVIO') {
+                productCell = renderEnvioItem(item);
+            } else {
+                // Asumimos que es un producto de pollo por ahora
+                productCell = renderProductItem(item);
             }
+            // TODO: Añadir lógica para 'producto adicional' aquí más adelante
 
-            // Usar el precio por kg almacenado en el item si está disponible, de lo contrario calcularlo
-            const unitPriceDisplay = item.pricePerKg !== undefined && item.pricePerKg !== null
-                ? item.pricePerKg.toFixed(2) // Usar el precio del catálogo si está almacenado
-                : (item.quantity > 0 ? (item.cost / item.quantity).toFixed(2) : '0.00'); // Fallback si no está almacenado o cantidad es 0
-
-
-            // Combinar nombre, detalle de ID (si aplica) y personalizaciones en la primera línea
-            const productNameLine = `<div class="item-nombre">${optionNameDisplay}${optionDetailId}${personalizationsString}</div>`;
-
-            // Segunda línea con cantidad y precio unitario (usando el precio unitario para mostrar)
-            const quantityPriceLine = `<div class="item-detalle">${item.quantity.toFixed(3)}(kg) * ($${unitPriceDisplay})</div>`;
-
-
-            productCell.innerHTML = `
-                ${productNameLine}
-                ${quantityPriceLine}
-            `;
             row.appendChild(productCell);
 
-            // Celda de Subtotal
+            // Celda de Subtotal (común a la mayoría de los items)
             const subtotalCell = document.createElement('td');
             subtotalCell.classList.add('item-subtotal');
             subtotalCell.textContent = `$${item.cost.toFixed(2)}`;
             row.appendChild(subtotalCell);
 
-            // Celda de Acciones (Eliminar)
+            // Celda de Acciones (Eliminar) (común a la mayoría de los items)
             const actionsCell = document.createElement('td');
             actionsCell.classList.add('item-acciones');
-            actionsCell.innerHTML = `<button class="remove-item-btn" aria-label="Eliminar item">×</button>`; // Use × character for close/remove
+            actionsCell.innerHTML = `<button class="remove-item-btn" aria-label="Eliminar item"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></button>`; // Use × character for close/remove
             row.appendChild(actionsCell);
 
 
@@ -179,34 +159,97 @@ function updateCarritoDisplay() {
         // Mostrar el carrito si hay items
         carritoContainer.classList.add('visible');
 
-        // Ocultar el mensaje "Ver todos los items" ya que la tabla es scrollable
-        // verTodosMensaje.classList.add('hidden'); // Eliminamos esta línea
-        // itemCountSpan.textContent = cartItems.length; // Eliminamos esta línea
+        // Actualizar el contador dentro del botón "Ver todo"
+        itemCountSpan.textContent = cartItems.length; // Descomentado
 
 
-        // Calcular la altura del carrito y añadir padding al main content
-        // Usamos getBoundingClientRect() para obtener la altura precisa, incluyendo padding y borde
-        const cartHeight = carritoContainer.getBoundingClientRect().height;
-        // Añadir un poco de padding extra para separación visual
-        const rootStyles = getComputedStyle(document.documentElement);
-        const extraPadding = parseFloat(rootStyles.getPropertyValue('--espacio-l')); // Usar --espacio-l para más separación
-
-        mainContent.style.paddingBottom = `${cartHeight + extraPadding}px`;
+        // Eliminar la lógica de padding inferior ya que el carrito no está fijo
+        // const cartHeight = carritoContainer.getBoundingClientRect().height;
+        // const rootStyles = getComputedStyle(document.documentElement);
+        // const extraPadding = parseFloat(rootStyles.getPropertyValue('--espacio-l'));
+        // mainContent.style.paddingBottom = `${cartHeight + extraPadding}px`;
 
 
     } else {
         // Ocultar el carrito si no hay items
         carritoContainer.classList.remove('visible');
-        // verTodosMensaje.classList.add('hidden'); // Eliminamos esta línea
+        // El contador se ocultará junto con el botón "Ver todo" si el contenedor del carrito se oculta.
+        // No necesitamos ocultar el span específicamente.
+
 
         // Restablecer el padding inferior del main content al valor por defecto del CSS
         mainContent.style.paddingBottom = '';
     }
 
 
-    // Actualizar el total
-    totalValueSpan.textContent = `$${total.toFixed(2)}`;
+    // Aplicar redondeo al total antes de mostrarlo
+    const roundedTotal = Math.round(total);
+
+    // Actualizar el total con el valor redondeado, formateado a dos decimales
+    totalValueSpan.textContent = `${roundedTotal.toFixed(2)}`;
 }
+
+// --- Funciones Auxiliares de Renderizado de Items ---
+
+// Renderiza un item de producto de pollo
+function renderProductItem(item) {
+    const productCell = document.createElement('td');
+
+    // Usar item.optionName si está disponible, de lo contrario item.optionId
+    const optionNameDisplay = item.optionName || item.optionId;
+    // Asegurarse de que item.optionId exista y sea diferente del productId para mostrar el detalle del ID si es una variante/subproducto
+    const optionDetailId = item.optionId && item.optionId !== item.productId ? ` (${item.optionId})` : ''; // Incluir paréntesis aquí
+
+    // Construir el string de personalizaciones
+    let personalizationsString = '';
+    if (item.personalizations) {
+        // Aplanar todos los nombres de personalización de todos los grupos
+        const allPersonalizations = Object.values(item.personalizations).flat();
+        if (allPersonalizations.length > 0) {
+            // Unir las personalizaciones con coma y espacio, y encerrarlas en paréntesis
+            personalizationsString = ` (${allPersonalizations.join(', ')})`;
+        }
+    }
+
+    // Usar el precio por kg almacenado en el item si está disponible, de lo contrario calcularlo
+    const unitPriceDisplay = item.pricePerKg !== undefined && item.pricePerKg !== null
+        ? item.pricePerKg.toFixed(2) // Usar el precio del catálogo si está almacenado
+        : (item.quantity > 0 ? (item.cost / item.quantity).toFixed(2) : '0.00'); // Fallback si no está almacenado o cantidad es 0
+
+
+    // Combinar nombre, detalle de ID (si aplica) y personalizaciones en la primera línea
+    const productNameLine = `<div class="item-nombre">${optionNameDisplay}${personalizationsString}</div>`;
+
+    // Segunda línea con cantidad y precio unitario (usando el precio unitario para mostrar)
+    const quantityPriceLine = `<div class="item-detalle">${item.quantity.toFixed(3)}(kg) * $${unitPriceDisplay}</div>`;
+
+
+    productCell.innerHTML = `
+        ${productNameLine}
+        ${quantityPriceLine}
+    `;
+
+    return productCell;
+}
+
+// Renderiza un item de envío
+function renderEnvioItem(item) {
+    const productCell = document.createElement('td');
+
+    // Mostrar solo el nombre y la descripción/monto
+    const envioDesc = item.personalizations && item.personalizations.descripcion && item.personalizations.descripcion.length > 0
+        ? item.personalizations.descripcion[0] // Asumimos que la descripción manual está en el primer elemento
+        : item.descripcion || ''; // Fallback a la descripción original si no hay personalización
+
+    productCell.innerHTML = `
+        <div class="item-nombre">${item.optionName}</div>
+        <div class="item-detalle">${envioDesc}</div>
+    `;
+
+    return productCell;
+}
+
+// TODO: Crear renderAdicionalItem(item) para productos adicionales
 
 // --- Handlers de botones de acción ---
 

@@ -1,14 +1,20 @@
-<div id="carrito-container" class="pos-footer">
+<div id="carrito-container"> <!-- Eliminada la clase pos-footer -->
     <style>
         /* Estilos específicos para el Carrito (Inyectados por carrito.html) */
 
-        /* Contenedor principal del carrito (usa pos-footer) */
+        /* Contenedor principal del carrito (ya NO usa pos-footer) */
         #carrito-container {
-            /* pos-footer ya define position: fixed, bottom, left, right, padding, border-top, box-shadow, display: flex, gap, z-index */
+            /* Eliminamos las propiedades de position: fixed, bottom, left, right, z-index */
+            /* Ahora participará en el flujo normal del documento */
+            display: flex; /* Mantenemos flexbox para el contenido interno */
             flex-direction: column; /* Apilar contenido verticalmente */
             align-items: stretch; /* Estirar los elementos hijos */
-            padding-top: var(--espacio-s); /* Ajustar padding superior */
-            padding-bottom: var(--espacio-s); /* Ajustar padding inferior */
+            padding: var(--espacio-s); /* Ajustar padding general */
+            background: var(--gris-elemento-claro); /* Fondo */
+            border: 1px solid var(--gris-borde-sutil); /* Borde */
+            border-radius: var(--radio-borde-l); /* Bordes redondeados */
+            box-shadow: var(--sombra-sm); /* Sombra sutil */
+            /* margin-bottom: var(--espacio-m); /* Espacio debajo del carrito - Esto lo manejará el gap en main */
         }
 
         /* Sección de resumen del carrito (tabla o lista) */
@@ -20,7 +26,7 @@
             overflow: hidden; /* Asegura que los bordes redondeados se apliquen a la tabla interna */
             border: 1px solid var(--gris-borde-sutil); /* Borde sutil */
             /* Añadir altura máxima y scroll vertical para la tabla si es necesario */
-            max-height: 150px; /* Altura máxima para el resumen, ajusta si es necesario */
+            max-height: 160px; /* Altura máxima para el resumen, ajusta si es necesario */
             overflow-y: auto; /* Añadir scroll vertical si excede la altura máxima */
         }
 
@@ -59,15 +65,17 @@
 
         .carrito-resumen .item-nombre {
             font-weight: 600;
+            font-size: 1em;
         }
 
         .carrito-resumen .item-detalle {
-            font-size: 0.8em;
+            font-size: 0.95em;
             color: var(--gris-texto-secundario);
         }
 
         .carrito-resumen .item-subtotal {
             font-weight: 700;
+            font-size: 1em;
             text-align: right; /* Alinear subtotal a la derecha */
             white-space: nowrap; /* Evitar que el subtotal se envuelva */
         }
@@ -85,31 +93,27 @@
             border: none;
             color: var(--rojo-peligro-texto); /* Color rojo para indicar peligro */
             cursor: pointer;
-            font-size: 1.1em;
+            /* font-size: 1.1em; */ /* Remove font-size as we'll size the SVG */
             padding: 0; /* Eliminar padding */
             line-height: 1;
             transition: color var(--transicion-rapida);
+            display: flex; /* Use flex to center the SVG */
+            justify-content: center;
+            align-items: center;
+            width: 100%; /* Make button fill the cell */
+            height: 100%; /* Make button fill the cell */
         }
 
         .remove-item-btn:hover {
             color: darken(var(--rojo-peligro-texto), 10%);
         }
 
-
-        /* Mensaje "Ver todos los items" */
-        .ver-todos-mensaje {
-            text-align: center;
-            font-size: 0.8em;
-            color: var(--gris-texto-secundario);
-            margin-top: var(--espacio-xs);
-            margin-bottom: var(--espacio-s);
-            cursor: pointer; /* Indicar que es clickeable */
+        /* Style for the SVG inside the remove button */
+        .remove-item-btn svg {
+            width: 20px; /* Set the desired width */
+            height: 20px; /* Set the desired height */
+            stroke: currentColor; /* Inherit color from the button */
         }
-
-        .ver-todos-mensaje:hover {
-            text-decoration: underline;
-        }
-
 
         /* Sección de total */
         .carrito-total {
@@ -143,27 +147,50 @@
             margin-bottom: 0; /* Eliminar margen inferior de los botones */
             padding: var(--espacio-m) var(--espacio-s); /* Ajustar padding de botones */
             font-size: 0.9em; /* Ajustar tamaño de fuente */
+            height: 50px;
         }
 
         /* Estilos específicos para los botones */
         .btn-ver-items {
-            background-color: var(--amarillo-polleria); /* Color naranja/amarillo */
-            color: var(--texto-sobre-amarillo);
+            /*background-color: var(--negro-azabache); /* Color naranja/amarillo */
+            /*color: var(--blanco);*/
+            gap: var(--espacio-xs);
+            
         }
 
         .btn-cobrar {
             background-color: var(--verde-accion); /* Color verde */
             color: var(--texto-sobre-verde);
+            gap: var(--espacio-s);
         }
 
         .btn-guardar-pedido {
             background-color: var(--azul-info); /* Color azul */
             color: var(--blanco);
+            gap: var(--espacio-s);
         }
 
         /* Ocultar el carrito por defecto */
+        /* Ahora usamos opacity y height/margin para la transición */
         #carrito-container:not(.visible) {
-            display: none; /* Ocultar completamente si no tiene la clase visible */
+            opacity: 0;
+            max-height: 0; /* Colapsar el contenedor */
+            /* margin-bottom: 0; /* Eliminar margen inferior - Esto lo manejará el gap en main */
+            padding-top: 0; /* Eliminar padding */
+            padding-bottom: 0; /* Eliminar padding */
+            border-width: 0; /* Eliminar borde */
+            overflow: hidden; /* Ocultar contenido durante la transición */
+            transition: opacity var(--transicion-suave), max-height var(--transicion-suave), margin-bottom var(--transicion-suave), padding var(--transicion-suave), border-width var(--transicion-suave);
+        }
+
+        #carrito-container.visible {
+            opacity: 1;
+            max-height: 300px; /* Altura máxima visible (ajusta si es necesario) */
+            /* margin-bottom: var(--espacio-m); /* Restaurar margen - Esto lo manejará el gap en main */
+            padding-top: var(--espacio-s); /* Restaurar padding */
+            padding-bottom: var(--espacio-s); /* Restaurar padding */
+            border-width: 1px; /* Restaurar borde */
+            transition: opacity var(--transicion-suave), max-height var(--transicion-suave), margin-bottom var(--transicion-suave), padding var(--transicion-suave), border-width var(--transicion-suave);
         }
 
 
@@ -185,22 +212,19 @@
         </table>
     </div>
 
-    <!-- Mensaje para ver todos los items -->
-    <div id="ver-todos-mensaje" class="ver-todos-mensaje hidden">
-        Ver todos los items (<span id="item-count">0</span>)
-    </div>
-
-
-    <!-- Aquí se mostrará el total -->
-    <div class="carrito-total">
-        <span>Total:</span>
-        <span id="carrito-total-value">$0.00</span>
-    </div>
-
     <!-- Botones de acción -->
     <div class="carrito-acciones">
-        <button class="btn btn-ver-items" id="btn-ver-items">Ver todos los items</button>
-        <button class="btn btn-cobrar" id="btn-cobrar">Cobrar</button>
-        <button class="btn btn-guardar-pedido" id="btn-guardar-pedido">Guardar Pedido</button>
+        <button class="btn btn-ver-items" id="btn-ver-items">
+            <span><svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></span>
+            <span>(<span id="item-count">0</span> items)</span>
+        </button>
+        <button class="btn btn-cobrar" id="btn-cobrar">
+            <span><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 14 14"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8.351 5.307a1.166 1.166 0 0 0-1.1-.778h-.903a1.041 1.041 0 0 0-.223 2.059l1.375.3a1.167 1.167 0 0 1-.25 2.307h-.777c-.508 0-.94-.324-1.1-.777m1.489-3.889V3.362m0 7V9.196m-4.864 4.302v-2.5h2.5"/><path d="M13.388 5.804a6.5 6.5 0 0 1-11.39 5.35M.612 8.196a6.5 6.5 0 0 1 11.39-5.35"/><path d="M12.002.502v2.5h-2.5"/></g></svg></span>
+            <span id="carrito-total-value">0.00</span>
+        </button>
+        <button class="btn btn-guardar-pedido" id="btn-guardar-pedido">
+            <span><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></span>
+            <span>Guardar</span>
+        </button>
     </div>
 </div>

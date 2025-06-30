@@ -1,15 +1,20 @@
 <div id="product-modal-container" class="modal-overlay">
-    <div class="product-modal-content">
+    <div class="product-modal-content modal-content"> <!-- Añadida la clase modal-content -->
         <div class="modal-header">
             <h3 id="modal-product-name">Nombre del Producto</h3>
-            <button class="close-modal-btn" aria-label="Cerrar modal">
+            <!-- Botones movidos al header -->
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="cancelar-modal-btn">Cancelar</button>                
+                <button class="btn btn-primario" id="add-to-order-btn">Añadir</button>                
+            </div>
+            <!--<button class="close-modal-btn" aria-label="Cerrar modal">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
+            </button>-->
         </div>
         <div class="modal-body">
             <!-- Sección de Opciones (Subproductos, Especiales, Variantes) -->
             <div class="modal-section opciones">
-                <h4>Producto</h4>
+                <h4>Opciones</h4>
                 <div class="opciones-grid">
                     <!-- Los botones de opciones se renderizarán aquí dinámicamente -->
                 </div>
@@ -17,7 +22,7 @@
 
             <!-- Sección de Precios -->
             <div class="modal-section precios">
-                <h4>Tipo de Precio</h4>
+                <h4>Precios</h4>
                 <div class="precios-grid">
                     <!-- Los botones de precios se renderizarán aquí dinámicamente -->
                 </div>
@@ -49,37 +54,17 @@
             <!-- Puedes añadir otras secciones aquí si es necesario (Notas, etc.) -->
 
         </div>
+        <!-- Eliminado el div modal-footer -->
+        <!--
         <div class="modal-footer">
             <button class="btn btn-secondary" id="cancelar-modal-btn">Cancelar</button>
-            <button class="btn btn-primario" id="add-to-order-btn">Añadir al Pedido</button>
+            <button class="btn btn-primario" id="add-to-order-btn">Añadir</button>
         </div>
+        -->
     </div>
 
     <style>
         /* Estilos específicos para el Modal del Catálogo (Inyectados por catalogo.modal.html) */
-
-        /* Overlay del modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semi-transparente */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000; /* Asegura que esté por encima de todo */
-            padding: var(--espacio-m);
-            opacity: 0; /* Inicialmente oculto */
-            visibility: hidden; /* Inicialmente no visible */
-            transition: opacity var(--transicion-suave), visibility var(--transicion-suave);
-        }
-
-        .modal-overlay.visible {
-            opacity: 1;
-            visibility: visible;
-        }
 
         /* Contenido del modal */
         .product-modal-content {
@@ -91,30 +76,49 @@
             max-height: 90vh; /* Altura máxima para evitar desbordamiento en pantallas pequeñas */
             display: flex;
             flex-direction: column;
-            transform: translateY(20px); /* Ligeramente desplazado hacia abajo */
-            transition: transform var(--transicion-suave) ease-out;
+            /* Eliminada la transformación y transición de aquí, ahora están en .modal-content */
         }
-
-         .modal-overlay.visible .product-modal-content {
-             transform: translateY(0); /* Vuelve a su posición original al ser visible */
-         }
-
 
         /* Encabezado del modal */
         .modal-header {
             padding: var(--espacio-m) var(--espacio-l);
-            border-bottom: 1px solid var(--gris-borde-sutil);
+            /* Ajustamos display y alineación para los botones */
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: space-between; /* Espacio entre h3, acciones y botón cerrar */
+            align-items: center; /* Alinear verticalmente */
             flex-shrink: 0; /* Evita que el header se encoja */
+            border-bottom: 1px solid var(--gris-borde-sutil); /* Mantener el borde inferior */
+            gap: var(--espacio-s); /* Espacio entre los elementos del header */
         }
+
+        /* Contenedor para los botones de acción en el header */
+        .header-actions {
+            display: flex;
+            gap: var(--espacio-s); /* Espacio entre los botones Cancelar y Añadir */
+            flex-grow: 1; /* Permite que este contenedor ocupe el espacio disponible */
+            justify-content: flex-end; /* Alinear los botones a la derecha */
+            align-items: center; /* Alinear verticalmente los botones */
+        }
+
+        /* Estilos para los botones dentro de header-actions */
+        .header-actions .btn {
+            /* Ajustar padding y tamaño para que sean más compactos en el header */
+            padding: var(--espacio-xs) var(--espacio-s); /* Padding más pequeño */
+            font-size: 0.8em; /* Tamaño de fuente más pequeño */
+            width: 70px;
+            min-height: 35px;
+            flex-grow: 0; /* No permitir que se expandan */
+            margin-bottom: 0; /* Eliminar margen inferior */
+        }
+
 
         .modal-header h3 {
             margin: 0;
             font-size: 1.2em;
             font-weight: 700;
             color: var(--negro-azabache);
+            /* flex-shrink: 0; /* Evita que el título se encoja */
+            margin-right: auto; /* Empuja los elementos siguientes a la derecha */
         }
 
         .close-modal-btn {
@@ -124,6 +128,7 @@
             padding: var(--espacio-xs);
             border-radius: var(--radio-borde-s);
             transition: background-color var(--transicion-rapida);
+            flex-shrink: 0; /* Evita que el botón cerrar se encoja */
         }
 
         .close-modal-btn:hover {
@@ -140,6 +145,7 @@
         /* Cuerpo del modal */
         .modal-body {
             padding: var(--espacio-l);
+            padding-top: 0; /* Eliminar padding superior ya que el header tiene borde */
             overflow-y: auto; /* Permite scroll dentro del cuerpo si el contenido es largo */
             -webkit-overflow-scrolling: touch; /* Desplazamiento suave en iOS */
             flex-grow: 1; /* Permite que el cuerpo ocupe el espacio restante */
@@ -152,19 +158,10 @@
             border-bottom: none;
 
             /* Añadimos margen y padding superior */
-            margin-top: var(--espacio-l); /* Espacio entre secciones */
-            padding-top: var(--espacio-m); /* Padding interno al inicio de la sección */
+            margin-top: var(--espacio-s); /* Espacio entre secciones */
+            padding-top: var(--espacio-s); /* Padding interno al inicio de la sección */
             border-top: 1px solid var(--gris-borde-sutil); /* Separador visual */
         }
-
-        /* Eliminamos el estilo last-child ya que no es necesario con la nueva lógica */
-        /*
-        .modal-section:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-        */
 
         /* Quitamos el margen y padding superior de la primera sección */
         .modal-section:first-child {
@@ -176,18 +173,25 @@
 
         .modal-section h4 {
             margin-top: 0;
-            margin-bottom: var(--espacio-m);
+            margin-left: var(--espacio-s);
+            margin-bottom: var(--espacio-s); /* Espacio debajo del título de sección */
             font-size: 1em;
             color: var(--gris-texto-secundario);
             font-weight: 600;
-            text-transform: uppercase;
+            /*text-transform: uppercase;*/
         }
 
         /* Grids para opciones, precios y procesamientos */
+        /* Modificado para usar flexbox y scroll horizontal */
         .opciones-grid {
-            display: grid;
-            gap: var(--espacio-s); /* Espacio entre elementos del grid */
-             grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); /* Columnas flexibles para opciones */
+            display: flex; /* Usamos flexbox para una sola fila */
+            flex-wrap: nowrap; /* Evita que los elementos se envuelvan */
+            gap: var(--espacio-s); /* Espacio entre los elementos flex */
+            overflow-x: auto; /* Añadimos scroll horizontal */
+            /* Añadir padding alrededor de los elementos flex */
+            padding: var(--espacio-s);
+            background-color: var(--gris-elemento-claro); /* Añadir fondo gris claro */
+            border-radius: var(--radio-borde-l); /* Añadir borde redondeado al contenedor */
         }
 
         .precios-grid {
@@ -198,7 +202,7 @@
             /* Añadir padding alrededor de los elementos flex */
             padding: var(--espacio-s);
             /* background-color: var(--gris-elemento-claro); /* Opcional: añadir fondo gris claro */
-            border-radius: var(--radio-borde-m); /* Opcional: añadir borde redondeado al contenedor */
+            border-radius: var(--radio-borde-l); /* Opcional: añadir borde redondeado al contenedor */
         }
 
          .procesamientos-grid {
@@ -231,7 +235,8 @@
             flex-shrink: 0; /* Evita que los elementos se encojan */
             min-width: 90px; /* Ancho mínimo para cada botón de procesamiento */
             max-width: 110px; /* Ancho máximo, ajusta si es necesario */
-            height: 90px; /* Altura fija para los botones de procesamiento */
+            min-height: 50px;
+            max-height: 100px; /* Altura fija para los botones de procesamiento */
         }
 
         .procesamientos-grid label:hover {
@@ -295,7 +300,13 @@
             justify-content: center;
             align-items: center;
             padding: var(--espacio-s);
-            min-height: 40px; /* Altura mínima para los botones */
+            /* Modificado para tener dimensiones controladas y no encogerse */
+            min-height: 50px; /* Altura mínima similar a procesamientos */
+            max-height: 100px; /* Altura máxima similar a procesamientos */
+            min-width: 90px; /* Ancho mínimo similar a procesamientos */
+            max-width: 110px; /* Ancho máximo ajusta si es necesario */
+            flex-shrink: 0; /* Evita que se encojan */
+
             font-size: 0.9em;
             line-height: 1.2;
             border: 1px solid var(--gris-borde-input);
@@ -355,6 +366,13 @@
         .registro-inputs {
             display: flex;
             gap: var(--espacio-m); /* Espacio entre los dos inputs */
+            padding: var(--espacio-s);
+        }
+
+        .registro-inputs label {
+            margin: 0;
+            margin-left: var(--espacio-m);
+            text-align: left;
         }
 
         .registro-inputs .form-group {
@@ -376,19 +394,21 @@
         }
 
 
-        /* Pie de página del modal */
+        /* Eliminado el estilo modal-footer */
+        /*
         .modal-footer {
             padding: var(--espacio-m) var(--espacio-l);
             border-top: 1px solid var(--gris-borde-sutil);
             display: flex;
             gap: var(--espacio-m);
-            flex-shrink: 0; /* Evita que el footer se encoja */
+            flex-shrink: 0;
         }
 
         .modal-footer .btn {
-            flex-grow: 1; /* Permite que los botones ocupen el espacio disponible */
-            margin-bottom: 0; /* Elimina el margen inferior del botón */
+            flex-grow: 1;
+            margin-bottom: 0;
         }
+        */
 
     </style>
 </div>

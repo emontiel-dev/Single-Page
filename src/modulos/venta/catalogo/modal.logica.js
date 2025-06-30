@@ -3,13 +3,14 @@
 // Este archivo maneja la lógica interna del modal de catálogo.
 
 import { catalogoProductos } from './catalogo.datos.js'; // Importamos los datos del catálogo
-import { addItemToCart } from '../carrito/carrito.js'; // Importamos la función para añadir al carrito
+import { addItemToCart, cartItems, updateCarritoDisplay } from '../carrito/carrito.js'; // Asegúrate de que updateCarritoDisplay esté importado
+import { opcionesEnvio } from '../envio/envio.datos.js'; // Importamos los datos de opciones de envío
 
 // Variables de estado del modal (serán pasadas desde catalogo.modal.js)
 let currentProduct = null;
 let selectedOptionId = null;
 let selectedPriceType = null;
-let selectedPersonalizations = {};
+let selectedPersonalizations = {}; // This variable holds the state shared with catalogo.modal.js
 
 // Referencias a elementos UI (serán pasadas desde catalogo.modal.js)
 let cantidadInput = null;
@@ -23,7 +24,7 @@ let closeModalBtn = null;
 
 // Callbacks a funciones de renderizado o externas (serán pasadas desde catalogo.modal.js)
 let renderPreciosCallback = null;
-let renderPersonalizacionesCallback = null;
+let renderPersonalizacionesCallback = null; // This callback now expects the state as an argument
 let closeCatalogoModalCallback = null;
 // updateModalContentForOptionCallback ya no es necesario pasarlo como callback, la lógica está aquí
 // let updateModalContentForOptionCallback = null;
@@ -34,8 +35,8 @@ export function initModalLogic(state, uiElements, callbacks) {
     // Asignar variables de estado
     currentProduct = state.currentProduct;
     selectedOptionId = state.selectedOptionId;
-    selectedPriceType = state.selectedPriceType; // Puede ser null inicialmente
-    selectedPersonalizations = state.selectedPersonalizations;
+    selectedPriceType = state.selectedPriceType; // May be null initially
+    selectedPersonalizations = state.selectedPersonalizations; // Assign the shared state object
 
     // Asignar referencias a elementos UI
     cantidadInput = uiElements.cantidadInput;
@@ -50,7 +51,7 @@ export function initModalLogic(state, uiElements, callbacks) {
 
     // Asignar callbacks
     renderPreciosCallback = callbacks.renderPrecios;
-    renderPersonalizacionesCallback = callbacks.renderPersonalizaciones;
+    renderPersonalizacionesCallback = callbacks.renderPersonalizaciones; // Store the callback
     closeCatalogoModalCallback = callbacks.closeCatalogoModal;
     // updateModalContentForOptionCallback = callbacks.updateModalContentForOption; // Ya no se pasa
 
@@ -60,8 +61,17 @@ export function initModalLogic(state, uiElements, callbacks) {
     if (cancelarModalBtn) cancelarModalBtn.addEventListener('click', handleCloseModal);
     if (addToOrderBtn) addToOrderBtn.addEventListener('click', handleAddToOrder);
 
-    if (cantidadInput) cantidadInput.addEventListener('input', handleCantidadInput);
-    if (costoInput) costoInput.addEventListener('input', handleCostoInput);
+    if (cantidadInput) {
+        cantidadInput.addEventListener('input', handleCantidadInput);
+        // Add keydown listener for Enter key
+        cantidadInput.addEventListener('keydown', handleInputKeyDown);
+    }
+    if (costoInput) {
+        costoInput.addEventListener('input', handleCostoInput);
+        // Add keydown listener for Enter key
+        costoInput.addEventListener('keydown', handleInputKeyDown);
+    }
+
 
     // Event listeners para los grids usando delegación
     if (opcionesGrid) opcionesGrid.addEventListener('click', handleOptionSelect);
@@ -74,6 +84,8 @@ export function initModalLogic(state, uiElements, callbacks) {
     if (initialOptionData) {
         selectDefaultPrice(initialOptionData);
     }
+    // Personalizaciones por defecto ya se inicializaron en openCatalogoModal
+    // and the shared selectedPersonalizations object was passed to initModalLogic
 }
 
 // Función para limpiar el estado y las referencias al cerrar el modal
@@ -81,7 +93,21 @@ export function resetModalLogic() {
     currentProduct = null;
     selectedOptionId = null;
     selectedPriceType = null;
-    selectedPersonalizations = {};
+    // Reset the shared state object
+    selectedPersonalizations = {}; // This clears the object referenced by both files
+
+    // Remove event listeners from inputs before clearing references
+    if (cantidadInput) {
+        cantidadInput.removeEventListener('input', handleCantidadInput);
+        cantidadInput.removeEventListener('keydown', handleInputKeyDown);
+    }
+    if (costoInput) {
+        costoInput.removeEventListener('input', handleCostoInput);
+        costoInput.removeEventListener('keydown', handleInputKeyDown);
+    }
+     // Note: Other event listeners (closeModalBtn, cancelarModalBtn, addToOrderBtn,
+     // and delegated listeners on grids) are removed automatically when the modal element
+     // is removed from the DOM in closeCatalogoModal.
 
     cantidadInput = null;
     costoInput = null;
@@ -96,9 +122,6 @@ export function resetModalLogic() {
     renderPersonalizacionesCallback = null;
     closeCatalogoModalCallback = null;
     // updateModalContentForOptionCallback = null; // Ya no se usa
-
-    // Nota: Los event listeners se limpian automáticamente cuando el elemento modal es removido del DOM.
-    // Si no se removiera, necesitaríamos remover los listeners explícitamente aquí.
 }
 
 
@@ -175,6 +198,15 @@ function handleCostoInput(event) {
 
     // Mostrar la cantidad calculada en el placeholder del input de cantidad
     cantidadInput.placeholder = `${cantidadCalculada.toFixed(3)} kg`; // Mostrar 3 decimales para cantidad
+}
+
+// New handler for keydown event on inputs
+function handleInputKeyDown(event) {
+    // Check if the pressed key is Enter (key code 13)
+    if (event.key === 'Enter' || event.keyCode === 13) {
+        event.preventDefault(); // Prevent default form submission or newline
+        handleAddToOrder(); // Trigger the add to order function
+    }
 }
 
 
@@ -298,7 +330,6 @@ function handleAddToOrder() {
 
     // Obtener el precio por kg del catálogo para el tipo de precio seleccionado
     const precioPorKg = optionData.precios ? optionData.precios[selectedPriceType] : null;
-
     if (precioPorKg === null) {
          console.error(`Precio por kg no encontrado para la opción ${selectedOptionId} y tipo ${selectedPriceType}.`);
          alert('Error al obtener el precio del producto. Inténtalo de nuevo.');
@@ -310,6 +341,7 @@ function handleAddToOrder() {
     const personalizationsWithNames = {};
     if (optionData.personalizaciones) {
         optionData.personalizaciones.forEach(grupo => {
+            // Use the selectedPersonalizations state from modal.logica.js
             const selectedIdsInGroup = selectedPersonalizations[grupo.grupo] || [];
             if (selectedIdsInGroup.length > 0) {
                 // Encontrar los nombres para los IDs seleccionados en este grupo
@@ -338,8 +370,35 @@ function handleAddToOrder() {
 
     console.log('Item a añadir al pedido:', itemToAdd);
 
-    // Llamar a la función para añadir el item al carrito
-    addItemToCart(itemToAdd);
+    // --- MODIFICADO: Añadir item de envío por defecto si el carrito está vacío, *antes* del producto ---
+    const wasCartEmpty = cartItems.length === 0;
+
+    if (wasCartEmpty) {
+        const defaultEnvioOption = opcionesEnvio.find(opcion => opcion.id === 'mostrador');
+        if (defaultEnvioOption) {
+            console.log('Carrito estaba vacío, añadiendo opción de envío por defecto:', defaultEnvioOption);
+            const envioItem = {
+                productId: 'ENVIO', // Identificador especial
+                optionId: defaultEnvioOption.id,
+                optionName: defaultEnvioOption.nombre,
+                quantity: 1,
+                cost: defaultEnvioOption.costo,
+                priceType: null,
+                pricePerKg: null,
+                personalizations: { descripcion: [defaultEnvioOption.descripcion] }
+            };
+            // Añadir el item de envío al principio del array DIRECTAMENTE
+            cartItems.unshift(envioItem);
+        } else {
+            console.warn('Opción de envío por defecto "mostrador" no encontrada en los datos.');
+        }
+    }
+
+    // Añadir el item de producto al final del array DIRECTAMENTE
+    cartItems.push(itemToAdd);
+
+    // --- NUEVO: Llamar a updateCarritoDisplay UNA VEZ después de añadir ambos items ---
+    updateCarritoDisplay();
 
 
     // Cerrar el modal después de añadir al pedido
@@ -385,6 +444,9 @@ function findOptionData(optionId) {
 // Esta función ahora reside en modal.logica.js
 export function updateModalContentForOption(optionId) {
     const optionData = findOptionData(optionId);
+    console.log('updateModalContentForOption called for optionId:', optionId);
+    console.log('Found optionData:', optionData); // Log optionData
+
     if (!optionData) {
         console.error(`Datos para la opción ${optionId} no encontrados.`);
         return;
@@ -401,8 +463,29 @@ export function updateModalContentForOption(optionId) {
     const procesamientosSection = procesamientosGrid ? procesamientosGrid.closest('.modal-section.procesamientos') : null;
 
     if (renderPersonalizacionesCallback && procesamientosGrid) {
-        // Pasamos el contenedor del grid de procesamientos
-        renderPersonalizacionesCallback(procesamientosGrid, optionData.personalizaciones);
+        // --- Resetear y inicializar selectedPersonalizations para la nueva opción ---
+        // Clear the existing object, maintaining the reference
+        for (const key in selectedPersonalizations) {
+            delete selectedPersonalizations[key];
+        }
+        console.log('Reset selectedPersonalizations:', selectedPersonalizations); // Log after reset
+
+        console.log('Option personalizaciones data:', optionData.personalizaciones); // Log personalizaciones data from optionData
+
+        if (optionData.personalizaciones) {
+            optionData.personalizaciones.forEach(grupo => {
+                if (grupo.default && Array.isArray(grupo.default)) {
+                    selectedPersonalizations[grupo.grupo] = [...grupo.default];
+                } else {
+                    selectedPersonalizations[grupo.grupo] = [];
+                }
+            });
+        }
+        console.log('Selected personalizations updated for new option:', selectedPersonalizations); // Log after populating from defaults
+        // -----------------------------------------------------------------------------
+
+        // Pasamos el contenedor del grid de procesamientos Y el estado actualizado
+        renderPersonalizacionesCallback(procesamientosGrid, optionData.personalizaciones, selectedPersonalizations); // <-- Pass the state
     } else if (procesamientosSection) {
          // Si no hay grid pero sí la sección, ocultarla si no hay personalizaciones
          if (!optionData.personalizaciones || optionData.personalizaciones.length === 0) {

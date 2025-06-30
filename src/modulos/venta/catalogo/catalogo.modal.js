@@ -6,17 +6,33 @@ import { catalogoProductos } from './catalogo.datos.js'; // Importamos los datos
 import { addItemToCart } from '../carrito/carrito.js'; // Importamos la función para añadir al carrito
 // Importamos las funciones de lógica del nuevo archivo
 import { initModalLogic, resetModalLogic, updateModalContentForOption } from './modal.logica.js';
+// Eliminamos la importación específica de closeEnvioModal
+// import { closeEnvioModal } from '../envio/envio.modal.js';
 
 
 // Variables de estado del modal (gestionadas aquí, pasadas a la lógica)
 let currentProduct = null; // Variable para almacenar el producto actual en el modal
 let selectedOptionId = null; // Almacena el ID de la opción (subproducto/especial/variante) seleccionada
 let selectedPriceType = null; // Almacena el tipo de precio seleccionado ('publico', 'cocina', etc.)
-let selectedPersonalizations = {}; // Almacena las personalizaciones seleccionadas { grupoId: [opcionId1, opcionId2], ... }
+// Remove the global selectedPersonalizations variable from here
+// let selectedPersonalizations = {}; // Almacena las personalizaciones seleccionadas { grupoId: [opcionId1, opcionId2], ... }
 
 
 // Función para crear y mostrar el modal
 export async function openCatalogoModal(productId) {
+    // --- Lógica para cerrar cualquier modal existente ---
+    const existingModal = document.querySelector('.modal-overlay');
+    if (existingModal) {
+        // Si hay un modal abierto, lo removemos inmediatamente para evitar conflictos
+        // Podríamos añadir una transición de salida si fuera necesario, pero para simplicidad lo removemos directo
+        existingModal.remove();
+        // Opcional: Limpiar la lógica asociada al modal cerrado si es necesario
+        // Por ejemplo, si el modal de envío tuviera lógica que necesita limpieza
+        // if (existingModal.id === 'envio-modal-container') { resetEnvioModalLogic(); } // Si tuviéramos una función así
+    }
+    // ----------------------------------------------------
+
+
     // Buscar el producto en los datos del catálogo
     const product = catalogoProductos.find(p => p.id === productId);
 
@@ -29,7 +45,24 @@ export async function openCatalogoModal(productId) {
     currentProduct = product;
     selectedOptionId = product.id; // Por defecto, la opción seleccionada es el producto principal
     selectedPriceType = null;
-    selectedPersonalizations = {};
+    // Initialize the state object that will be shared with modal.logica.js
+    let initialSelectedPersonalizations = {};
+
+    // --- Initialize default personalizations for the main product ---
+    if (product.personalizaciones) {
+        product.personalizaciones.forEach(grupo => {
+            if (grupo.default && Array.isArray(grupo.default)) {
+                // Copy default options to the state
+                initialSelectedPersonalizations[grupo.grupo] = [...grupo.default];
+            } else {
+                 // Ensure the group exists in state even if no defaults
+                 initialSelectedPersonalizations[grupo.grupo] = [];
+            }
+        });
+    }
+    console.log('Initial selected personalizations:', initialSelectedPersonalizations);
+    // -------------------------------------------------------------
+
 
     // Cargar la plantilla HTML del modal
     const response = await fetch('src/views/catalogo.modal.html');
@@ -55,7 +88,7 @@ export async function openCatalogoModal(productId) {
     const preciosGrid = modalElement.querySelector('.precios-grid');
     // const registroInputs = modalElement.querySelector('.registro-inputs'); // No necesitamos la referencia al contenedor
     const cantidadInput = modalElement.querySelector('#cantidad-input');
-    const costoInput = modalElement.querySelector('#costo-input');
+    const costoInput = modalElement.querySelector('#costo-input'); // <-- Obtener referencia al input de costo
     const procesamientosGrid = modalElement.querySelector('.procesamientos-grid'); // Este es el contenedor donde renderizaremos las opciones
     const closeModalBtn = modalElement.querySelector('.close-modal-btn');
     const cancelarModalBtn = modalElement.querySelector('#cancelar-modal-btn');
@@ -70,22 +103,9 @@ export async function openCatalogoModal(productId) {
     // Renderizar tipos de precio para la opción inicial (producto principal)
     renderPrecios(preciosGrid, product.precios);
 
-    // --- Lógica para seleccionar 'publico' por defecto ---
-    // MOVIDA A modal.logica.js -> initModalLogic
-    /*
-    const publicoBtn = preciosGrid.querySelector('.modal-btn.precio-btn[data-price-type="publico"]');
-    if (publicoBtn) {
-        publicoBtn.classList.add('selected');
-        selectedPriceType = 'publico'; // Establecer el tipo de precio seleccionado
-        console.log(`Tipo de precio seleccionado por defecto: ${selectedPriceType}`);
-    }
-    */
-    // ----------------------------------------------------
-
-
     // Renderizar personalizaciones (procesamientos) para la opción inicial
-    // Pasamos el contenedor del grid de procesamientos
-    renderPersonalizaciones(procesamientosGrid, product.personalizaciones);
+    // Pass the pre-filled initialSelectedPersonalizations state to renderPersonalizaciones
+    renderPersonalizaciones(procesamientosGrid, product.personalizaciones, initialSelectedPersonalizations);
 
 
     // Inicializar la lógica del modal, pasando el estado, elementos UI y callbacks
@@ -93,8 +113,8 @@ export async function openCatalogoModal(productId) {
         { // Estado inicial
             currentProduct: currentProduct,
             selectedOptionId: selectedOptionId,
-            selectedPriceType: selectedPriceType, // selectedPriceType ya podría ser 'publico' si la lógica de abajo se ejecutara antes
-            selectedPersonalizations: selectedPersonalizations
+            selectedPriceType: selectedPriceType, // This will be null initially, selectDefaultPrice will set it
+            selectedPersonalizations: initialSelectedPersonalizations // Pass the initialized state object
         },
         { // Elementos UI
             cantidadInput: cantidadInput,
@@ -107,19 +127,21 @@ export async function openCatalogoModal(productId) {
             closeModalBtn: closeModalBtn
         },
         { // Callbacks
-            renderPrecios: renderPrecios, // Pasamos la función de renderizado de precios
-            renderPersonalizaciones: renderPersonalizaciones, // Pasamos la función de renderizado de personalizaciones
-            closeCatalogoModal: closeCatalogoModal, // Pasamos la función para cerrar el modal
-            // updateModalContentForOption: updateModalContentForOption // Ya no pasamos esta, la lógica la maneja modal.logica
+            renderPrecios: renderPrecios,
+            renderPersonalizaciones: renderPersonalizaciones, // Pass the modified render function
+            closeCatalogoModal: closeCatalogoModal,
         }
     );
-
 
     // Añadir el modal al cuerpo del documento y hacerlo visible
     document.body.appendChild(modalElement);
     // Usar setTimeout para permitir que el elemento se añada al DOM antes de aplicar la transición
     setTimeout(() => {
         modalElement.classList.add('visible');
+        // Poner el foco en el input de costo después de que el modal sea visible
+        if (costoInput) {
+            costoInput.focus();
+        }
     }, 10); // Un pequeño retraso es suficiente
 
     // Inicializar el estado de los botones (seleccionar el producto principal por defecto)
@@ -142,7 +164,7 @@ export function closeCatalogoModal() {
             currentProduct = null;
             selectedOptionId = null;
             selectedPriceType = null;
-            selectedPersonalizations = {};
+            // selectedPersonalizations = {}; // No longer needed here
             resetModalLogic(); // Llama a la función de limpieza en la lógica
         }, { once: true }); // Asegura que el listener se elimine después de ejecutarse una vez
     }
@@ -236,9 +258,12 @@ function createPrecioButton(tipo, valor) {
 }
 
 
-function renderPersonalizaciones(container, personalizaciones) { // container es .procesamientos-grid
+// Modified to accept selectedPersonalizationsState as an argument
+function renderPersonalizaciones(container, personalizaciones, selectedPersonalizationsState) { // container es .procesamientos-grid
+    console.log('renderPersonalizaciones called with personalizaciones data:', personalizaciones); // Log personalizaciones data received
+    console.log('Current selectedPersonalizations state (passed as argument):', selectedPersonalizationsState); // Log the state being used
+
     container.innerHTML = ''; // Limpiar contenedor
-    // selectedPersonalizations = {}; // Resetear personalizaciones seleccionadas - Esto se hace al abrir el modal
 
     const procesamientosSection = container.closest('.modal-section.procesamientos');
 
@@ -253,15 +278,13 @@ function renderPersonalizaciones(container, personalizaciones) { // container es
 
     // Iterar sobre cada grupo de personalización
     personalizaciones.forEach(grupo => {
-        // Almacenar las personalizaciones seleccionadas por defecto para este grupo
-        // Esto se hace al abrir el modal, no al renderizar la sección
-        // selectedPersonalizations[grupo.grupo] = grupo.default ? [...grupo.default] : []; // Copia para no modificar el original
-
         // Iterar sobre las opciones dentro de cada grupo y renderizarlas
         grupo.options.forEach(opcion => {
             const inputId = `pers-${grupo.grupo.replace(/\s+/g, '-')}-${opcion.id}`; // ID único para el input
-            // Verificar si la opción está seleccionada en el estado actual (selectedPersonalizations)
-            const isSelected = (selectedPersonalizations[grupo.grupo] || []).includes(opcion.id);
+            // Verificar si la opción está seleccionada en el estado actual (selectedPersonalizationsState)
+            const isSelected = (selectedPersonalizationsState[grupo.grupo] || []).includes(opcion.id); // <-- Use the passed state
+
+            console.log(`Rendering option: ${opcion.id} in group ${grupo.grupo}. isSelected: ${isSelected}`); // Log each option's selection status
 
             // Crear el input (checkbox o radio)
             const input = document.createElement('input');
@@ -286,8 +309,6 @@ function renderPersonalizaciones(container, personalizaciones) { // container es
             if (isSelected) {
                  label.classList.add('selected'); // <-- Aplicar 'selected' al label
             }
-
-            // Nota: Los event listeners para estos inputs se añaden en initModalLogic usando delegación.
 
             // Añadir el label directamente al contenedor principal (.procesamientos-grid)
             container.appendChild(label);

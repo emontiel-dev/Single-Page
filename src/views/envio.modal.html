@@ -1,0 +1,242 @@
+<div id="envio-modal-container" class="modal-overlay">
+    <div class="envio-modal-content modal-content"> <!-- Añadida la clase modal-content -->
+        <div class="modal-header">
+            <!-- Título actualizado según el concepto -->
+            <h3 id="modal-envio-title">Elige una opcion</h3>
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="volver-envio-btn">Cancelar</button>                
+                <button class="btn btn-primario" id="agregar-envio-btn">Añadir</button>                
+            </div>
+        </div>
+        <div class="modal-body">
+            <!-- Sección de Opciones de Envío -->
+            <div class="modal-section opciones-envio">
+                <!-- <h4>Opciones Disponibles</h4> Eliminamos este título ya que está en el header -->
+                <div class="opciones-envio-grid">
+                    <!-- Las opciones de envío se renderizarán aquí dinámicamente -->
+                </div>
+            </div>
+
+            <!-- Eliminamos la Sección de Registro Manual -->
+            <!--
+            <div class="modal-section registro-manual">
+                <h4>O registra de forma manual</h4>
+                <div class="registro-inputs-envio">
+                    <div class="form-group">
+                        <label for="descripcion-envio-manual">Descripción</label>
+                        <input type="text" id="descripcion-envio-manual" placeholder="Ej. Envio-Pilcaya">
+                    </div>
+                    <div class="form-group">
+                        <label for="monto-envio-manual">Monto</label>
+                        <input type="number" id="monto-envio-manual" placeholder="0.00" step="0.01">
+                    </div>
+                </div>
+            </div>
+            -->
+
+        </div>
+    </div>
+
+    <style>
+        /* Estilos específicos para el Modal de Envío (Inyectados por envio.modal.html) */
+
+        /* Hereda la mayoría de los estilos de .modal-overlay y .modal-content */
+        /* Puedes añadir estilos específicos si el diseño difiere */
+
+        .envio-modal-content {
+             /* Si necesitas un ancho máximo diferente */
+            max-width: 400px;
+            background-color: var(--blanco);
+            border-radius: var(--radio-borde-l);
+            box-shadow: var(--sombra-md);
+            width: 100%;
+            /*max-width: 500px; /* Ancho máximo similar al contenedor de la app */
+            max-height: 90vh; /* Altura máxima para evitar desbordamiento en pantallas pequeñas */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Ajuste para el título del header si ocupa dos líneas */
+        .envio-modal-content .modal-header h3 {
+            font-size: 1.1em;
+            line-height: 1.3; /* Ajustar interlineado */
+        }
+
+        .modal-body {padding-top: var(--espacio-s);}
+
+
+        .opciones_envio-grid {
+            display: flex; /* Usamos flexbox para los botones */
+            flex-direction: row; /* Mostrar botones en fila */
+            gap: var(--espacio-s); /* Espacio entre los botones */
+            padding: var(--espacio-s); /* Padding interno */
+            background-color: var(--gris-elemento-claro); /* Fondo gris claro */
+            border-radius: var(--radio-borde-l); /* Borde redondeado */
+            overflow-x: auto; /* Añadir scroll horizontal si es necesario */
+            flex-wrap: nowrap; /* Evitar que los botones se envuelvan */
+        }
+
+        /* Botón base */
+.envio-option-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: var(--espacio-s);
+    min-height: 50px;
+    min-width: 100px;
+    max-width: 110px;
+    border: 2px solid var(--gris-borde-input);
+    border-radius: var(--radio-borde-l);
+    background: var(--blanco);
+    color: var(--negro-azabache);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 
+        background 0.18s cubic-bezier(.4,0,.2,1),
+        border-color 0.18s cubic-bezier(.4,0,.2,1),
+        box-shadow 0.18s cubic-bezier(.4,0,.2,1),
+        color 0.18s cubic-bezier(.4,0,.2,1);
+    margin-bottom: 4px;
+    outline: none;
+    gap: 2px;
+    user-select: none;
+}
+
+/* Hover y focus */
+.envio-option-btn:hover,
+.envio-option-btn:focus-visible {
+    background: var(--gris-hover-sutil);
+    border-color: var(--amarillo-polleria);
+    box-shadow: 0 4px 16px rgba(255,193,7,0.08);
+}
+
+/* Estado seleccionado */
+.envio-option-btn.selected {
+    background: var(--amarillo-polleria);
+    color: var(--negro-azabache);
+    border-color: var(--amarillo-polleria);
+    box-shadow: 0 6px 18px rgba(255,193,7,0.12);
+}
+
+/* Nombre de la opción */
+.envio-option-btn span:first-child {
+    font-size: 0.9em;
+    font-weight: 500;
+    color: var(--gris-texto-secundario);
+    margin-bottom: 2px;
+}
+
+/* Costo/detalle */
+.envio-option-btn span:last-child {
+    font-size: 1em;
+    font-weight: 600;
+    color: var(--amarillo-polleria);
+    letter-spacing: 0.5px;
+}
+
+.envio-option-btn.selected span:last-child {
+    color: var(--negro-azabache);
+}
+
+.envio-option-btn.selected span:first-child {
+    color: var(--negro-azabache);
+    font-weight: 700;
+}
+
+/* Mejorar accesibilidad en dispositivos táctiles */
+@media (hover: none) and (pointer: coarse) {
+    .envio-option-btn:active {
+        background: var(--amarillo-polleria-hover);
+        border-color: var(--amarillo-polleria-hover);
+    }
+}
+
+/* Eliminamos los estilos para la sección de registro manual */
+        /*
+        .registro-manual {
+            margin-top: var(--espacio-m);
+            padding-top: var(--espacio-m);
+            border-top: 1px solid var(--gris-borde-sutil);
+        }
+
+        .registro-manual .form-group {
+            margin-bottom: var(--espacio-s);
+        }
+
+        .registro-manual label {
+            display: block;
+            margin-left: var(--espacio-m);
+            margin-bottom: var(--espacio-xs);
+            font-size: 0.9em;
+            font-weight: 600;
+            color: var(--gris-texto-secundario);
+        }
+
+        .registro-manual .label-hint {
+            font-weight: normal;
+            font-size: 0.8em;
+            color: var(--gris-texto-terciario);
+        }
+
+        .registro-manual .registro-inputs-envio {
+            display: flex;
+            gap: var(--espacio-m);
+            padding: var(--espacio-s);
+        }
+
+        .registro-manual .registro-inputs-envio .form-group {
+             margin-bottom: 0;
+        }
+
+        .registro-manual input[type="text"],
+        .registro-manual input[type="number"] {
+             width: 100%;
+             padding: 14px var(--espacio-m);
+             border: 1px solid var(--gris-borde-input);
+             border-radius: var(--radio-borde-m);
+             background-color: var(--gris-elemento-claro);
+             color: var(--negro-azabache);
+             font-size: 1.1em;
+             font-weight: 600;
+        }
+
+        .registro-manual input[type="text"] {
+             text-align: left;
+        }
+
+        .registro-manual input[type="number"] {
+             text-align: right;
+            max-width: 120px;
+        }
+        */
+
+
+        /* Estilos para el pie de página del modal */
+        .modal-footer {
+            padding: var(--espacio-m) var(--espacio-l);
+            border-top: 1px solid var(--gris-borde-sutil);
+            display: flex;
+            gap: var(--espacio-m);
+            flex-shrink: 0;
+        }
+
+        .modal-footer .btn {
+            flex-grow: 1; /* Permite que los botones se expandan */
+            margin-bottom: 0; /* Eliminar margen inferior */
+        }
+
+        /* Estilos específicos para los botones del footer */
+        #volver-envio-btn {
+            /* Estilos para botón secundario */
+        }
+
+        #agregar-envio-btn {
+            /* Estilos para botón primario */
+        }
+
+
+    </style>
+</div>
