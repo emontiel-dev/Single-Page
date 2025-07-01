@@ -1,254 +1,248 @@
+<!-- Reemplaza el contenido de tu archivo con este código -->
 <div id="carrito-ver-items-modal-container" class="modal-overlay">
-    <div class="carrito-ver-items-modal-content modal-content">
-        <div class="modal-header">
-            <h3 id="modal-ver-items-title">Detalle del Pedido</h3>
-            <div class="header-actions">
-                <!-- Botón para cerrar el modal -->
-                <button class="btn btn-secondary" id="cerrar-ver-items-modal-btn">Cerrar</button>
-            </div>
+    <div class="receipt-modal-content">
+        <!-- 1. Encabezado del Modal -->
+        <header class="receipt-header">
+            <h2>Resumen del Pedido</h2>
+            <button class="close-btn" id="cerrar-ver-items-modal-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.41,12l4.3-4.29a1,1,0,1,0-1.42-1.42L12,10.59,7.71,6.29A1,1,0,0,0,6.29,7.71L10.59,12l-4.3,4.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l4.29,4.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z"/></svg>
+            </button>
+        </header>
+
+        <!-- 2. Cuerpo del Recibo (se llena con JS) -->
+        <div class="receipt-body">
+            <section class="store-branding">
+                <h3>Polleria Montiel</h3>
+                <!-- MODIFICACIÓN: Añadir teléfono -->
+                <p>Teléfono: 275-120-2728</p>
+                <!-- Fin MODIFICACIÓN -->
+                <!-- La fecha y hora ahora se combinarán en un solo elemento -->
+                <p class="receipt-meta">
+                    Ticket: #<span id="ticket-id">0000</span> | <span id="ticket-date-time"></span>
+                </p>
+            </section>
+
+            <!-- SECCIONES DINÁMICAS PARA ITEMS -->
+
+            <!-- Items de Pollo -->
+            <section class="items-section pollo-items hidden">
+                <div class="section-title">
+                    <h4>Productos de Pollo:</h4>
+                </div>
+                 <ul class="items-list-ui" id="ticket-items-pollo">
+                     <!-- Items de pollo se renderizarán aquí -->
+                 </ul>
+            </section>
+
+            <!-- Items de Productos Adicionales -->
+            <section class="items-section pa-items hidden">
+                <div class="section-title">
+                    <h4>Productos Adicionales:</h4>
+                </div>
+                 <ul class="items-list-ui" id="ticket-items-pa">
+                     <!-- Items de PA se renderizarán aquí -->
+                 </ul>
+            </section>
+
+             <!-- Items de Cargos -->
+            <section class="items-section cargo-items hidden">
+                <div class="section-title">
+                    <h4>Cargos:</h4>
+                </div>
+                 <ul class="items-list-ui" id="ticket-items-cargo">
+                     <!-- Items de Cargo se renderizarán aquí -->
+                 </ul>
+            </section>
+
+            <!-- FIN SECCIONES DINÁMICAS -->
+
+
+            <section class="totals-section">
+                <!-- Subtotal, Envío, etc. van aquí. El JS los llenará -->
+            </section>
         </div>
-        <div class="modal-body">
-            <!-- Contenido del ticket -->
-            <div class="ticket-content">
-                <!-- Información de la Carnicería (Sección estática o cargada dinámicamente) -->
-                <div class="ticket-section carniceria-info">
-                    <div class="text-center">
-                        <h4 class="ticket-title">Polleria Montiel</h4>
-                        <p>Int. Mercado local 17, Chiautla </p>
-                        <p>Teléfono: 275-120-2728</p>
-                        <!-- MODIFICACIÓN: Envolver Fecha y Hora en un div -->
-                        <div class="date-time-line">
-                            <p>Fecha: <span id="ticket-date"></span></p>
-                            <p>Hora: <span id="ticket-time"></span></p>
-                        </div>
-                        <!-- Fin MODIFICACIÓN -->
-                    </div>
-                    <div class="separator"></div>
-                </div>
 
-                <!-- Información del Cliente (Omitida por ahora) -->
-                <!--
-                <div class="ticket-section cliente-info">
-                    <h5 class="section-title">Cliente:</h5>
-                    <p>Nombre del Cliente</p>
-                    <p>Dirección del Cliente</p>
-                    <div class="separator"></div>
-                </div>
-                -->
-
-                <!-- Items de Pollo -->
-                <div class="ticket-section items-pollo hidden">
-                    <h5 class="section-title">Productos de Pollo:</h5>
-                    <div class="items-list" id="ticket-items-pollo">
-                        <!-- Items de pollo se renderizarán aquí -->
-                    </div>
-                    <div class="separator"></div>
-                </div>
-
-                <!-- Items de Productos Adicionales -->
-                <div class="ticket-section items-pa hidden">
-                    <h5 class="section-title">Productos Adicionales:</h5>
-                    <div class="items-list" id="ticket-items-pa">
-                        <!-- Items de PA se renderizarán aquí -->
-                    </div>
-                    <div class="separator"></div>
-                </div>
-
-                 <!-- Items de Cargos -->
-                <div class="ticket-section items-cargo hidden">
-                    <h5 class="section-title">Cargos:</h5>
-                    <div class="items-list" id="ticket-items-cargo">
-                        <!-- Items de Cargo se renderizarán aquí -->
-                    </div>
-                    <div class="separator"></div>
-                </div>
-
-                <!-- Item de Envío -->
-                <div class="ticket-section item-envio hidden">
-                    <h5 class="section-title">Envío:</h5>
-                     <div class="items-list" id="ticket-item-envio">
-                        <!-- Item de Envío se renderizará aquí -->
-                    </div>
-                    <div class="separator"></div>
-                </div>
-
-
-                <!-- Resumen del Total -->
-                <div class="ticket-section ticket-total">
-                    <div class="total-line">
-                        <span>TOTAL:</span>
-                        <span id="ticket-total-value">$0.00</span>
-                    </div>
-                    <div class="separator"></div>
-                </div>
-
-                <!-- Mensaje de agradecimiento o pie de página -->
-                <div class="ticket-section footer-message">
-                    <div class="text-center">
-                        <p>¡Gracias por tu compra!</p>
-                    </div>
-                </div>
-
+        <!-- 3. Pie de página con botones de acción -->
+        <footer class="receipt-footer">
+            <div class="action-buttons">
+                <!-- Botón Imprimir (Añadido ID) -->
+                <button class="action-btn primary" id="btn-imprimir">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,8H5a3,3,0,0,0-3,3v6H6V19a1,1,0,0,0,1,1H17a1,1,0,0,0,1-1V17h4V11A3,3,0,0,0,19,8Zm-2,9H7V14h10Zm2-7a1,1,0,0,1-1,1H6a1,1,0,0,1-1-1V11a1,1,0,0,1,1-1H18a1,1,0,0,1,1,1Z"/></svg>
+                    Imprimir
+                </button>
+                <!-- Botón Cobrar (ya tiene ID) -->
+                <button class="action-btn primary" id="btn-cobrar">
+                    <span><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 14 14"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8.351 5.307a1.166 1.166 0 0 0-1.1-.778h-.903a1.041 1.041 0 0 0-.223 2.059l1.375.3a1.167 1.167 0 0 1-.25 2.307h-.777c-.508 0-.94-.324-1.1-.777m1.489-3.889V3.362m0 7V9.196m-4.864 4.302v-2.5h2.5"/><path d="M13.388 5.804a6.5 6.5 0 0 1-11.39 5.35M.612 8.196a6.5 6.5 0 0 1 11.39-5.35"/><path d="M12.002.502v2.5h-2.5"/></g></svg></span>
+                    <span id="carrito-total-value">0.00</span> <!-- El span ya está aquí -->
+                </button>
+                <!-- Botón Guardar (ya tiene ID) -->
+                <button class="action-btn secondary" id="btn-guardar-pedido">
+                    <span><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></span>
+                    <span>Guardar</span>
+                </button>
             </div>
-        </div>
-    </div>
+        </footer>
 
-    <style>
-        /* =============================================================== */
-        /* ========= INICIA BLOQUE DE ESTILOS REFINADO (COPIA ESTO) ======= */
-        /* =============================================================== */
-
-        /* --- Contenedor del Modal --- */
-        .carrito-ver-items-modal-content {
-            max-width: 300px;
+        <!-- ESTILOS CSS COMPLETAMENTE NUEVOS Y ADAPTADOS -->
+        <style>
+        
+        .receipt-modal-content {
             background-color: var(--blanco);
-            border-radius: var(--radio-borde-l);
-            box-shadow: var(--sombra-md);
-            width: 100%;
+            width: calc(100% - 20px); /* Ancho completo menos 10px de margen a cada lado */
+            max-width: 420px; /* Ancho máximo para pantallas grandes */
+            margin: 10px;
+            margin-top: auto; /* Empuja el modal hacia abajo */
+            border-radius: var(--radio-borde-l); /* Bordes redondeados en todas las esquinas */
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
             max-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            padding: 0;
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .receipt-modal-content p {
+            color: var(--negro-azabache);
         }
 
-        .carrito-ver-items-modal-content .modal-header {
-            padding: var(--espacio-s) var(--espacio-m);
+        /* El ID viene de tu JS, no es necesario cambiarlo */
+        #carrito-ver-items-modal-container.visible .receipt-modal-content {
+            transform: translateY(0);
+        }
+
+        /* Encabezado del Modal */
+        .receipt-header {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             border-bottom: 1px solid var(--gris-borde-sutil);
+            border-radius: var(--radio-borde-l) var(--radio-borde-l) 0 0;
             flex-shrink: 0;
         }
-
-        .carrito-ver-items-modal-content .modal-header h3 {
-            font-size: 1.1em;
-            line-height: 1.3;
+        .receipt-header h2 {
+            margin: 0;
+            font-size: 1.15em;
+            font-weight: 600;
+            color: var(--negro-azabache);
         }
+        .close-btn {
+            background: none; border: none; cursor: pointer; padding: 5px;
+        }
+        .close-btn svg { width: 24px; height: 24px; fill: var(--negro-azabache); }
 
-        .modal-body {
-            padding: 0; /* Sin padding para que el ticket ocupe todo */
+        /* Cuerpo del Recibo */
+        .receipt-body {
+            padding: 20px;
             overflow-y: auto;
+            font-family: 'Poppins', sans-serif; /* Fuente más moderna */
         }
-
-        /* --- Estilo General del Ticket --- */
-        .ticket-content {
-            font-family: 'Consolas', 'Menlo', 'Courier New', monospace;
-            font-size: 13px;
-            line-height: 1.5;
-            background-color: #F7F7F0; /* Tono de papel térmico */
-            color: #262626; /* Tono de tinta */
-            padding: var(--espacio-m);
-        }
-
-        .ticket-section {
-            margin-bottom: var(--espacio-m);
-        }
-        .ticket-section:last-child {
-            margin-bottom: 0;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .ticket-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: var(--espacio-xs);
-        }
-
-        /* --- Títulos de Sección (PRODUCTOS, CARGOS, etc.) --- */
-        .section-title {
-            font-weight: bold;
-            text-transform: uppercase;
+        .store-branding { text-align: center; padding-bottom: 20px; }
+        .store-branding h3 { margin: 0 0 5px 0; font-size: 1.6em; font-weight: 700; }
+        .receipt-meta { font-size: 0.9em; color: var(--gris-elemento-claro); }
+        .items-section .section-title h4 {
             margin-bottom: var(--espacio-s);
-            padding-bottom: var(--espacio-xs);
-            border-bottom: 1px dashed #888; /* Separador integrado */
+            text-align: center;
+            font-weight: 500;
+            font-size: 1em;
+            color: var(--gris-texto-secundario);
         }
 
-        /* --- Separadores adicionales --- */
-        .separator {
-            border-bottom: 1px dashed #888;
-            margin: var(--espacio-m) 0;
+        /* Lista de Items */
+        /*.items-section, */.totals-section {
+            border-top: 1px solid var(--gris-borde-sutil);
+            padding: 15px 0;
+            /*margin: 15px 0;*/
         }
-
-
-        /* [NUEVO] Contenedor para las listas de items */
-        .items-list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--espacio-s); /* Espacio entre cada grupo de producto */
+        .items-list-ui { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px; }
+        .item-row-ui { display: flex; justify-content: space-between; align-items: flex-start; }
+        .item-info .name { font-weight: 500; color: var(--negro-azabache); font-size: 1.05em; }
+        .item-info .details {
+            font-size: 0.85em;
+            color: var(--color-texto-secondary);
+            /* Añadir estilos para manejar texto largo */
+            word-break: break-word; /* Rompe palabras largas si es necesario */
+            white-space: normal; /* Asegura que el texto se envuelva */
         }
+        .item-price { font-size: 1.05em; font-weight: 600; color: var(--negro-azabache); white-space: nowrap; margin-top: auto ; padding-left: 10px;}
 
-        /* [NUEVO] Grupo de un producto (nombre/precio + detalles) */
-        .ticket-item-group {
-            /* Este contenedor agrupa un item y sus detalles */
-        }
+        /* Totales */
+        .totals-section { border-bottom: none; display: flex; flex-direction: column; gap: 12px; }
+        .total-row-ui { display: flex; justify-content: space-between; font-size: 1em; }
+        .total-row-ui .label { color: var(--color-texto-secondary); }
+        .total-row-ui .value { font-weight: 600; }
+        .grand-total-ui { margin-top: 10px; padding-top: 15px; border-top: 2px solid var(--negro-azabache); font-size: 1.6em; font-weight: 700; }
+        .grand-total-ui .value { color: var(--azul-info); }
 
-        /* Línea principal (Nombre y Precio) y líneas de detalle */
-        .item-line {
-            display: flex;
-            justify-content: space-between;
-            gap: var(--espacio-m);
-        }
-
-        .item-line .item-name {
-            font-weight: bold; /* Nombre del producto en negrita */
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .item-line .item-price {
-            white-space: nowrap;
+        /* Pie de página con botones */
+        .receipt-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--gris-borde-sutil);
+            background-color: var(--gris-elemento-claro); /* Fondo gris claro */
             flex-shrink: 0;
+            border-radius: 0 0 var(--radio-borde-l) var(--radio-borde-l); /* Bordes redondeados abajo */
         }
-
-        /* [NUEVO] Contenedor para los detalles de un producto */
-        .item-details-container {
-            padding-left: var(--espacio-m); /* Indentación para los detalles */
-            font-size: 0.9em;
-            color: #555;
+        .action-buttons {
             display: flex;
-            flex-direction: column;
-            line-height: 1.3; /* Líneas de detalle más juntas */
-            margin-top: 2px; /* Pequeño espacio tras la línea principal */
+            gap: 8px; /* MODIFICADO: Reducido el espacio entre los botones de 12px a 8px */
         }
-
-        /* Estilo específico para líneas de descuento */
-        .item-details-container .item-discount {
-            color: var(--rojo-error, #d9534f);
-        }
-
-        /* --- Sección del Total --- */
-        .ticket-total {
-            border-top: 1px solid #555;
-            padding-top: var(--espacio-s);
-            margin-top: var(--espacio-m);
-        }
-
-        .ticket-total .total-line {
+        .action-btn {
+            flex: 1; /* Permite que los botones se expandan y ocupen el espacio disponible */
+            padding: 14px 10px; /* MODIFICADO: Reducido el padding horizontal de 14px a 10px */
+            border-radius: var(--radio-borde-l);
+            font-size: 1em;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--color-white); /* Color de texto por defecto para action-btn */
+            border: none;
+            cursor: pointer;
             display: flex;
-            justify-content: space-between;
-            font-size: 1.3em;
-            font-weight: bold;
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* Espacio entre icono y texto/valor (se mantiene en 8px) */
+            transition: opacity 0.2s;
+        }
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+        /* Estilos de variante (usando variables CSS de styles.css) */
+        /* Puedes mantener estas reglas generales si quieres un color base */
+        .action-btn.primary {
+            /* background-color: var(--azul-info); */ /* Comentar o eliminar si usas IDs */
+            /* color: var(--blanco); */ /* Comentar o eliminar si usas IDs */
+        }
+        .action-btn.secondary {
+            background-color: var(--gris-elemento-claro); /* Comentar o eliminar si usas IDs */
+            /* color: var(--negro-azabache); */ /* Comentar o eliminar si usas IDs */
         }
 
-        /* --- Clases de utilidad --- */
-        .hidden {
-            display: none;
+        /* --- Estilos específicos por ID para colores diferentes --- */
+        #btn-imprimir {
+            background-color: var(--azul-info); /* O el color que prefieras para Imprimir */
+            color: var(--blanco);
         }
 
-        /* --- NUEVO: Estilo para la línea de Fecha y Hora --- */
-        .date-time-line {
-            display: flex; /* Usar flexbox */
-            justify-content: center; /* Centrar horizontalmente */
-            gap: var(--espacio-m); /* Espacio entre Fecha y Hora */
-            margin-top: var(--espacio-xs); /* Espacio sobre esta línea */
+        #btn-cobrar {
+            background-color: var(--verde-accion); /* O el color que prefieras para Cobrar */
+            color: var(--texto-sobre-verde); /* Asegúrate de tener una variable para el texto sobre verde */
         }
 
-        .date-time-line p {
-            margin: 0; /* Eliminar margen por defecto de los párrafos dentro de flex */
-            line-height: inherit; /* Heredar line-height del contenedor */
+        #btn-guardar-pedido {
+            background-color: var(--amarillo-polleria); /* O el color que prefieras para Guardar */
+            color: var(--negro-azabache); /* Color de texto oscuro sobre fondo claro */
         }
-        /* --- Fin NUEVO --- */
+        /* --- Fin Estilos específicos por ID --- */
 
+
+        /* Ajuste específico para el texto del total en el botón Cobrar */
+        #btn-cobrar span#carrito-total-value {
+             color: inherit; /* Hereda el color del botón (blanco o el que definas para #btn-cobrar) */
+             font-weight: 700;
+             font-size: 1.1em;
+             white-space: nowrap;
+        }
+
+
+        .hidden { display: none; }
     </style>
+    </div>
 </div>

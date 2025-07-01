@@ -329,7 +329,8 @@ function handlePrecioKgInput() {
     const nuevoPrecioKg = parseFloat(precioKgInput.value);
 
     // Limpiar los otros inputs
-    if (descuentoCantidadInput) descuentoCantidadInputInput.value = '';
+    // FIX TYPO: Change descuentoCantidadInputInput to descuentoCantidadInput
+    if (descuentoCantidadInput) descuentoCantidadInput.value = '';
     if (descuentoPorcentajeInput) descuentoPorcentajeInput.value = '';
 
     // Si el valor no es un número válido o no hay ítem seleccionado, resetear placeholders y salir
@@ -353,7 +354,7 @@ function handlePrecioKgInput() {
          // Resetear placeholders de descuento y precio/kg si no aplica
          if (descuentoCantidadInput) descuentoCantidadInput.placeholder = '0.00';
          if (descuentoPorcentajeInput) descuentoPorcentajeInput.placeholder = '0';
-         if (precioKgInput) precioKgInput.placeholder = 'N/A';
+         if (precioKgInput) precioKgInput.placeholder = 'N/A'; // Resetear a N/A si no aplica precio/kg
          return;
     }
 
@@ -505,7 +506,8 @@ function handleAplicarDescuento() {
         monto: montoFinalDescuento,
         descripcion: descripcionDescuento,
         originalCost: originalCostBeforeDiscount,
-        newPricePerKg: finalNewPricePerKg // Guardar el nuevo precio por kg si se usó esa opción
+        newPricePerKg: finalNewPricePerKg, // Guardar el nuevo precio por kg si se usó esa opción
+        tipoDescuentoAplicado: tipoDescuentoAplicado // <-- Asegúrate de que esta línea exista
     };
 
     // Actualizar el costo del ítem al nuevo costo descontado
