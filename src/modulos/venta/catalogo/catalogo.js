@@ -1,9 +1,11 @@
 // src/modulos/venta/catalogo/catalogo.js
 
-// Este archivo se encarga de renderizar la vista del catálogo de productos.
-
-import { openCatalogoModal } from './catalogo.modal.js'; // Importamos la función para abrir el modal
+import { catalogoProductos } from './catalogo.datos.js'; // Importamos los datos del catálogo
+import { openCatalogoModal } from './catalogo.modal.js'; // Importamos la función para abrir el modal del catálogo
 import { openEnvioModal } from '../envio/envio.modal.js'; // Importamos la función para abrir el modal de envío
+import { openCargoModal } from '../cargo/cargo.modal.js'; // Importamos la función para abrir el modal de cargo
+import { openDescuentoModal } from '../descuento/descuento.modal.js'; // Importamos la función para abrir el modal de descuento
+import { openPaModal } from '../pa/pa.modal.js'; // <-- Importamos la función para abrir el modal de PA
 
 
 export async function renderCatalogo(container) {
@@ -38,6 +40,34 @@ export async function renderCatalogo(container) {
                  openEnvioModal(); // Abrir el modal de envío
              });
          }
+
+        // Añadir event listener al botón de "Cargo" en acciones rápidas
+        const cargoButton = container.querySelector('#btn-agregar-cargo-rapido'); // Obtener el botón por su ID
+         if (cargoButton) {
+             cargoButton.addEventListener('click', () => {
+                 console.log('Botón de Cargo clicado.');
+                 openCargoModal(); // Abrir el modal de cargo
+             });
+         }
+
+        // Añadir event listener al botón de "Descuento" en acciones rápidas
+        const descuentoButton = container.querySelector('#btn-aplicar-descuento-rapido'); // Obtener el botón por su ID
+         if (descuentoButton) {
+             descuentoButton.addEventListener('click', () => {
+                 console.log('Botón de Descuento clicado.');
+                 openDescuentoModal(); // Abrir el modal de descuento
+             });
+         }
+
+        // <-- Añadir event listener al botón de "PA" en acciones rápidas -->
+        const paButton = container.querySelector('#btn-agregar-pa-rapido'); // Obtener el botón por su ID
+         if (paButton) {
+             paButton.addEventListener('click', () => {
+                 console.log('Botón de PA clicado.');
+                 openPaModal(); // Abrir el modal de PA
+             });
+         }
+        // --> Fin de la adición <--
 
 
     } catch (error) {

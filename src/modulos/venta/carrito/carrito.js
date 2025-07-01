@@ -5,6 +5,9 @@
 // No necesitamos importar carrito.detalle.js si eliminamos el modal de detalle
 // import { openCarritoDetalleModal } from './carrito.detalle.js';
 
+import { openCarritoVerItemsModal } from './carrito.ver.items.js'; // <-- Importar la función del nuevo modal
+
+
 export let cartItems = []; // Array para almacenar los items del carrito - AHORA EXPORTADO
 
 // Función para renderizar la plantilla HTML del carrito
@@ -30,8 +33,15 @@ export async function renderCarrito(container) {
         const itemsListBody = container.querySelector('#carrito-items-list'); // Get the tbody for item list
 
 
-        // Si decides re-implementar la funcionalidad de "Ver todo" (ej. modal), descomenta esta línea
-        // if (btnVerItems) btnVerItems.addEventListener('click', handleVerItems);
+        // --- MODIFICACIÓN: Añadir listener al botón 'Ver todo' ---
+        if (btnVerItems) {
+             btnVerItems.addEventListener('click', () => {
+                 console.log('Botón "Ver todos los items" clicado.');
+                 openCarritoVerItemsModal(); // Abrir el nuevo modal de detalle
+             });
+        }
+        // --> Fin de la MODIFICACIÓN <--
+
         if (btnCobrar) btnCobrar.addEventListener('click', handleCobrar);
         if (btnGuardarPedido) btnGuardarPedido.addEventListener('click', handleGuardarPedido);
         // Eliminamos el listener del div verTodosMensaje
@@ -130,8 +140,14 @@ export function updateCarritoDisplay() { // <-- Añadido 'export' aquí
             // --- DETECCIÓN Y RENDERIZADO POR TIPO DE ITEM ---
             if (item.productId === 'ENVIO') {
                 productCell = renderEnvioItem(item);
-            } else {
-                // Asumimos que es un producto de pollo por ahora
+            } else if (item.productId === 'CARGO') {
+                productCell = renderCargoItem(item);
+            } else if (item.productId === 'PA') { // <-- Añadida lógica para PA
+                 productCell = renderPaItem(item);
+            }
+             else {
+                // Asumimos que es un producto de pollo o un producto con descuento aplicado
+                // La función renderProductItem ahora maneja la visualización de descuentos
                 productCell = renderProductItem(item);
             }
             // TODO: Añadir lógica para 'producto adicional' aquí más adelante
@@ -141,7 +157,10 @@ export function updateCarritoDisplay() { // <-- Añadido 'export' aquí
             // Celda de Subtotal (común a la mayoría de los items)
             const subtotalCell = document.createElement('td');
             subtotalCell.classList.add('item-subtotal');
-            subtotalCell.textContent = `$${item.cost.toFixed(2)}`;
+            // Mostrar el costo con signo para descuentos (aunque ahora el costo del item ya es el final)
+            // Si el item tiene descuento, mostramos el costo final. Si no, mostramos el costo normal.
+            // La función renderProductItem se encargará de mostrar el detalle del descuento.
+            subtotalCell.textContent = `$${item.cost.toFixed(2)}`; // <-- Mostrar el costo final del item
             row.appendChild(subtotalCell);
 
             // Celda de Acciones (Eliminar) (común a la mayoría de los items)
@@ -153,14 +172,14 @@ export function updateCarritoDisplay() { // <-- Añadido 'export' aquí
 
             itemsListBody.appendChild(row);
 
-            total += item.cost; // Sumar al total
+            total += item.cost; // Sumar al total (el costo del item ya es el final)
         });
 
         // Mostrar el carrito si hay items
         carritoContainer.classList.add('visible');
 
         // Actualizar el contador dentro del botón "Ver todo"
-        itemCountSpan.textContent = cartItems.length; // Descomentado
+        itemCountSpan.textContent = cartItems.length;
 
 
         // Eliminar la lógica de padding inferior ya que el carrito no está fijo
@@ -191,12 +210,12 @@ export function updateCarritoDisplay() { // <-- Añadido 'export' aquí
 
 // --- Funciones Auxiliares de Renderizado de Items ---
 
-// Renderiza un item de producto de pollo
+// Renderiza un item de producto de pollo (ahora también maneja descuentos)
 function renderProductItem(item) {
     const productCell = document.createElement('td');
 
     // Usar item.optionName si está disponible, de lo contrario item.optionId
-    const optionNameDisplay = item.optionName || item.optionId;
+    const optionNameDisplay = item.optionName || item.productId; // Usar productId como fallback si optionName no está definido
     // Asegurarse de que item.optionId exista y sea diferente del productId para mostrar el detalle del ID si es una variante/subproducto
     const optionDetailId = item.optionId && item.optionId !== item.productId ? ` (${item.optionId})` : ''; // Incluir paréntesis aquí
 
@@ -211,23 +230,37 @@ function renderProductItem(item) {
         }
     }
 
-    // Usar el precio por kg almacenado en el item si está disponible, de lo contrario calcularlo
-    const unitPriceDisplay = item.pricePerKg !== undefined && item.pricePerKg !== null
-        ? item.pricePerKg.toFixed(2) // Usar el precio del catálogo si está almacenado
-        : (item.quantity > 0 ? (item.cost / item.quantity).toFixed(2) : '0.00'); // Fallback si no está almacenado o cantidad es 0
+    let itemHtml = '';
+
+    // --- Lógica para mostrar descuento si existe ---
+    if (item.discount) {
+        // Mostrar formato detallado con descuento
+        const originalCost = item.discount.originalCost;
+        const originalUnitPrice = item.quantity > 0 ? (originalCost / item.quantity) : 0;
+        const newUnitPrice = item.quantity > 0 ? (item.cost / item.quantity) : 0; // item.cost ya es el costo final
+
+        itemHtml = `
+            <div class="item-nombre">${optionNameDisplay}${personalizationsString}</div>
+            <div class="item-detalle">${item.quantity.toFixed(3)}(kg) * $${originalUnitPrice.toFixed(2)}</div>
+            <div class="item-detalle item-descuento-detalle" style="color: var(--rojo-error);">${item.discount.descripcion}</div> <!-- Estilo para descuento -->
+            <div class="item-detalle">${item.quantity.toFixed(3)}(kg) * $${newUnitPrice.toFixed(2)}</div> <!-- Nuevo precio unitario -->
+        `;
+        // Nota: El subtotal final ($item.cost.toFixed(2)) se muestra en la celda .item-subtotal
+
+    } else {
+        // Mostrar formato estándar sin descuento
+        const unitPriceDisplay = item.pricePerKg !== undefined && item.pricePerKg !== null
+            ? item.pricePerKg.toFixed(2) // Usar el precio del catálogo si está almacenado
+            : (item.quantity > 0 ? (item.cost / item.quantity).toFixed(2) : '0.00'); // Fallback si no está almacenado o cantidad es 0
+
+        itemHtml = `
+            <div class="item-nombre">${optionNameDisplay}${personalizationsString}</div>
+            <div class="item-detalle">${item.quantity.toFixed(3)}(kg) * $${unitPriceDisplay}</div>
+        `;
+    }
 
 
-    // Combinar nombre, detalle de ID (si aplica) y personalizaciones en la primera línea
-    const productNameLine = `<div class="item-nombre">${optionNameDisplay}${personalizationsString}</div>`;
-
-    // Segunda línea con cantidad y precio unitario (usando el precio unitario para mostrar)
-    const quantityPriceLine = `<div class="item-detalle">${item.quantity.toFixed(3)}(kg) * $${unitPriceDisplay}</div>`;
-
-
-    productCell.innerHTML = `
-        ${productNameLine}
-        ${quantityPriceLine}
-    `;
+    productCell.innerHTML = itemHtml;
 
     return productCell;
 }
@@ -249,7 +282,51 @@ function renderEnvioItem(item) {
     return productCell;
 }
 
-// TODO: Crear renderAdicionalItem(item) para productos adicionales
+// Renderiza un item de cargo manual
+function renderCargoItem(item) {
+    const productCell = document.createElement('td');
+
+    // Obtener la descripción ingresada por el usuario desde personalizations
+    const cargoDescription = item.personalizations && item.personalizations.descripcion && item.personalizations.descripcion.length > 0
+        ? item.personalizations.descripcion[0]
+        : 'Cargo Manual'; // Usar 'Cargo Manual' como fallback si por alguna razón no hay descripción (aunque el input es requerido)
+
+    productCell.innerHTML = `
+        <div class="item-nombre">${cargoDescription}</div> <!-- Descripción ingresada por el usuario -->
+        <div class="item-detalle">Cargo Manual</div> <!-- Nombre fijo como detalle -->
+    `;
+
+    return productCell;
+}
+
+// <-- NUEVA: Renderiza un item de Producto Adicional (PA) -->
+function renderPaItem(item) {
+    const productCell = document.createElement('td');
+
+    // Obtener la descripción ingresada por el usuario desde personalizations
+    const paDescription = item.personalizations && item.personalizations.descripcion && item.personalizations.descripcion.length > 0
+        ? item.personalizations.descripcion[0]
+        : 'Producto Adicional'; // Usar 'Producto Adicional' como fallback si no hay descripción
+
+    // Mostrar la descripción y el costo (si tiene)
+    // Eliminamos la lógica de añadir el costo aquí, ya que el costo total se muestra en la columna de subtotal
+    // let paDetails = paDescription;
+    // if (item.cost > 0) {
+    //     paDetails += ` ($${item.cost.toFixed(2)})`;
+    // }
+
+    // --- MODIFICACIÓN: Intercambiar nombre y detalle ---
+    productCell.innerHTML = `
+        <div class="item-nombre">${paDescription}</div> <!-- Descripción ingresada por el usuario -->
+        <div class="item-detalle">${item.optionName}</div> <!-- Nombre fijo: Producto Adicional -->
+    `;
+    // --> Fin de la MODIFICACIÓN <--
+
+
+    return productCell;
+}
+// --> Fin de la NUEVA función <--
+
 
 // --- Handlers de botones de acción ---
 

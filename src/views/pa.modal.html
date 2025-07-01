@@ -1,0 +1,148 @@
+<div id="pa-modal-container" class="modal-overlay">
+    <div class="pa-modal-content modal-content">
+        <div class="modal-header">
+            <h3 id="modal-pa-title">Agrega Producto Adicional.</h3>
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="cancelar-pa-btn">volver</button>
+                <button class="btn btn-primario" id="agregar-pa-btn">agregar</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <!-- Sección para registrar el Producto Adicional -->
+            <div class="modal-section registrar-pa">
+                <!-- No necesitamos un título h4 aquí ya que el título principal lo indica -->
+                <div class="registro-inputs-pa">
+                    <div class="form-group">
+                        <label for="pa-descripcion-input">Descripción breve</label>
+                        <input type="text" id="pa-descripcion-input" placeholder="Ej: 1k de jitomate">
+                    </div>
+                    <div class="form-group">
+                        <label for="pa-costo-input">Costo <span class="label-detalle">(Ingresa el monto del PA)</span></label>
+                        <input type="number" id="pa-costo-input" placeholder="0.00" step="0.01">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nota informativa (opcional, basada en la imagen) -->
+            <!-- Puedes añadir esta sección si quieres replicar la nota de la imagen -->
+            <!--
+            <div class="modal-section pa-nota">
+                <h4>Modal para agregar Productos Adicionales al pedido</h4>
+                <p>La 'descripcion breve' actuara como etiqueta, integrando el dato de 'cantidad'</p>
+                <p>El costo en esta fase del registro es opcional. El ux(tablajero) podra acceder a este modal para editar y/o agregar informacion</p>
+            </div>
+            -->
+
+        </div>
+    </div>
+
+    <style>
+        /* Estilos específicos para el Modal de Producto Adicional (Inyectados por pa.modal.html) */
+
+        .pa-modal-content {
+            max-width: 400px; /* Un ancho adecuado para este modal simple */
+            background-color: var(--blanco);
+            border-radius: var(--radio-borde-l);
+            box-shadow: var(--sombra-md);
+            width: 100%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pa-modal-content .modal-header h3 {
+            font-size: 1.1em;
+            line-height: 1.3;
+        }
+
+        .modal-body {
+            padding-top: var(--espacio-s);
+            overflow-y: auto;
+        }
+
+        .registrar-pa {
+            padding: var(--espacio-s);
+            /* No border-bottom si es la última sección */
+            /* margin-bottom: var(--espacio-m); */
+        }
+
+        .registro-inputs-pa {
+            display: flex;
+            flex-direction: column; /* Apilar inputs verticalmente */
+            gap: var(--espacio-m); /* Espacio entre los grupos de formulario */
+            padding: var(--espacio-s);
+        }
+
+        .registro-inputs-pa .form-group {
+             margin-bottom: 0; /* Eliminar margen inferior por defecto */
+        }
+
+        .registro-inputs-pa label {
+             margin-bottom: var(--espacio-xs); /* Espacio entre label e input */
+             font-weight: 600;
+             color: var(--gris-texto-secundario);
+             font-size: 0.9em;
+        }
+
+        .registro-inputs-pa .label-detalle {
+             font-weight: 400;
+             font-size: 0.8em;
+             color: var(--gris-texto-terciario);
+        }
+
+
+        /* Estilos generales para inputs en secciones de registro */
+        .registro-inputs-pa input[type="text"],
+        .registro-inputs-pa input[type="number"] {
+             width: 100%;
+             padding: 14px var(--espacio-m);
+             border: 1px solid var(--gris-borde-input);
+             border-radius: var(--radio-borde-m);
+             background-color: var(--gris-elemento-claro);
+             color: var(--negro-azabache);
+             font-size: 1em; /* Tamaño de fuente ligeramente más pequeño que en descuento */
+             font-weight: 500;
+        }
+
+        .registro-inputs-pa input[type="number"] {
+             text-align: right; /* Alinear números a la derecha */
+        }
+
+
+        /* Estilos para los botones en el header */
+        .pa-modal-content .header-actions .btn {
+            width: auto; /* Permitir que el ancho se ajuste al contenido */
+            min-width: 70px; /* Ancho mínimo */
+            padding: var(--espacio-xs) var(--espacio-s); /* Padding ajustado */
+            font-size: 0.9em; /* Tamaño de fuente ajustado */
+        }
+
+        /* Estilos para la nota informativa (si la incluyes) */
+        .pa-nota {
+            padding: var(--espacio-s);
+            background-color: var(--azul-info-claro);
+            border-radius: var(--radio-borde-m);
+            margin: var(--espacio-m); /* Margen alrededor */
+            font-size: 0.9em;
+            color: var(--azul-info-oscuro);
+        }
+
+        .pa-nota h4 {
+            margin-top: 0;
+            font-size: 1em;
+            font-weight: 600;
+            margin-bottom: var(--espacio-xs);
+        }
+
+        .pa-nota p {
+            margin-bottom: var(--espacio-xs);
+            line-height: 1.4;
+        }
+
+        .pa-nota p:last-child {
+            margin-bottom: 0;
+        }
+
+
+    </style>
+</div>

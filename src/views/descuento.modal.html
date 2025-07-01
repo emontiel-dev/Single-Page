@@ -1,0 +1,243 @@
+<div id="descuento-modal-container" class="modal-overlay">
+    <div class="descuento-modal-content modal-content">
+        <div class="modal-header">
+            <h3 id="modal-descuento-title">Aplicar descuento</h3>
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="cancelar-descuento-btn">volver</button>
+                <button class="btn btn-primario" id="aplicar-descuento-btn">aplicar</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <!-- Sección para seleccionar un ítem del carrito -->
+            <div class="modal-section seleccionar-item">
+                <h4>Elige un item para aplicar descuento.</h4>
+                <div class="items-carrito-grid">
+                    <!-- Los items del carrito se renderizarán aquí como botones -->
+                </div>
+            </div>
+
+            <!-- Sección para registrar el descuento manual -->
+            <div class="modal-section registrar-descuento">
+                <h4>Registra una de las opciones</h4>
+                <div class="registro-inputs-descuento">
+                    <div class="form-group">
+                        <label for="descuento-cantidad-input">Por cantidad ($)</label>
+                        <input type="number" id="descuento-cantidad-input" placeholder="0.00" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="descuento-porcentaje-input">Por porcentaje (%)</label>
+                        <input type="number" id="descuento-porcentaje-input" placeholder="0" step="0.1">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nueva Sección para modificar precio por kg -->
+            <div class="modal-section modificar-precio-kg">
+                <h4>O cambia el precio(kg) del item</h4>
+                <!-- Nuevo elemento para mostrar la cantidad del item seleccionado -->
+                <div id="selected-item-quantity" class="item-detalle" style="margin-left: var(--espacio-s); margin-bottom: var(--espacio-s); font-size: 0.9em; color: var(--gris-texto-secundario);"></div>
+
+                <div class="registro-inputs-precio-kg">
+                    <div class="form-group">
+                        <label for="precio-kg-input">Precio por kg ($)</label>
+                        <!-- El valor inicial se establecerá en JS -->
+                        <input type="number" id="precio-kg-input" placeholder="0.00" step="0.01">
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <style>
+        /* Estilos específicos para el Modal de Descuento (Inyectados por descuento.modal.html) */
+
+        .descuento-modal-content {
+            max-width: 500px; /* Ancho similar al modal de catálogo */
+            background-color: var(--blanco);
+            border-radius: var(--radio-borde-l);
+            box-shadow: var(--sombra-md);
+            width: 100%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .descuento-modal-content .modal-header h3 {
+            font-size: 1.1em;
+            line-height: 1.3;
+        }
+
+        .modal-body {
+            padding-top: var(--espacio-s);
+            overflow-y: auto; /* Permitir scroll si la lista de items es larga */
+        }
+
+        .seleccionar-item {
+            padding: var(--espacio-s);
+            border-bottom: 1px solid var(--gris-borde-sutil); /* Separador */
+            margin-bottom: var(--espacio-m);
+        }
+
+        .seleccionar-item h4 {
+             margin-top: 0;
+             margin-left: var(--espacio-s);
+             margin-bottom: var(--espacio-s);
+             font-size: 1em;
+             color: var(--gris-texto-secundario);
+             font-weight: 600;
+        }
+
+
+        .items-carrito-grid {
+            display: flex; /* Usamos flexbox para los botones de item */
+            flex-direction: row; /* Mostrar botones en fila */
+            gap: var(--espacio-s); /* Espacio entre los botones */
+            padding: var(--espacio-s); /* Padding interno */
+            background-color: var(--gris-elemento-claro); /* Fondo gris claro */
+            border-radius: var(--radio-borde-l); /* Borde redondeado */
+            overflow-x: auto; /* Añadir scroll horizontal si es necesario */
+            flex-wrap: nowrap; /* Evitar que los botones se envuelvan */
+        }
+
+        /* Estilo para los botones de item en el modal de descuento */
+        .item-descuento-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            padding: var(--espacio-s);
+            min-height: 60px; /* Altura mínima */
+            min-width: 120px; /* Ancho mínimo */
+            max-width: 150px; /* Ancho máximo */
+            border: 2px solid var(--gris-borde-input);
+            border-radius: var(--radio-borde-l);
+            background: var(--blanco);
+            color: var(--negro-azabache);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transicion-rapida);
+            outline: none;
+            gap: 2px;
+            user-select: none;
+            text-align: left; /* Alinear texto a la izquierda */
+        }
+
+        .item-descuento-btn:hover,
+        .item-descuento-btn:focus-visible {
+            background: var(--gris-hover-sutil);
+            border-color: var(--amarillo-polleria);
+        }
+
+        .item-descuento-btn.selected {
+            background: var(--amarillo-polleria);
+            color: var(--negro-azabache);
+            border-color: var(--amarillo-polleria);
+            box-shadow: 0 4px 12px rgba(255,193,7,0.1);
+        }
+
+        .item-descuento-btn span:first-child {
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--negro-azabache);
+            white-space: nowrap; /* Evitar salto de línea en el nombre */
+            overflow: hidden; /* Ocultar texto que desborda */
+            text-overflow: ellipsis; /* Mostrar puntos suspensivos */
+            width: 100%; /* Asegurar que ocupe el ancho del contenedor */
+        }
+
+        .item-descuento-btn span:last-child {
+            font-size: 0.9em;
+            font-weight: 500;
+            color: var(--gris-texto-secundario);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        .item-descuento-btn.selected span:last-child {
+             color: var(--negro-azabache);
+        }
+
+
+        .registrar-descuento {
+            padding: var(--espacio-s);
+            border-bottom: 1px solid var(--gris-borde-sutil); /* Separador */
+            margin-bottom: var(--espacio-m);
+        }
+
+        .registrar-descuento h4 {
+             margin-top: 0;
+             margin-left: var(--espacio-s);
+             margin-bottom: var(--espacio-s);
+             font-size: 1em;
+             color: var(--gris-texto-secundario);
+             font-weight: 600;
+        }
+
+        .registro-inputs-descuento {
+            display: flex;
+            gap: var(--espacio-m);
+            padding: var(--espacio-s);
+        }
+
+        .registro-inputs-descuento .form-group {
+             flex-grow: 1; /* Permite que los grupos de formulario se expandan */
+             margin-bottom: 0;
+        }
+
+        /* Nueva sección de modificar precio */
+        .modificar-precio-kg {
+            padding: var(--espacio-s);
+        }
+
+        .modificar-precio-kg h4 {
+             margin-top: 0;
+             margin-left: var(--espacio-s);
+             margin-bottom: var(--espacio-s);
+             font-size: 1em;
+             color: var(--gris-texto-secundario);
+             font-weight: 600;
+        }
+
+        .registro-inputs-precio-kg {
+            display: flex; /* Usamos flexbox aunque solo haya un input */
+            gap: var(--espacio-m);
+            padding: var(--espacio-s);
+        }
+
+        .registro-inputs-precio-kg .form-group {
+             flex-grow: 1;
+             margin-bottom: 0;
+        }
+
+
+        /* Estilos generales para inputs numéricos en secciones de registro */
+        .registro-inputs-descuento input[type="number"],
+        .registro-inputs-precio-kg input[type="number"] { /* Aplicar a ambos inputs numéricos */
+             width: 100%;
+             padding: 14px var(--espacio-m);
+             border: 1px solid var(--gris-borde-input);
+             border-radius: var(--radio-borde-m);
+             background-color: var(--gris-elemento-claro);
+             color: var(--negro-azabache);
+             font-size: 1.1em;
+             font-weight: 600;
+             text-align: right;
+        }
+
+
+        /* Estilos para los botones en el header */
+        .descuento-modal-content .header-actions .btn {
+            width: auto; /* Permitir que el ancho se ajuste al contenido */
+            min-width: 70px; /* Ancho mínimo */
+            padding: var(--espacio-xs) var(--espacio-s); /* Padding ajustado */
+            font-size: 0.9em; /* Tamaño de fuente ajustado */
+        }
+
+    </style>
+</div>
