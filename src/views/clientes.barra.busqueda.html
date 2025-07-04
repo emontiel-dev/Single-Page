@@ -1,0 +1,36 @@
+<div class="search-bar-container">
+    <style>
+        .search-bar-container {
+            padding: 0 var(--espacio-m) var(--espacio-m) var(--espacio-m);
+            position: sticky;
+            top: 0;
+            background: var(--gris-fondo-app);
+            z-index: 10;
+        }
+        .search-input-wrapper {
+            position: relative;
+        }
+        .search-input-wrapper svg {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            color: var(--gris-texto-secundario);
+        }
+        #cliente-search-input {
+            width: 100%;
+            padding: 15px 15px 15px 50px; /* Espacio para el icono */
+            border-radius: var(--radio-borde-pill);
+            border: 1px solid var(--gris-borde-input);
+            background-color: var(--blanco);
+            font-size: 1em;
+            font-weight: 500;
+        }
+    </style>
+    <div class="search-input-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="search" id="cliente-search-input" placeholder="Buscar por nombre, alias, teléfono...">
+    </div>
+</div>

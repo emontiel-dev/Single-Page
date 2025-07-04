@@ -11,7 +11,7 @@ export const catalogoProductos = [
     personalizaciones: [
       {
         grupo: "Procesamientos",
-        tipo: "checkbox",
+        tipo: "radio",
         default: ['E'], //  (asegúrate de que los IDs aquí también estén en mayúsculas si los cambiaste en las opciones)
         options: [
           { id: 'E', nombre: 'Entera' }, // 
@@ -39,7 +39,7 @@ export const catalogoProductos = [
         precios: { publico: 185, cocina: 175, leal: null, aliado: null, mayoreo: 150 },
         personalizaciones: [{
           grupo: "Procesamientos",
-          tipo: "checkbox",
+          tipo: "radio",
           default: ['MIL'],
           options: [
             { id: 'E', nombre: 'Entera' }, // 
@@ -69,7 +69,7 @@ export const catalogoProductos = [
     ],
     personalizaciones: [{
       grupo: "Procesamientos",
-      tipo: "checkbox",
+      tipo: "radio",
       default: ['E'],
       options: [
         { id: 'E', nombre: 'Entera' },
@@ -94,7 +94,7 @@ export const catalogoProductos = [
     ],
     personalizaciones: [{
       grupo: "Procesamientos",
-      tipo: "checkbox",
+      tipo: "radio",
       default: ['E'],
       options: [
         { id: 'E', nombre: 'Entero' },
@@ -111,7 +111,7 @@ export const catalogoProductos = [
         precios: { publico: 55, cocina: null, leal: null, aliado: null, mayoreo: null },
         personalizaciones: [{
           grupo: "Procesamientos",
-          tipo: "checkbox",
+          tipo: "radio",
           default: ['E'],
           options: [
             { id: 'E', nombre: 'Entero' },
@@ -129,7 +129,7 @@ export const catalogoProductos = [
         precios: { publico: 45, cocina: null, leal: null, aliado: null, mayoreo: null },
         personalizaciones: [{
           grupo: "Procesamientos",
-          tipo: "checkbox",
+          tipo: "radio",
           default: ['E'],
           options: [
             { id: 'E', nombre: 'Entero' }, // 
@@ -146,7 +146,7 @@ export const catalogoProductos = [
         precios: { publico: 45, cocina: null, leal: null, aliado: null, mayoreo: null },
         personalizaciones: [{
           grupo: "Procesamientos",
-          tipo: "checkbox",
+          tipo: "radio",
           default: ['C'],
           options: [
             { id: 'E', nombre: 'Entero' }, // 
@@ -170,7 +170,7 @@ export const catalogoProductos = [
     precios: { publico: 100, cocina: 85, aliado: 85, leal: null, mayoreo: null },
     personalizaciones: [{
       grupo: "Procesamientos",
-      tipo: "checkbox",
+      tipo: "radio",
       default: ['C'],
       options: [
         { id: 'E', nombre: 'Enteras' }, // 
@@ -194,7 +194,7 @@ export const catalogoProductos = [
         precios: { publico: 125, cocina: null, leal: null, aliado: null, mayoreo: null },
         personalizaciones: [{
           grupo: "Procesamientos",
-          tipo: "checkbox",
+          tipo: "radio",
           default: ['E'],
           options: [
             { id: 'E', nombre: 'Sin Procesar' }, // 
@@ -211,7 +211,7 @@ export const catalogoProductos = [
         precios: { publico: 105, cocina: null, leal: null, aliado: null, mayoreo: null },
         personalizaciones: [{
           grupo: "Procesamientos",
-          tipo: "checkbox",
+          tipo: "radio",
           default: ['E'],
           options: [
             { id: 'E', nombre: 'Entera' }, // 
@@ -233,7 +233,7 @@ export const catalogoProductos = [
         precios: { publico: 100, cocina: null, leal: null, aliado: null, mayoreo: null },
         personalizaciones: [{
           grupo: "Procesamientos",
-          tipo: "checkbox",
+          tipo: "radio",
           default: ['E'],
           options: [
             { id: 'E', nombre: 'Entero' }, // 
@@ -274,7 +274,7 @@ export const catalogoProductos = [
     promociones: [{ desde: 2, precio: 35 }],
     personalizaciones: [{
       grupo: "Procesamientos",
-      tipo: "checkbox",
+      tipo: "radio",
       default: [],
       options: [
         { id: 'S/G', nombre: 'Sin grasa' } // 
@@ -294,7 +294,7 @@ export const catalogoProductos = [
         precios: { publico: 75, cocina: null, leal: null, aliado: null, mayoreo: null },
         personalizaciones: [{
           grupo: "Procesamientos",
-          tipo: "checkbox",
+          tipo: "radio",
           default: ['S/G'],
           options: [
             { id: 'S/G', nombre: 'Sin grasa' } // 
@@ -351,7 +351,7 @@ export const catalogoProductos = [
     promociones: [{ desde: 2, precio: 80 }, { desde: 3, precio: 70 }],
     personalizaciones: [{
       grupo: "Procesamientos",
-      tipo: "checkbox",
+      tipo: "radio",
       default: ['C | H'],
       options: [
         { id: 'C | H', nombre: 'Con Huacal' }, // 

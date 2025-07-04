@@ -1,0 +1,149 @@
+<div id="cliente-modal-container" class="modal-overlay">
+    <div class="cliente-modal-content modal-content">
+        <div class="modal-header">
+            <h3>Busca y elige un cliente para la venta</h3>
+            <!-- MODIFICADO: Botones movidos al header -->
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="cliente-modal-volver-btn">volver</button>
+                <button class="btn btn-primario" id="cliente-modal-agregar-btn">agregar</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <!-- Área para la barra de búsqueda -->
+            <div id="cliente-modal-search-area"></div>
+            
+            <!-- Área para los resultados de la búsqueda -->
+            <div id="cliente-modal-search-results" class="search-results-list"></div>
+
+            <!-- Sección de registro rápido -->
+            <div class="modal-section registro-rapido">
+                <h4>O haz un registro rápido para la venta</h4>
+                <div class="form-group">
+                    <label for="cliente-modal-nombre">Nombre</label>
+                    <input type="text" id="cliente-modal-nombre" placeholder="Nombre del cliente">
+                </div>
+                <!-- MODIFICADO: Contenedor para el control de teléfono -->
+                <div class="form-group">
+                    <label for="cliente-modal-telefono">Teléfono</label>
+                    <div id="cliente-modal-telefono-container">
+                        <input type="tel" id="cliente-modal-telefono" placeholder="Número de teléfono">
+                    </div>
+                </div>
+                <!-- MODIFICADO: Contenedor para el control de dirección -->
+                <div class="form-group">
+                    <label for="cliente-modal-direccion">Dirección</label>
+                    <div id="cliente-modal-direccion-container">
+                        <textarea id="cliente-modal-direccion" rows="3" placeholder="Dirección y referencias"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ELIMINADO: El footer ya no es necesario -->
+    </div>
+    <style>
+        /*
+         * Estilos para el modal de cliente.
+         * Se asume que las clases base .modal-overlay y .modal-content
+         * ya existen en un CSS global (styles.css) con la configuración
+         * de posición, transición y fondo.
+         * Estos estilos complementan y especifican el diseño para este modal en particular.
+        */
+
+        .cliente-modal-content {
+            max-width: 450px;
+            width: 100%;
+            background-color: var(--blanco);
+            border-radius: var(--radio-borde-l);
+            box-shadow: var(--sombra-md);
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+        }
+
+        /* MODIFICADO: Estilos para el header con botones */
+        .cliente-modal-content .modal-header {
+            padding: var(--espacio-m);
+            border-bottom: 1px solid var(--gris-borde-sutil);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .cliente-modal-content .modal-header h3 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+
+        .cliente-modal-content .modal-body {
+            padding: var(--espacio-m);
+            overflow-y: auto;
+        }
+
+        /* ELIMINADO: Estilos del footer */
+
+        /* Estilos para la lista de resultados de búsqueda */
+        .search-results-list {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: var(--espacio-m);
+            border: 1px solid var(--gris-borde-input);
+            border-radius: var(--radio-borde-m);
+        }
+
+        .search-result-item {
+            padding: var(--espacio-s) var(--espacio-m);
+            cursor: pointer;
+            border-bottom: 1px solid var(--gris-borde-sutil);
+        }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:hover { background-color: var(--gris-hover-sutil); }
+        .search-result-item .nombre { font-weight: 600; }
+        .search-result-item .telefono { font-size: 0.9em; color: var(--gris-texto-secundario); }
+
+        /* Estilos para la sección de registro rápido */
+        .registro-rapido {
+            margin-top: var(--espacio-l);
+            padding-top: var(--espacio-l);
+            border-top: 1px solid var(--gris-borde-sutil);
+        }
+
+        .registro-rapido h4 {
+            margin-top: 0;
+            margin-bottom: var(--espacio-m);
+        }
+
+        /* MODIFICADO: Estilos para los inputs, textarea y select */
+        .registro-rapido input[type="text"],
+        .registro-rapido input[type="tel"],
+        .registro-rapido textarea,
+        .registro-rapido select {
+            width: 100%;
+            padding: 14px var(--espacio-m);
+            border: 1px solid var(--gris-borde-input);
+            border-radius: var(--radio-borde-m);
+            background-color: var(--gris-elemento-claro);
+            color: var(--negro-azabache);
+            font-size: 1em;
+            font-weight: 500;
+            appearance: none; /* Quitar la apariencia por defecto */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        /* AÑADIDO: Estilo para la flecha personalizada del select */
+        .registro-rapido select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right var(--espacio-m) center;
+            background-size: 16px 12px;
+            padding-right: calc(var(--espacio-m) * 2 + 16px); /* Espacio extra para la flecha */
+            cursor: pointer;
+        }
+
+        .registro-rapido textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+    </style>
+</div>

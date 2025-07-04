@@ -1,5 +1,5 @@
 // Reemplaza el contenido de tu archivo con este código
-import { cartItems } from './carrito.js';
+import { cartItems, selectedClient } from './carrito.js'; // <-- IMPORTAR selectedClient
 import { resetModalLogic as resetCatalogoModalLogic } from '../catalogo/modal.logica.js';
 
 // --- CAMBIOS CLAVE: Referencias a elementos UI del NUEVO modal ---
@@ -15,6 +15,8 @@ let ticketIdElement = null;        // (Opcional) Para un futuro ID de ticket
 let ticketItemsPolloElement = null;
 let ticketItemsPaElement = null;
 let ticketItemsCargoElement = null;
+let ticketClienteInfoElement = null; // <-- NUEVA REFERENCIA
+
 // Eliminamos la referencia al contenedor de envío ya que se renderiza en totales
 // let ticketItemEnvioElement = null;
 
@@ -78,8 +80,7 @@ export async function openCarritoVerItemsModal() {
         ticketItemsPolloElement = carritoVerItemsModalElement.querySelector('#ticket-items-pollo');
         ticketItemsPaElement = carritoVerItemsModalElement.querySelector('#ticket-items-pa');
         ticketItemsCargoElement = carritoVerItemsModalElement.querySelector('#ticket-items-cargo');
-        // Eliminamos la referencia al contenedor de envío
-        // ticketItemEnvioElement = carritoVerItemsModalElement.querySelector('#ticket-item-envio');
+        ticketClienteInfoElement = carritoVerItemsModalElement.querySelector('#ticket-cliente-info'); // <-- OBTENER REFERENCIA
 
         // --- OBTENER REFERENCIAS A LAS SECCIONES COMPLETAS ---
         sectionItemsPollo = carritoVerItemsModalElement.querySelector('.items-section.pollo-items');
@@ -177,6 +178,39 @@ function renderTicketContent() {
         }
         subtotal += item.cost; // Sumar al subtotal general
     });
+
+
+    // --- MODIFICACIÓN: Renderizar sección del cliente con más estructura ---
+    if (selectedClient && ticketClienteInfoElement) {
+        const clienteDetails = ticketClienteInfoElement.querySelector('.cliente-details');
+        
+        // --- AÑADIDO: Lógica para incluir el alias ---
+        let nombreMostrado = selectedClient.nombre;
+        if (selectedClient.alias) {
+            nombreMostrado += ` (${selectedClient.alias})`;
+        }
+        // --- FIN DE LA MODIFICACIÓN ---
+
+        let clienteHtml = `<div class="cliente-detail-item cliente-nombre">${nombreMostrado}</div>`;
+
+        if (selectedClient.telefonos && selectedClient.telefonos[0]?.numero) {
+            clienteHtml += `<div class="cliente-detail-item">
+                                <span class="cliente-label">Tel:</span>
+                                <span class="cliente-valor">${selectedClient.telefonos[0].numero}</span>
+                            </div>`;
+        }
+        
+        if (selectedClient.direcciones && selectedClient.direcciones[0]?.direccion) {
+            clienteHtml += `<div class="cliente-detail-item">
+                                <span class="cliente-label">Dir:</span>
+                                <span class="cliente-valor">${selectedClient.direcciones[0].direccion}</span>
+                            </div>`;
+        }
+
+        clienteDetails.innerHTML = clienteHtml;
+        ticketClienteInfoElement.classList.remove('hidden');
+    }
+    // --- FIN DE LA MODIFICACIÓN ---
 
 
     // Renderizar secciones si hay items y mostrarlas

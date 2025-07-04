@@ -224,18 +224,12 @@ function handleCartItemSelect(event) {
     // Si el ítem seleccionado tiene precio por kg, mostrarlo en el input correspondiente
     if (item && item.pricePerKg !== undefined && item.pricePerKg !== null) {
         if (precioKgInput) {
-            precioKgInput.value = item.pricePerKg.toFixed(2);
-            // Opcional: Calcular y mostrar el costo total actual en el placeholder
-            if (item.quantity > 0) {
-                 precioKgInput.placeholder = `$${(item.pricePerKg * item.quantity).toFixed(2)}`;
-            } else {
-                 precioKgInput.placeholder = '0.00';
-            }
-            // Asegurarse de que el input de precio por kg esté habilitado si el item es por peso
-            // precioKgInput.disabled = false; // Descomentar si se llegó a deshabilitar
+            // MODIFICACIÓN: Limpiar el valor y usar el precio/kg como placeholder
+            precioKgInput.value = '';
+            precioKgInput.placeholder = item.pricePerKg.toFixed(2);
         }
     } else {
-         // Si el ítem no tiene precio por kg (ej. cargo, envío, o producto por pieza), limpiar y deshabilitar el input de precio por kg
+         // Si el ítem no tiene precio por kg (ej. cargo, envío, o producto por pieza), limpiar y poner placeholder 'N/A'
          if (precioKgInput) {
              precioKgInput.value = '';
              precioKgInput.placeholder = 'N/A';
@@ -258,12 +252,8 @@ function handleDescuentoCantidadInput() {
             precioKgInput.value = '';
             // Restaurar placeholder original si aplica
             if (selectedCartItemIndex !== null && cartItems[selectedCartItemIndex] && cartItems[selectedCartItemIndex].pricePerKg !== undefined && cartItems[selectedCartItemIndex].pricePerKg !== null) {
-                 if (cartItems[selectedCartItemIndex].quantity > 0) {
-                      // Mostrar el costo total original en el placeholder del precio por kg
-                      precioKgInput.placeholder = `$${(cartItems[selectedCartItemIndex].pricePerKg * cartItems[selectedCartItemIndex].quantity).toFixed(2)}`;
-                 } else {
-                      precioKgInput.placeholder = '0.00';
-                 }
+                 // MODIFICACIÓN: El placeholder debe ser el precio/kg, no el costo total.
+                 precioKgInput.placeholder = cartItems[selectedCartItemIndex].pricePerKg.toFixed(2);
             } else {
                  precioKgInput.placeholder = 'N/A'; // Resetear a N/A si no aplica precio/kg
             }
@@ -299,12 +289,8 @@ function handleDescuentoPorcentajeInput() {
             precioKgInput.value = '';
             // Restaurar placeholder original si aplica
             if (selectedCartItemIndex !== null && cartItems[selectedCartItemIndex] && cartItems[selectedCartItemIndex].pricePerKg !== undefined && cartItems[selectedCartItemIndex].pricePerKg !== null) {
-                 if (cartItems[selectedCartItemIndex].quantity > 0) {
-                      // Mostrar el costo total original en el placeholder del precio por kg
-                      precioKgInput.placeholder = `$${(cartItems[selectedCartItemIndex].pricePerKg * cartItems[selectedCartItemIndex].quantity).toFixed(2)}`;
-                 } else {
-                      precioKgInput.placeholder = '0.00';
-                 }
+                 // MODIFICACIÓN: El placeholder debe ser el precio/kg, no el costo total.
+                 precioKgInput.placeholder = cartItems[selectedCartItemIndex].pricePerKg.toFixed(2);
             } else {
                  precioKgInput.placeholder = 'N/A'; // Resetear a N/A si no aplica precio/kg
             }
@@ -376,9 +362,10 @@ function handlePrecioKgInput() {
     }
 
     // --- CORRECCIÓN E4: Actualizar el placeholder del propio input de precio por kg con el NUEVO PRECIO POR KG ---
-    if (precioKgInput) {
-         precioKgInput.placeholder = nuevoPrecioKg.toFixed(2); // Mostrar el nuevo precio por kg
-    }
+    // ELIMINADO: Esta línea es confusa y no es necesaria. El valor ya está visible en el input.
+    // if (precioKgInput) {
+    //      precioKgInput.placeholder = nuevoPrecioKg.toFixed(2); // Mostrar el nuevo precio por kg
+    // }
 }
 // --> Fin del Handler modificado
 
@@ -536,9 +523,9 @@ function renderCartItemsForDiscount() {
     // Filtrar items que no sean ya descuentos, envíos, o Productos Adicionales (PA)
     // Tampoco mostrar ítems que ya tienen un descuento aplicado (para evitar aplicar doble descuento)
     cartItems.forEach((item, index) => {
-        // --- MODIFICACIÓN: Excluir items de PA ---
-        if (item.productId === 'DESCUENTO' || item.productId === 'ENVIO' || item.productId === 'PA' || item.discount) {
-            return; // Saltar este ítem si es un descuento, envío, PA, o ya tiene descuento
+        // --- MODIFICACIÓN: Excluir items de CARGO ---
+        if (item.productId === 'DESCUENTO' || item.productId === 'ENVIO' || item.productId === 'PA' || item.productId === 'CARGO' || item.discount) {
+            return; // Saltar este ítem si es un descuento, envío, PA, cargo, o ya tiene descuento
         }
         // --> Fin de la MODIFICACIÓN <--
 

@@ -9,6 +9,14 @@ import { openCarritoVerItemsModal } from './carrito.ver.items.js'; // <-- Import
 
 
 export let cartItems = []; // Array para almacenar los items del carrito - AHORA EXPORTADO
+export let selectedClient = null; // <-- NUEVO: Variable para el cliente seleccionado
+
+// <-- NUEVO: Función para establecer el cliente -->
+export function setCliente(cliente) {
+    selectedClient = cliente;
+    console.log('Cliente seleccionado para la venta:', selectedClient);
+    updateCarritoDisplay(); // Actualizar la UI para reflejar el cambio (ej. botón activo)
+}
 
 // Función para renderizar la plantilla HTML del carrito
 export async function renderCarrito(container) {
@@ -131,6 +139,13 @@ export function updateCarritoDisplay() { // <-- Añadido 'export' aquí
     // Renderizar cada item en la lista
     if (cartItems.length > 0) {
         cartItems.forEach((item, index) => { // Use index to identify the item for removal
+            // --- MODIFICACIÓN: Ocultar el item de envío de esta lista ---
+            if (item.productId === 'ENVIO') {
+                total += item.cost; // Asegurarse de que el costo del envío se sume al total
+                return; // Saltar la renderización de esta fila
+            }
+            // --- FIN DE LA MODIFICACIÓN ---
+
             const row = document.createElement('tr');
             row.dataset.itemIndex = index; // Add data attribute for index
 
@@ -200,12 +215,37 @@ export function updateCarritoDisplay() { // <-- Añadido 'export' aquí
         mainContent.style.paddingBottom = '';
     }
 
+    // --- AÑADIDO: Lógica para actualizar el estado visual de los botones de acción rápida ---
+    updateActionButtonsState();
+}
 
-    // Aplicar redondeo al total antes de mostrarlo
-    const roundedTotal = Math.round(total);
+function updateActionButtonsState() {
+    const btnEnvio = document.getElementById('btn-abrir-envio-modal');
+    const btnCargo = document.getElementById('btn-agregar-cargo-rapido');
+    const btnDescuento = document.getElementById('btn-aplicar-descuento-rapido');
+    const btnCliente = document.getElementById('btn-seleccionar-cliente-rapido');
+    const btnPa = document.getElementById('btn-agregar-pa-rapido');
 
-    // Actualizar el total con el valor redondeado, formateado a dos decimales
-    totalValueSpan.textContent = `${roundedTotal.toFixed(2)}`;
+    // Comprobar estado para Envío
+    if (btnEnvio) {
+        const hasEnvio = cartItems.some(item => item.productId === 'ENVIO' && item.optionId !== 'mostrador');
+        btnEnvio.classList.toggle('active', hasEnvio);
+    }
+
+    // Comprobar estado para Cliente
+    if (btnCliente) {
+        btnCliente.classList.toggle('active', selectedClient !== null);
+    }
+
+    // Comprobar estado para Descuento
+    if (btnDescuento) {
+        const hasDescuento = cartItems.some(item => item.discount);
+        btnDescuento.classList.toggle('active', hasDescuento);
+    }
+
+    // Comprobar estado para Cargo y PA
+    if (btnCargo) btnCargo.classList.toggle('active', cartItems.some(item => item.productId === 'CARGO'));
+    if (btnPa) btnPa.classList.toggle('active', cartItems.some(item => item.productId === 'PA'));
 }
 
 // --- Funciones Auxiliares de Renderizado de Items ---

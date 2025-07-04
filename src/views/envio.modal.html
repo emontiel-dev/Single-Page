@@ -1,29 +1,23 @@
 <div id="envio-modal-container" class="modal-overlay">
-    <div class="envio-modal-content modal-content"> <!-- Añadida la clase modal-content -->
+    <div class="envio-modal-content modal-content">
         <div class="modal-header">
-            <!-- Título actualizado según el concepto -->
-            <h3 id="modal-envio-title">Elige una opcion</h3>
-            <div class="header-actions">
-                <button class="btn btn-secondary" id="volver-envio-btn">Cancelar</button>                
-                <button class="btn btn-primario" id="agregar-envio-btn">Añadir</button>                
-            </div>
+            <h3 id="modal-envio-title">Elige una forma de entrega para tu pedido.</h3>
+            <!-- Los botones de acción se moverán al footer -->
         </div>
         <div class="modal-body">
             <!-- Sección de Opciones de Envío -->
             <div class="modal-section opciones-envio">
-                <!-- <h4>Opciones Disponibles</h4> Eliminamos este título ya que está en el header -->
                 <div class="opciones-envio-grid">
                     <!-- Las opciones de envío se renderizarán aquí dinámicamente -->
                 </div>
             </div>
 
-            <!-- Eliminamos la Sección de Registro Manual -->
-            <!--
+            <!-- RESTAURADO: Sección de Registro Manual -->
             <div class="modal-section registro-manual">
                 <h4>O registra de forma manual</h4>
                 <div class="registro-inputs-envio">
                     <div class="form-group">
-                        <label for="descripcion-envio-manual">Descripción</label>
+                        <label for="descripcion-envio-manual">Descripción breve</label>
                         <input type="text" id="descripcion-envio-manual" placeholder="Ej. Envio-Pilcaya">
                     </div>
                     <div class="form-group">
@@ -32,8 +26,11 @@
                     </div>
                 </div>
             </div>
-            -->
-
+        </div>
+        <!-- AÑADIDO: Footer para los botones -->
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="volver-envio-btn">volver</button>                
+            <button class="btn btn-primario" id="agregar-envio-btn">agregar</button>                
         </div>
     </div>
 
@@ -56,9 +53,15 @@
             flex-direction: column;
         }
 
+        .envio-modal-content .modal-header {
+            padding: var(--espacio-m);
+            border-bottom: 1px solid var(--gris-borde-sutil);
+        }
+
         /* Ajuste para el título del header si ocupa dos líneas */
         .envio-modal-content .modal-header h3 {
-            font-size: 1.1em;
+            margin: 0;
+            font-size: 1.2em;
             line-height: 1.3; /* Ajustar interlineado */
         }
 
@@ -155,43 +158,26 @@
     }
 }
 
-/* Eliminamos los estilos para la sección de registro manual */
-        /*
+/* Resto de estilos eliminados por brevedad... */
+
+
+        /* AÑADIDO: Estilos para la sección de registro manual */
         .registro-manual {
-            margin-top: var(--espacio-m);
-            padding-top: var(--espacio-m);
-            border-top: 1px solid var(--gris-borde-sutil);
+            margin-top: var(--espacio-l);
+            padding: 0 var(--espacio-s);
         }
-
-        .registro-manual .form-group {
-            margin-bottom: var(--espacio-s);
-        }
-
-        .registro-manual label {
-            display: block;
-            margin-left: var(--espacio-m);
-            margin-bottom: var(--espacio-xs);
-            font-size: 0.9em;
+        .registro-manual h4 {
+            margin-bottom: var(--espacio-m);
             font-weight: 600;
-            color: var(--gris-texto-secundario);
         }
-
-        .registro-manual .label-hint {
-            font-weight: normal;
-            font-size: 0.8em;
-            color: var(--gris-texto-terciario);
-        }
-
-        .registro-manual .registro-inputs-envio {
+        .registro-inputs-envio {
             display: flex;
+            align-items: flex-end;
             gap: var(--espacio-m);
-            padding: var(--espacio-s);
         }
-
-        .registro-manual .registro-inputs-envio .form-group {
-             margin-bottom: 0;
+        .registro-inputs-envio .form-group:first-child {
+            flex-grow: 1;
         }
-
         .registro-manual input[type="text"],
         .registro-manual input[type="number"] {
              width: 100%;
@@ -199,45 +185,20 @@
              border: 1px solid var(--gris-borde-input);
              border-radius: var(--radio-borde-m);
              background-color: var(--gris-elemento-claro);
-             color: var(--negro-azabache);
-             font-size: 1.1em;
-             font-weight: 600;
+             font-size: 1em;
         }
-
-        .registro-manual input[type="text"] {
-             text-align: left;
-        }
-
         .registro-manual input[type="number"] {
              text-align: right;
-            max-width: 120px;
+             max-width: 120px;
         }
-        */
 
-
-        /* Estilos para el pie de página del modal */
+        /* AÑADIDO: Estilos para el footer del modal */
         .modal-footer {
-            padding: var(--espacio-m) var(--espacio-l);
+            padding: var(--espacio-m);
             border-top: 1px solid var(--gris-borde-sutil);
             display: flex;
+            justify-content: flex-end;
             gap: var(--espacio-m);
-            flex-shrink: 0;
         }
-
-        .modal-footer .btn {
-            flex-grow: 1; /* Permite que los botones se expandan */
-            margin-bottom: 0; /* Eliminar margen inferior */
-        }
-
-        /* Estilos específicos para los botones del footer */
-        #volver-envio-btn {
-            /* Estilos para botón secundario */
-        }
-
-        #agregar-envio-btn {
-            /* Estilos para botón primario */
-        }
-
-
     </style>
 </div>

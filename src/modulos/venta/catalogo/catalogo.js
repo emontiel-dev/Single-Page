@@ -6,6 +6,7 @@ import { openEnvioModal } from '../envio/envio.modal.js'; // Importamos la funci
 import { openCargoModal } from '../cargo/cargo.modal.js'; // Importamos la función para abrir el modal de cargo
 import { openDescuentoModal } from '../descuento/descuento.modal.js'; // Importamos la función para abrir el modal de descuento
 import { openPaModal } from '../pa/pa.modal.js'; // <-- Importamos la función para abrir el modal de PA
+import { openClienteModal } from '../../clientes/cliente.modal.js'; // <-- IMPORTAR MODAL DE CLIENTE
 
 
 export async function renderCatalogo(container) {
@@ -33,7 +34,7 @@ export async function renderCatalogo(container) {
         });
 
         // Añadir event listener al botón de "Envio" en acciones rápidas
-        const envioButton = container.querySelector('.acciones-rapidas .btn-accion:nth-child(1)'); // Asumiendo que es el primer botón
+        const envioButton = container.querySelector('#btn-abrir-envio-modal'); // CORREGIDO: Usar ID
          if (envioButton) {
              envioButton.addEventListener('click', () => {
                  console.log('Botón de Envío clicado.');
@@ -58,6 +59,15 @@ export async function renderCatalogo(container) {
                  openDescuentoModal(); // Abrir el modal de descuento
              });
          }
+
+        // <-- Añadir event listener al botón de "Cliente" en acciones rápidas -->
+        const clienteButton = container.querySelector('#btn-seleccionar-cliente-rapido');
+        if (clienteButton) {
+            clienteButton.addEventListener('click', () => {
+                console.log('Botón de Cliente clicado.');
+                openClienteModal();
+            });
+        }
 
         // <-- Añadir event listener al botón de "PA" en acciones rápidas -->
         const paButton = container.querySelector('#btn-agregar-pa-rapido'); // Obtener el botón por su ID

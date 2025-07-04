@@ -1,0 +1,80 @@
+<div class="clientes-container">
+    <style>
+        .clientes-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .clientes-header {
+            padding: var(--espacio-m);
+            padding-bottom: 0;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--negro-azabache);
+        }
+        #clientes-search-bar-area {
+            flex-shrink: 0;
+        }
+        .clientes-list-wrapper {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 0 var(--espacio-m);
+        }
+        .cliente-item {
+            display: flex;
+            align-items: center;
+            padding: var(--espacio-m);
+            border-bottom: 1px solid var(--gris-borde-sutil);
+            cursor: pointer;
+            transition: background-color var(--transicion-rapida);
+        }
+        .cliente-item:hover {
+            background-color: var(--gris-hover-sutil);
+        }
+        .cliente-item .info {
+            flex-grow: 1;
+            display: flex; /* Usar flexbox para el contenedor de información */
+            flex-direction: column; /* Apilar los elementos verticalmente */
+            gap: 4px; /* Añadir un pequeño espacio entre las líneas */
+        }
+        .cliente-item .nombre {
+            font-weight: 600;
+            font-size: 1.1em; /* Ligeramente más grande */
+            color: var(--negro-azabache);
+        }
+        .cliente-item .nombre .alias {
+            font-weight: 400; /* Peso normal para el alias */
+            font-style: italic;
+            font-size: 0.9em; /* Ligeramente más pequeño que el nombre */
+            color: var(--gris-texto-secundario);
+        }
+        .cliente-item .telefono,
+        .cliente-item .direccion {
+            font-size: 0.9em;
+            color: var(--gris-texto-secundario);
+            line-height: 1.3;
+        }
+        .cliente-item .tipo-dato {
+            font-style: italic;
+            color: var(--gris-texto-terciario); /* Un gris más sutil */
+        }
+        .cliente-item .muted {
+            font-style: italic;
+            color: var(--gris-texto-terciario);
+        }
+    </style>
+
+    <!--<header class="clientes-header">
+        <h2>Clientes</h2>
+    </header>-->
+
+    <!-- Área donde se inyectará la barra de búsqueda -->
+    <div id="clientes-search-bar-area"></div>
+
+    <!-- Contenedor para la lista de clientes con scroll -->
+    <div class="clientes-list-wrapper" id="clientes-list-container">
+        <!-- Los items de cliente se renderizarán aquí por JS -->
+    </div>
+
+    <!-- TODO: Añadir un botón flotante para agregar nuevos clientes -->
+</div>

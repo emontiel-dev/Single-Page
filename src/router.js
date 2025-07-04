@@ -1,10 +1,12 @@
 // src/router.js
 import { renderInicio } from './modulos/interfaz/inicio.js';
 import { renderVenta } from './modulos/venta/venta.js';
+import { renderClientes } from './modulos/clientes/clientes.js'; // Importar la función renderClientes
 
 const routes = {
     '/': renderInicio,
     '/venta': renderVenta,
+    '/clientes': renderClientes, // Añadir la nueva ruta para clientes
     // Agrega más rutas aquí
 };
 
