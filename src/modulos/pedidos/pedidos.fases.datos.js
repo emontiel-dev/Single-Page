@@ -11,6 +11,12 @@ export const FASES_PEDIDO = {
         color: 'var(--negro-azabache)',
         backgroundColor: 'var(--amarillo-polleria)'
     },
+    LISTO_PARA_ENTREGA: {
+        id: 'LISTO_PARA_ENTREGA',
+        nombre: 'Listo p/ Entrega',
+        color: 'var(--blanco)',
+        backgroundColor: 'var(--verde-listo)' // Usaremos un verde distintivo
+    },
     EN_RUTA: {
         id: 'EN_RUTA',
         nombre: 'En Ruta',
