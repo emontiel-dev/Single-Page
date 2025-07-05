@@ -13,9 +13,9 @@ export const FASES_PEDIDO = {
     },
     LISTO_PARA_ENTREGA: {
         id: 'LISTO_PARA_ENTREGA',
-        nombre: 'Listo p/ Entrega',
+        nombre: 'Listo p/entrega',
         color: 'var(--blanco)',
-        backgroundColor: 'var(--verde-listo)' // Usaremos un verde distintivo
+        backgroundColor: 'var(--verde-accion)' // Usaremos un verde distintivo
     },
     EN_RUTA: {
         id: 'EN_RUTA',

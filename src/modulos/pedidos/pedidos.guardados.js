@@ -27,7 +27,7 @@ export async function renderPedidosGuardados(container) {
 // --- Lógica de Acciones ---
 
 function getNextPhase(currentPhaseId) {
-    const phaseOrder = [FASES_PEDIDO.GUARDADO.id, FASES_PEDIDO.PROCESANDO.id, FASES_PEDIDO.EN_RUTA.id, FASES_PEDIDO.COMPLETADO.id];
+    const phaseOrder = [FASES_PEDIDO.GUARDADO.id, FASES_PEDIDO.PROCESANDO.id, FASES_PEDIDO.LISTO_PARA_ENTREGA.id, FASES_PEDIDO.EN_RUTA.id, FASES_PEDIDO.COMPLETADO.id];
     const currentIndex = phaseOrder.indexOf(currentPhaseId);
     return currentIndex !== -1 && currentIndex < phaseOrder.length - 1 ? phaseOrder[currentIndex + 1] : null;
 }

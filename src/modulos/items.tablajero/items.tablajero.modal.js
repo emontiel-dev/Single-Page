@@ -2,7 +2,8 @@ import { pedidosGuardados } from '../pedidos/pedidos.guardados.datos.js';
 import { findOptionData } from '../venta/catalogo/modal.logica.js';
 import { catalogoProductos } from '../venta/catalogo/catalogo.datos.js';
 import { clientes } from '../clientes/clientes.datos.js';
-import { getItemDisplayDetails } from './items.tablajero.js'; // <-- AÑADIR NUEVA IMPORTACIÓN
+import { getItemDisplayDetails } from './items.tablajero.js';
+import { FASES_PEDIDO } from '../pedidos/pedidos.fases.datos.js'; // <-- AÑADIR IMPORTACIÓN
 
 let modalElement = null;
 let onCompleteCallback = null;
@@ -111,6 +112,17 @@ function handleMarcarComoListo() {
 
     item.estado = 'LISTO';
     if (onCompleteCallback) onCompleteCallback();
+
+    // --- NUEVA LÓGICA: Verificar si todos los items están listos para cambiar la fase del pedido ---
+    const itemsAProcesar = currentPedido.items.filter(i => i.productId !== 'ENVIO' && i.productId !== 'CARGO');
+    const todosListos = itemsAProcesar.every(i => i.estado === 'LISTO');
+
+    if (todosListos && currentPedido.faseId === FASES_PEDIDO.PROCESANDO.id) {
+        currentPedido.faseId = FASES_PEDIDO.LISTO_PARA_ENTREGA.id;
+        console.log(`Pedido ${currentPedido.id} actualizado automáticamente a ${FASES_PEDIDO.LISTO_PARA_ENTREGA.id}`);
+    }
+    // --- FIN DE LA NUEVA LÓGICA ---
+
     closeItemsTablajeroModal();
 }
 
