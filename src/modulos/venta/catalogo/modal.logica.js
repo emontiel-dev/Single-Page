@@ -411,29 +411,30 @@ function handleAddToOrder() {
 // --- Funciones Auxiliares ---
 
 // Función auxiliar para encontrar los datos de la opción seleccionada (producto principal, subproducto, especial, variante)
-function findOptionData(optionId) {
-    if (!currentProduct) return null;
+// MODIFICADO: Ahora es exportada y puede recibir un producto específico para la búsqueda.
+export function findOptionData(optionId, product = currentProduct) {
+    if (!product) return null;
 
     // Verificar si es el producto principal
-    if (currentProduct.id === optionId) {
-        return currentProduct;
+    if (product.id === optionId) {
+        return product;
     }
 
     // Verificar subproductos
-    if (currentProduct.subproductos) {
-        const sub = currentProduct.subproductos.find(s => s.id === optionId);
+    if (product.subproductos) {
+        const sub = product.subproductos.find(s => s.id === optionId);
         if (sub) return sub;
     }
 
     // Verificar especiales
-    if (currentProduct.especiales) {
-        const esp = currentProduct.especiales.find(e => e.id === optionId);
+    if (product.especiales) {
+        const esp = product.especiales.find(e => e.id === optionId);
         if (esp) return esp;
     }
 
     // Verificar variantes
-    if (currentProduct.variantes) {
-        const varnt = currentProduct.variantes.find(v => v.id === optionId);
+    if (product.variantes) {
+        const varnt = product.variantes.find(v => v.id === optionId);
         if (varnt) return varnt;
     }
 

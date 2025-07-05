@@ -1,0 +1,86 @@
+<div class="pedido-detalle-container">
+    <header class="detalle-header">
+        <h3 id="detalle-pedido-id"></h3>
+        <div class="acciones">
+            <button id="btn-volver-pedidos" class="btn volver ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                <span>Volver</span>
+            </button>        
+        </div>
+    </header>
+    
+    <div id="detalle-cliente-info" class="detalle-card">
+        <!-- La información del cliente se renderizará aquí -->
+    </div>
+
+    <div class="detalle-card">
+        <h4>Items del Pedido</h4>
+        <ul id="detalle-items-lista" class="items-list-ui">
+            <!-- Los items se renderizarán aquí -->
+        </ul>
+    </div>
+
+    <div class="detalle-card">
+        <h4>Totales</h4>
+        <div id="detalle-totales" class="totals-section">
+            <!-- Los totales se renderizarán aquí -->
+        </div>
+    </div>
+</div>
+
+<style>
+    .volver {
+    max-width: 110px;
+    margin-top: var(--espacio-m);
+    background-color: var(--amarillo-polleria);
+    }
+
+    .pedido-detalle-container {
+        background-color: var(--blanco);
+        padding: var(--espacio-m);
+        display: flex;
+        flex-direction: column;
+        gap: var(--espacio-l);
+    }
+    .detalle-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid var(--gris-borde-sutil);
+        border-radius: var(--radio-borde-m);
+    }
+    .detalle-header h3 {
+        margin: 0;
+        font-size: 1.2em;
+        color: var(--gris-texto-secundario);
+    }
+    .detalle-header .btn {
+        display: flex;
+        align-items: center;
+        gap: var(--espacio-s);
+    }
+    .detalle-card {
+        background: var(--blanco);
+        border: 1px solid var(--gris-borde-sutil);
+        border-radius: var(--radio-borde-m);
+        padding: var(--espacio-m);
+        box-shadow: var(--sombra-sm);
+    }
+    .detalle-card h4 {
+        margin-top: 0;
+        border-bottom: 1px solid var(--gris-borde-sutil);
+        padding-bottom: var(--espacio-s);
+        margin-bottom: var(--espacio-m);
+    }
+    /* Estilos de la lista de items y totales (similares a carrito.ver.items.html) */
+    .items-list-ui { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px; }
+    .item-row-ui { display: flex; justify-content: space-between; align-items: flex-start; }
+    .item-info .name { font-weight: 500; color: var(--negro-azabache); font-size: 1.05em; }
+    .item-info .details { font-size: 0.85em; color: var(--gris-texto-secundario); }
+    .item-price { font-size: 1.05em; font-weight: 600; color: var(--negro-azabache); white-space: nowrap; padding-left: 10px; }
+    .totals-section { display: flex; flex-direction: column; gap: 12px; }
+    .total-row-ui { display: flex; justify-content: space-between; font-size: 1em; }
+    .total-row-ui .label { color: var(--gris-texto-secundario); }
+    .total-row-ui .value { font-weight: 600; }
+    .grand-total-ui { margin-top: 10px; padding-top: 15px; border-top: 2px solid var(--negro-azabache); font-size: 1.6em; font-weight: 700; }
+</style>

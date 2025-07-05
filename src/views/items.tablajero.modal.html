@@ -1,0 +1,66 @@
+<div id="items-tablajero-modal-container" class="modal-overlay">
+    <div class="tablajero-modal-content modal-content">
+        <div class="modal-header">
+            <h3 id="tablajero-modal-title">Item 1 de 3</h3>
+        </div>
+        <div class="modal-body">
+            <div class="pedido-info">
+                <span>Pedido para</span>
+                <strong id="tablajero-modal-cliente"></strong>
+            </div>
+            <div class="producto-info">
+                <h4 id="tablajero-modal-producto-nombre"></h4>
+                <p id="tablajero-modal-producto-detalles"></p>
+            </div>
+            <div class="form-group" id="tablajero-modal-cantidad-group">
+                <label for="tablajero-modal-cantidad">Cantidad (kg)</label>
+                <input type="number" id="tablajero-modal-cantidad" step="0.001">
+            </div>
+            <div class="form-group" id="tablajero-modal-costo-group">
+                <label for="tablajero-modal-costo">Costo ($)</label>
+                <input type="number" id="tablajero-modal-costo" step="0.01">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="tablajero-modal-volver-btn">Volver</button>
+            <button class="btn btn-primario" id="tablajero-modal-listo-btn">Listo</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .tablajero-modal-content {
+        max-width: 400px;
+        /* --- AÑADIDO: Estilos base del modal --- */
+        background-color: var(--blanco);
+        border-radius: var(--radio-borde-l);
+        box-shadow: var(--sombra-md);
+        width: 100%;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+    }
+    /* --- REEMPLAZAR ESTOS ESTILOS --- */
+    .pedido-info {
+        text-align: center;
+        margin-bottom: var(--espacio-m);
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+        gap: var(--espacio-s);
+    }
+    .pedido-info span {
+        color: var(--gris-texto-secundario);
+    }
+    .pedido-info strong {
+        font-size: 1.2em;
+        /* Se eliminó 'display: block;' que causaba el salto de línea */
+    }
+    /* --- FIN DEL REEMPLAZO --- */
+    .producto-info { text-align: center; margin-bottom: var(--espacio-l); }
+    .producto-info h4 { font-size: 1.5em; color: var(--amarillo-polleria-texto); margin: 0; }
+    .producto-info p { font-size: 0.9em; color: var(--gris-texto-secundario); margin: 4px 0 0; }
+    .form-group { margin-bottom: var(--espacio-m); }
+    .form-group label { display: block; margin-bottom: var(--espacio-s); font-weight: 600; }
+    .form-group input { width: 100%; padding: 14px; font-size: 1.2em; text-align: center; }
+</style>

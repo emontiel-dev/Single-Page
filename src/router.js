@@ -1,57 +1,59 @@
 // src/router.js
 import { renderInicio } from './modulos/interfaz/inicio.js';
 import { renderVenta } from './modulos/venta/venta.js';
-import { renderClientes } from './modulos/clientes/clientes.js'; // Importar la función renderClientes
+import { renderClientes } from './modulos/clientes/clientes.js';
+import { renderPedidosGuardados } from './modulos/pedidos/pedidos.guardados.js';
+import { renderItemsTablajero } from './modulos/items.tablajero/items.tablajero.js'; // <-- AÑADIR
 
 const routes = {
     '/': renderInicio,
     '/venta': renderVenta,
-    '/clientes': renderClientes, // Añadir la nueva ruta para clientes
+    '/clientes': renderClientes,
+    '/pedidos': renderPedidosGuardados,
+    '/items-tablajero': renderItemsTablajero, // <-- AÑADIR
     // Agrega más rutas aquí
 };
 
-export function initRouter() {
+// --- Función privada para renderizar el contenido ---
+function render(path) {
     const mainContent = document.getElementById('main-content');
-
-    function navigateTo(url) {
-        history.pushState(null, null, url);
-        renderContent(url);
+    // Asegurarse de que la ruta sea válida, si no, ir a inicio.
+    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+    const renderFunction = routes[cleanPath] || renderInicio;
+    
+    if (mainContent) {
+        mainContent.innerHTML = ''; // Limpiar contenido actual
+        renderFunction(mainContent); // Renderizar nuevo contenido
     }
-
-    function renderContent(url) {
-        const path = url === '' ? '/' : url;
-        const renderFunction = routes[path] || renderInicio; // Default to inicio
-        if (mainContent) {
-            mainContent.innerHTML = ''; // Limpiar contenido actual
-            renderFunction(mainContent); // Renderizar nuevo contenido
-        }
-    }
-
-    // Manejar la navegación inicial y los cambios de historial
-    window.addEventListener('popstate', () => {
-        renderContent(location.pathname);
-    });
-
-    // Manejar clics en enlaces internos
-    document.body.addEventListener('click', e => {
-        if (e.target.matches('[data-link]')) {
-            e.preventDefault();
-            navigateTo(e.target.href);
-        }
-    });
-
-    // Renderizar la ruta inicial
-    renderContent(location.pathname);
 }
 
-// Función para navegar programáticamente
-export function navigate(url) {
-    const mainContent = document.getElementById('main-content');
-    if (mainContent) {
-         history.pushState(null, null, url);
-         const path = url === '' ? '/' : url;
-         const renderFunction = routes[path] || renderInicio; // Default to inicio
-         mainContent.innerHTML = ''; // Limpiar contenido actual
-         renderFunction(mainContent); // Renderizar nuevo contenido
+// --- API Pública del Router ---
+export const router = {
+    navigate: (path) => {
+        // Evitar navegar a la misma página
+        if (location.pathname === path) return;
+        
+        history.pushState(null, null, path);
+        render(path);
     }
+};
+
+export function initRouter() {
+    // Manejar la navegación con los botones de atrás/adelante del navegador
+    window.addEventListener('popstate', () => {
+        render(location.pathname);
+    });
+
+    // Manejar clics en todos los enlaces con el atributo [data-link]
+    document.body.addEventListener('click', e => {
+        const link = e.target.closest('[data-link]');
+        if (link) {
+            e.preventDefault();
+            const href = link.getAttribute('href');
+            router.navigate(href); // Usar nuestro método de navegación
+        }
+    });
+
+    // Renderizar la ruta inicial al cargar la página
+    render(location.pathname);
 }

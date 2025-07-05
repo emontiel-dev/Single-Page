@@ -6,6 +6,9 @@
 // import { openCarritoDetalleModal } from './carrito.detalle.js';
 
 import { openCarritoVerItemsModal } from './carrito.ver.items.js'; // <-- Importar la función del nuevo modal
+import { router } from '../../../router.js'; // Importar el router
+import { pedidosGuardados } from '../../pedidos/pedidos.guardados.datos.js'; // Importar los pedidos
+import { FASES_PEDIDO } from '../../pedidos/pedidos.fases.datos.js'; // Importar las fases
 
 
 export let cartItems = []; // Array para almacenar los items del carrito - AHORA EXPORTADO
@@ -111,111 +114,72 @@ function removeItemFromCart(index) {
 }
 
 
-// Función para actualizar la visualización del carrito
-export function updateCarritoDisplay() { // <-- Añadido 'export' aquí
+// --- FUNCIÓN REFACTORIZADA Y CORREGIDA ---
+export function updateCarritoDisplay() {
     const carritoContainer = document.getElementById('carrito-container');
     const itemsListBody = document.getElementById('carrito-items-list');
     const totalValueSpan = document.getElementById('carrito-total-value');
-    const mainContent = document.getElementById('main-content'); // Obtener el contenedor principal del contenido
-    // Obtener referencias al span del contador (ahora dentro del botón)
-    // Eliminamos la referencia a verTodosMensaje
-    // const verTodosMensaje = document.getElementById('ver-todos-mensaje'); // Obtener el elemento del mensaje
-    const itemCountSpan = document.getElementById('item-count'); // Obtener el span para el contador
-    // const btnVerItems = document.getElementById('btn-ver-items'); // Get the 'Ver todos los items' button
+    const mainContent = document.getElementById('main-content');
+    const itemCountSpan = document.getElementById('item-count');
 
-
-    // Ajustamos la verificación de elementos encontrados
-    // Eliminamos la verificación de verTodosMensaje
     if (!itemsListBody || !totalValueSpan || !carritoContainer || !mainContent || !itemCountSpan) {
         console.error('Elementos del carrito o main content no encontrados en el DOM.');
         return;
     }
 
-    // Limpiar la lista actual
-    itemsListBody.innerHTML = '';
+    // 1. CALCULAR TOTALES Y CONTEOS PRIMERO
+    // El total es la suma del costo de TODOS los items, incluyendo el envío.
+    const total = cartItems.reduce((acc, item) => acc + item.cost, 0);
+    // El contador de items excluye el item de envío.
+    const itemCount = cartItems.filter(item => item.productId !== 'ENVIO').length;
 
-    let total = 0;
+    // 2. ACTUALIZAR LA UI CON LOS VALORES CALCULADOS
+    totalValueSpan.textContent = Math.round(total).toFixed(2); // MODIFICADO: Redondeo aplicado
+    itemCountSpan.textContent = itemCount;
 
-    // Renderizar cada item en la lista
-    if (cartItems.length > 0) {
-        cartItems.forEach((item, index) => { // Use index to identify the item for removal
-            // --- MODIFICACIÓN: Ocultar el item de envío de esta lista ---
+    // 3. RENDERIZAR LA LISTA DE ITEMS
+    itemsListBody.innerHTML = ''; // Limpiar la lista actual
+
+    if (itemCount > 0) { // Solo mostrar el carrito si hay items visibles (no solo envío)
+        cartItems.forEach((item, index) => {
+            // Omitir el item de envío de la lista visible
             if (item.productId === 'ENVIO') {
-                total += item.cost; // Asegurarse de que el costo del envío se sume al total
-                return; // Saltar la renderización de esta fila
+                return;
             }
-            // --- FIN DE LA MODIFICACIÓN ---
 
             const row = document.createElement('tr');
-            row.dataset.itemIndex = index; // Add data attribute for index
+            row.dataset.itemIndex = index;
 
-            // Celda de Producto (renderizada por función auxiliar)
             let productCell;
-
-            // --- DETECCIÓN Y RENDERIZADO POR TIPO DE ITEM ---
-            if (item.productId === 'ENVIO') {
-                productCell = renderEnvioItem(item);
-            } else if (item.productId === 'CARGO') {
+            if (item.productId === 'CARGO') {
                 productCell = renderCargoItem(item);
-            } else if (item.productId === 'PA') { // <-- Añadida lógica para PA
-                 productCell = renderPaItem(item);
-            }
-             else {
-                // Asumimos que es un producto de pollo o un producto con descuento aplicado
-                // La función renderProductItem ahora maneja la visualización de descuentos
+            } else if (item.productId === 'PA') {
+                productCell = renderPaItem(item);
+            } else {
                 productCell = renderProductItem(item);
             }
-            // TODO: Añadir lógica para 'producto adicional' aquí más adelante
-
             row.appendChild(productCell);
 
-            // Celda de Subtotal (común a la mayoría de los items)
             const subtotalCell = document.createElement('td');
             subtotalCell.classList.add('item-subtotal');
-            // Mostrar el costo con signo para descuentos (aunque ahora el costo del item ya es el final)
-            // Si el item tiene descuento, mostramos el costo final. Si no, mostramos el costo normal.
-            // La función renderProductItem se encargará de mostrar el detalle del descuento.
-            subtotalCell.textContent = `$${item.cost.toFixed(2)}`; // <-- Mostrar el costo final del item
+            subtotalCell.textContent = `$${item.cost.toFixed(2)}`;
             row.appendChild(subtotalCell);
 
-            // Celda de Acciones (Eliminar) (común a la mayoría de los items)
             const actionsCell = document.createElement('td');
             actionsCell.classList.add('item-acciones');
-            actionsCell.innerHTML = `<button class="remove-item-btn" aria-label="Eliminar item"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></button>`; // Use × character for close/remove
+            actionsCell.innerHTML = `<button class="remove-item-btn" aria-label="Eliminar item"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></button>`;
             row.appendChild(actionsCell);
 
-
             itemsListBody.appendChild(row);
-
-            total += item.cost; // Sumar al total (el costo del item ya es el final)
         });
 
-        // Mostrar el carrito si hay items
         carritoContainer.classList.add('visible');
-
-        // Actualizar el contador dentro del botón "Ver todo"
-        itemCountSpan.textContent = cartItems.length;
-
-
-        // Eliminar la lógica de padding inferior ya que el carrito no está fijo
-        // const cartHeight = carritoContainer.getBoundingClientRect().height;
-        // const rootStyles = getComputedStyle(document.documentElement);
-        // const extraPadding = parseFloat(rootStyles.getPropertyValue('--espacio-l'));
-        // mainContent.style.paddingBottom = `${cartHeight + extraPadding}px`;
-
-
     } else {
-        // Ocultar el carrito si no hay items
+        // Ocultar el carrito si está completamente vacío
         carritoContainer.classList.remove('visible');
-        // El contador se ocultará junto con el botón "Ver todo" si el contenedor del carrito se oculta.
-        // No necesitamos ocultar el span específicamente.
-
-
-        // Restablecer el padding inferior del main content al valor por defecto del CSS
         mainContent.style.paddingBottom = '';
     }
 
-    // --- AÑADIDO: Lógica para actualizar el estado visual de los botones de acción rápida ---
     updateActionButtonsState();
 }
 
@@ -370,29 +334,54 @@ function renderPaItem(item) {
 
 // --- Handlers de botones de acción ---
 
-// Eliminamos la función handleVerItems ya que el botón fue removido
-/*
-function handleVerItems() {
-    console.log('Botón "Ver todos los items" clicado.');
-    // Dado que todos los items son visibles en la tabla scrollable, este botón es menos crítico para *ver*.
-    // Podría usarse para abrir un modal de *gestión* de items (editar cantidad, añadir notas, etc.).
-    // Por ahora, solo mostramos una alerta placeholder.
-    alert('Funcionalidad "Ver todos los items" pendiente (todos los items son visibles en la tabla scrollable).');
-    // Si decides implementar un modal de gestión más adelante, llamarías a una función aquí, por ejemplo:
-    // openCarritoManagementModal(cartItems);
-}
-*/
-
 function handleCobrar() {
     console.log('Botón "Cobrar" clicado.');
     // TODO: Implementar lógica para procesar el pago y finalizar la venta
     alert('Funcionalidad "Cobrar" pendiente.');
 }
 
+// --- AÑADIDO: Función para generar un ID de pedido único ---
+function generateUniquePedidoId() {
+    const existingIds = new Set(pedidosGuardados.map(p => p.id));
+    let newId;
+    do {
+        // Generar un número aleatorio entre 10000 y 99999
+        const randomNum = Math.floor(10000 + Math.random() * 90000);
+        newId = `PED-${randomNum}`;
+    } while (existingIds.has(newId)); // Repetir si el ID ya existe
+    return newId;
+}
+
 function handleGuardarPedido() {
     console.log('Botón "Guardar Pedido" clicado.');
-    // TODO: Implementar lógica para guardar el estado actual del carrito como un pedido pendiente
-    alert('Funcionalidad "Guardar Pedido" pendiente.');
+    
+    if (cartItems.length === 0) {
+        alert('No puedes guardar un pedido vacío.');
+        return;
+    }
+
+    // Crear un nuevo objeto de pedido
+    const nuevoPedido = {
+        id: generateUniquePedidoId(), // <-- Usar la nueva función para el ID
+        clienteId: selectedClient ? selectedClient.id : null,
+        faseId: FASES_PEDIDO.GUARDADO.id, // Fase inicial
+        precioTipoPredominante: 'Publico', // TODO: Calcular esto dinámicamente si es necesario
+        fechaCreacion: new Date().toISOString(),
+        items: [...cartItems] // Copiar los items del carrito
+    };
+
+    // Añadir el nuevo pedido a la lista de pedidos guardados
+    pedidosGuardados.unshift(nuevoPedido); // Añadir al principio para que aparezca primero
+
+    console.log('Pedido guardado:', nuevoPedido);
+    alert('Pedido guardado con éxito.');
+
+    // Limpiar el carrito actual
+    cartItems.length = 0;
+    setCliente(null); // Esto también llama a updateCarritoDisplay
+
+    // Navegar a la vista de pedidos
+    router.navigate('/pedidos');
 }
 
 // TODO: Considerar añadir funciones para editar cantidades de items directamente en la tabla o via un modal separado.

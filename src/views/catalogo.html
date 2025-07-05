@@ -137,6 +137,16 @@
 
         .hidden {display: none;} /* Aseguramos que la clase hidden funcione */
 
+        /* AÑADIDO: Media query para pantallas más grandes */
+        @media (min-width: 768px) {
+            .catalogo-container {
+                width: 980px; /* Ancho máximo para mejor legibilidad en escritorio */
+                width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
     </style>
 
     <!-- Aquí podrías añadir elementos de filtro o búsqueda si fueran necesarios -->

@@ -33,6 +33,14 @@
     .nav-label { font-size: 0.7em; }
     .nav-item.active-link .nav-icon svg, .nav-item.active-link .nav-label { color: var(--amarillo-polleria); font-weight: 600; }
     .nav-item.active-link::after { content: ''; position: absolute; bottom: 0; left: 25%; width: 50%; height: 3px; background-color: var(--amarillo-polleria); border-radius: var(--radio-borde-pill); }
+
+    /* AÑADIDO: Media query para centrar en pantallas más grandes */
+    @media (min-width: 768px) {
+        .icon-nav-mobile {
+            justify-content: center; /* Centra los items horizontalmente */
+            overflow-x: hidden; /* Oculta el scroll horizontal que ya no es necesario */
+        }
+    }
 </style>
 <header>
     <!-- El enlace principal ahora usa data-link para el router -->
@@ -43,11 +51,11 @@
             <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></span>
             <span class="nav-label">Venta</span>
         </a>
-        <a href="/pedidos-guardados" data-link class="nav-item">
+        <a href="/pedidos" data-link class="nav-item">
             <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></span>
             <span class="nav-label">Pedidos</span>
         </a>
-        <a href="/items-tablajero" data-link class="nav-item">
+        <a href="/items-tablajero" data-link class="nav-item"> <!-- <-- ASEGURAR QUE ESTE href ES CORRECTO -->
             <span class="nav-icon"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></span>
             <span class="nav-label">Items</span>
         </a>

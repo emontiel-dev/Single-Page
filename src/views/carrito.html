@@ -193,6 +193,15 @@
             transition: opacity var(--transicion-suave), max-height var(--transicion-suave), margin-bottom var(--transicion-suave), padding var(--transicion-suave), border-width var(--transicion-suave);
         }
 
+        /* AÑADIDO: Media query para pantallas más grandes */
+        @media (min-width: 768px) {
+            #carrito-container {
+                max-width: 980px; /* Mismo ancho que el catálogo para consistencia */
+                width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
 
     </style>
 

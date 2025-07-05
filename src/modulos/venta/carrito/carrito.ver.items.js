@@ -10,6 +10,7 @@ let cerrarVerItemsModalBtn = null;
 let totalsSection = null;          // Contenedor para las filas de totales
 let ticketDateTimeElement = null;  // Elemento para fecha y hora combinadas
 let ticketIdElement = null;        // (Opcional) Para un futuro ID de ticket
+let cobrarBtnTotalSpan = null;     // <-- AÑADIDO: Referencia al span del total en el botón Cobrar
 
 // --- NUEVAS REFERENCIAS A CONTENEDORES POR SECCIÓN ---
 let ticketItemsPolloElement = null;
@@ -81,6 +82,7 @@ export async function openCarritoVerItemsModal() {
         ticketItemsPaElement = carritoVerItemsModalElement.querySelector('#ticket-items-pa');
         ticketItemsCargoElement = carritoVerItemsModalElement.querySelector('#ticket-items-cargo');
         ticketClienteInfoElement = carritoVerItemsModalElement.querySelector('#ticket-cliente-info'); // <-- OBTENER REFERENCIA
+        cobrarBtnTotalSpan = carritoVerItemsModalElement.querySelector('#btn-cobrar #carrito-total-value'); // <-- AÑADIDO: Obtener referencia
 
         // --- OBTENER REFERENCIAS A LAS SECCIONES COMPLETAS ---
         sectionItemsPollo = carritoVerItemsModalElement.querySelector('.items-section.pollo-items');
@@ -273,6 +275,11 @@ function renderTicketContent() {
         totalsSection.appendChild(
             createTotalRow('TOTAL', Math.round(finalTotal).toFixed(2), true) // Aplicar redondeo aquí
         );
+
+        // --- AÑADIDO: Actualizar el total en el botón de cobrar del modal ---
+        if (cobrarBtnTotalSpan) {
+            cobrarBtnTotalSpan.textContent = Math.round(finalTotal).toFixed(2);
+        }
     }
 
     // Actualizar fecha y hora

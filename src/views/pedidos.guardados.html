@@ -1,0 +1,153 @@
+<div class="pedidos-container">
+    <!--<header class="pedidos-header">
+        <h3>Pedidos</h3>
+    </header>-->
+    <div class="pedidos-list-container">
+        <div class="pedidos-list-header">
+            <span>Pedido</span>
+            <span>Estado</span>
+        </div>
+        <div id="pedidos-list-body">
+            <!-- Los pedidos se renderizarán aquí dinámicamente -->
+        </div>
+    </div>
+    <footer class="pedidos-footer">
+        <!-- Aquí podrían ir filtros o acciones masivas -->
+    </footer>
+</div>
+
+<style>
+    .pedidos-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        background-color: var(--gris-fondo-app);
+        padding: 0;
+    }
+    .pedidos-header {
+        text-align: center;
+        padding-bottom: var(--espacio-m);
+    }
+    .pedidos-header h3 {
+        font-size: 1.5em;
+        margin: 0;
+        color: var(--negro-azabache);
+    }
+    .pedidos-list-container {
+        flex-grow: 1;
+        background-color: var(--blanco);
+        border-radius: var(--radio-borde-l);
+        box-shadow: var(--sombra-sm);
+        overflow-y: auto;
+        padding: var(--espacio-s);
+    }
+    .pedidos-list-header {
+        display: flex;
+        justify-content: space-between;
+        padding: var(--espacio-s) var(--espacio-m);
+        color: var(--gris-texto-secundario);
+        font-weight: 600;
+        border-bottom: 2px solid var(--gris-borde-sutil);
+        position: sticky;
+        top: 0;
+        background: var(--blanco);
+        z-index: 1;
+    }
+    #pedidos-list-body {
+        display: flex;
+        flex-direction: column;
+        gap: var(--espacio-s);
+        padding-top: var(--espacio-s);
+    }
+    .pedido-item {
+        position: relative; /* Necesario para posicionar las acciones */
+        overflow: hidden; /* Oculta las acciones por defecto */
+        border-radius: var(--radio-borde-m);
+        background-color: var(--blanco);
+    }
+    /* AÑADIDO: Contenedor del contenido que se desliza */
+    .pedido-item-content {
+        position: relative;
+        z-index: 2;
+        background-color: inherit; /* Hereda el fondo del padre */
+        transition: transform 0.2s ease-out;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--espacio-m);
+        border: 1px solid var(--gris-borde-sutil);
+        border-radius: var(--radio-borde-m);
+        cursor: pointer;
+        touch-action: pan-y; /* AÑADIDO: Permite scroll vertical, pero captura el horizontal para nuestros gestos. */
+    }
+
+    /* AÑADIDO: Elimina la transición mientras se desliza activamente */
+    .pedido-item.swiping .pedido-item-content {
+        transition: none;
+    }
+    /* AÑADIDO: Estilos para los fondos de las acciones */
+    .swipe-action-bg {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 90px; /* Ancho del área de acción */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: var(--blanco);
+        z-index: 1;
+        font-size: 0.8em;
+        font-weight: 600;
+        gap: 4px;
+    }
+    .swipe-right-bg {
+        left: 0;
+        background-color: var(--azul-info);
+    }
+    .swipe-left-bg {
+        right: 0;
+        background-color: var(--verde-accion);
+    }
+    .swipe-action-bg svg {
+        width: 24px;
+        height: 24px;
+    }
+    .pedido-info .cliente-nombre {
+        font-weight: 700;
+        font-size: 1.1em;
+        color: var(--negro-azabache);
+    }
+    .pedido-info .precio-tipo-tag {
+        font-size: 0.8em;
+        font-weight: 600;
+        padding: 2px 6px;
+        border-radius: var(--radio-borde-s);
+        margin-left: var(--espacio-s);
+        color: var(--negro-azabache);
+        background-color: var(--amarillo-polleria); /* Color por defecto */
+    }
+    .pedido-info .pedido-resumen {
+        font-size: 0.9em;
+        color: var(--gris-texto-secundario);
+        margin-top: 4px;
+        /* AÑADIDO: Alinear items y hora */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--espacio-m);
+    }
+    .pedido-resumen .hora-registro {
+        font-weight: 500;
+        font-size: 0.9em;
+        color: var(--gris-texto-terciario);
+        white-space: nowrap; /* Evitar que la hora se parta en dos líneas */
+    }
+    .pedido-estado .estado-badge {
+        font-size: 0.9em;
+        font-weight: 700;
+        padding: 6px 12px;
+        border-radius: var(--radio-borde-pill);
+        text-align: center;
+    }
+</style>

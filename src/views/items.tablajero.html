@@ -1,0 +1,87 @@
+<div class="tablajero-container">
+    <div class="tablajero-list-container">
+        <div class="tablajero-list-header">
+            <span>Pedido</span>
+            <span>Estado</span>
+        </div>
+        <div id="tablajero-list-body">
+            <!-- Los items de pedidos en 'Procesando' se renderizarán aquí -->
+        </div>
+    </div>
+</div>
+
+<style>
+    .tablajero-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        background-color: var(--gris-fondo-app);
+    }
+    .tablajero-list-container {
+        flex-grow: 1;
+        background-color: var(--blanco);
+        border-radius: var(--radio-borde-l);
+        box-shadow: var(--sombra-sm);
+        overflow-y: auto;
+        padding: var(--espacio-s);
+    }
+    .tablajero-list-header {
+        display: flex;
+        justify-content: space-between;
+        padding: var(--espacio-s) var(--espacio-m);
+        color: var(--gris-texto-secundario);
+        font-weight: 600;
+        border-bottom: 2px solid var(--gris-borde-sutil);
+        position: sticky;
+        top: 0;
+        background: var(--blanco);
+        z-index: 1;
+    }
+    #tablajero-list-body {
+        display: flex;
+        flex-direction: column;
+        gap: var(--espacio-s);
+        padding-top: var(--espacio-s);
+    }
+    .tablajero-item {
+        padding: var(--espacio-m);
+        border: 1px solid var(--gris-borde-sutil);
+        border-radius: var(--radio-borde-m);
+        cursor: pointer;
+        transition: background-color var(--transicion-rapida);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .tablajero-item.listo {
+        background-color: var(--gris-elemento-claro);
+        color: var(--gris-texto-secundario);
+    }
+    .tablajero-item.listo .item-producto,
+    .tablajero-item.listo .item-cliente {
+        color: var(--gris-texto-secundario);
+        text-decoration: line-through;
+    }
+    .item-info .item-cliente {
+        font-weight: 700;
+        font-size: 1.1em;
+        color: var(--negro-azabache);
+    }
+    .item-info .item-producto {
+        font-size: 1em;
+        color: var(--amarillo-polleria-texto);
+        font-weight: 600;
+    }
+    .item-info .item-detalles {
+        font-size: 0.9em;
+        color: var(--gris-texto-secundario);
+        margin-top: 4px;
+    }
+    .item-estado .estado-badge {
+        font-size: 0.9em;
+        font-weight: 700;
+        padding: 6px 12px;
+        border-radius: var(--radio-borde-pill);
+        text-align: center;
+    }
+</style>
