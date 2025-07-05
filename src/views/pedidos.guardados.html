@@ -113,41 +113,46 @@
         width: 24px;
         height: 24px;
     }
-    .pedido-info .cliente-nombre {
+
+    /* --- ESTILOS MODIFICADOS PARA EL NUEVO DISEÑO --- */
+    .pedido-info {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 4px; /* Espacio entre las dos líneas */
+    }
+
+    .linea-superior, .linea-inferior {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .cliente-nombre {
         font-weight: 700;
         font-size: 1.1em;
         color: var(--negro-azabache);
     }
-    .pedido-info .precio-tipo-tag {
-        font-size: 0.8em;
-        font-weight: 600;
-        padding: 2px 6px;
-        border-radius: var(--radio-borde-s);
-        margin-left: var(--espacio-s);
-        color: var(--negro-azabache);
-        background-color: var(--amarillo-polleria); /* Color por defecto */
-    }
-    .pedido-info .pedido-resumen {
-        font-size: 0.9em;
-        color: var(--gris-texto-secundario);
-        margin-top: 4px;
-        /* AÑADIDO: Alinear items y hora */
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: var(--espacio-m);
-    }
-    .pedido-resumen .hora-registro {
-        font-weight: 500;
-        font-size: 0.9em;
-        color: var(--gris-texto-terciario);
-        white-space: nowrap; /* Evitar que la hora se parta en dos líneas */
-    }
-    .pedido-estado .estado-badge {
+
+    .estado-badge {
         font-size: 0.9em;
         font-weight: 700;
         padding: 6px 12px;
         border-radius: var(--radio-borde-pill);
         text-align: center;
     }
+
+    .resumen-pedido {
+        font-size: 0.9em;
+        color: var(--gris-texto-secundario);
+    }
+
+    .hora-registro {
+        font-weight: 500;
+        font-size: 0.9em;
+        color: var(--gris-texto-terciario);
+        white-space: nowrap;
+    }
+    /* --- FIN DE LOS ESTILOS MODIFICADOS --- */
 </style>

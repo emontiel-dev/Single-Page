@@ -106,11 +106,9 @@ function renderListaPedidos(container, pedidos) {
         const cliente = pedido.clienteId ? clientes.find(c => c.id === pedido.clienteId) : null;
         const fase = FASES_PEDIDO[pedido.faseId];
         
-        // --- MODIFICACIÓN: No contar el envío como un item y redondear el total ---
         const totalItems = pedido.items.filter(item => item.productId !== 'ENVIO').length;
         const totalCosto = pedido.items.reduce((acc, item) => acc + item.cost, 0);
         
-        // --- AÑADIDO: Formatear la hora de registro ---
         const fecha = new Date(pedido.fechaCreacion);
         const horaRegistro = fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
@@ -118,6 +116,7 @@ function renderListaPedidos(container, pedidos) {
         itemDiv.className = 'pedido-item';
         itemDiv.dataset.pedidoId = pedido.id;
 
+        // --- ESTRUCTURA HTML MODIFICADA ---
         itemDiv.innerHTML = `
             <div class="swipe-action-bg swipe-right-bg">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
@@ -129,19 +128,14 @@ function renderListaPedidos(container, pedidos) {
             </div>
             <div class="pedido-item-content">
                 <div class="pedido-info">
-                    <div class="cliente-nombre">
-                        ${cliente ? cliente.nombre : 'Sin Cliente'}
-                        ${pedido.precioTipoPredominante ? `<span class="precio-tipo-tag">${pedido.precioTipoPredominante}</span>` : ''}
+                    <div class="linea-superior">
+                        <span class="cliente-nombre">${cliente ? cliente.nombre : 'Sin Cliente'}</span>
+                        <span class="estado-badge" style="color: ${fase.color}; background-color: ${fase.backgroundColor};">${fase.nombre}</span>
                     </div>
-                    <div class="pedido-resumen">
-                        <span class="resumen-line">${totalItems} item${totalItems !== 1 ? 's' : ''} - <strong>$${Math.round(totalCosto).toFixed(2)}</strong></span>
+                    <div class="linea-inferior">
+                        <span class="resumen-pedido">${totalItems} item${totalItems !== 1 ? 's' : ''} - <strong>$${Math.round(totalCosto).toFixed(2)}</strong></span>
                         <span class="hora-registro">${horaRegistro}</span>
                     </div>
-                </div>
-                <div class="pedido-estado">
-                    <span class="estado-badge" style="color: ${fase.color}; background-color: ${fase.backgroundColor};">
-                        ${fase.nombre}
-                    </span>
                 </div>
             </div>
         `;
