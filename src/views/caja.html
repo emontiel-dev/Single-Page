@@ -1,0 +1,96 @@
+<div class="caja">
+    
+    <div class="stock-container">
+        <div class="total-acumulado">
+            <span>Total Acumulado</span>
+            <span id="caja-total-acumulado">$0.00</span>
+        </div>
+        <h4>Stock denominaciones</h4>
+        <div id="caja-stock-grid" class="stock-grid">
+            <!-- Las columnas se generarán dinámicamente aquí -->
+        </div>
+    </div>
+
+    <div class="caja-acciones-container">
+        <button id="btn-añadir-ingreso" class="btn-accion">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+            <span>Ingreso</span>
+        </button>
+        <button id="btn-añadir-egreso" class="btn-accion">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+            <span>Egreso</span>
+        </button>
+        <button id="btn-recargar-denominaciones" class="btn-accion">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            <span>Recarga</span>
+        </button>
+        <button id="btn-corte-caja" class="btn-accion">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
+            <span>Corte</span>
+        </button>
+    </div>
+
+    <div class="movimientos-container">
+        <h4>Registro movimientos en caja</h4>
+        <div id="caja-movimientos-lista" class="movimientos-lista">
+            <!-- Los movimientos se renderizarán aquí dinámicamente -->
+        </div>
+    </div>
+
+</div>
+<style>
+    .caja {
+        display: flex;
+        flex-direction: column;
+        gap: var(--espacio-m);
+    }
+    .stock-container { background-color: var(--blanco); border: 1px solid var(--gris-borde-sutil); border-radius: var(--radio-borde-l); padding: var(--espacio-m); }
+    .total-acumulado { display: flex; justify-content: space-between; align-items: center; font-size: 1.2em; font-weight: 600; color: var(--negro-azabache); padding-bottom: var(--espacio-m); margin-bottom: var(--espacio-m); border-bottom: 1px solid var(--gris-borde-sutil); }
+    .stock-container h4 { margin: 0 0 var(--espacio-s) 0; font-size: 1em; color: var(--gris-texto-secundario); }
+    .stock-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--espacio-s); }
+    .denominacion-columna { display: flex; flex-direction: column; gap: var(--espacio-xs); }
+    .denominacion-item { display: flex; align-items: center; background-color: var(--gris-elemento-claro); padding: 0.3rem; padding-bottom: 0; gap: var(--espacio-s); border-radius: var(--radio-borde-m); font-weight: 600; }
+    .denominacion-valor { padding: var(--espacio-pill) var(--espacio-pill); border-radius: var(--radio-borde-m); color: var(--blanco); min-width: 50px; text-align: center; font-size: 1em; font-weight: 700; }
+    .denominacion-cantidad { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+    .multiplicador { font-size: 0.9em; color: var(--gris-texto-secundario); }
+    .cantidad-valor { font-size: 1em; color: var(--negro-azabache); font-weight: 700; }
+    .caja-acciones-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--espacio-s); }
+    .btn-accion { display: flex;flex-direction: column;align-items: center;justify-content: center;gap: 4px;height: 60px;padding: var(--espacio-s); border: 1px solid var(--gris-borde-input); background-color: var(--gris-elemento-claro); color: var(--negro-azabache); border-radius: var(--radio-borde-m); cursor: pointer; font-weight: 600; text-align: center; font-size: 0.8em; transition: var(--transicion-rapida); }
+    .btn-accion:hover { background-color: var(--gris-hover-sutil); border-color: var(--amarillo-polleria);color: var(--amarillo-polleria-texto);}
+    .btn-accion svg {
+        width: 20px;
+        height: 20px;
+    }
+    .movimientos-container {
+        max-height: 250px;
+        overflow-y: auto;
+        background-color: var(--blanco);
+        border: 1px solid var(--gris-borde-sutil);
+        border-radius: var(--radio-borde-l);
+        /* El padding se elimina de aquí para un mejor control del scroll */
+    }
+    .movimientos-container h4 {
+        position: sticky;
+        top: 0;
+        background: var(--blanco);
+        z-index: 1;
+        margin: 0;
+        padding: var(--espacio-m) var(--espacio-m) var(--espacio-s) var(--espacio-m);
+        border-bottom: 1px solid var(--gris-borde-muy-sutil);
+        font-size: 1em;
+        color: var(--gris-texto-secundario);
+    }
+    .movimientos-lista {
+        display: flex;
+        flex-direction: column;
+        gap: var(--espacio-s);
+        padding: var(--espacio-s) var(--espacio-m) var(--espacio-m) var(--espacio-m); /* Padding para el contenido */
+    }
+    .movimiento-item {display: grid;grid-template-columns: 1fr 2fr 1fr;align-items: center;padding-bottom: var(--espacio-s);border-bottom: 1px solid var(--gris-borde-muy-sutil);}
+    .movimiento-origen-hora {font-size: 0.8em;color: var(--gris-texto-secundario);}
+    .movimiento-origen-hora .origen {font-weight: 600;}
+    .movimiento-tipo {font-weight: 500;text-align: center;}
+    .movimiento-monto {font-weight: 600;text-align: right;}
+    .movimiento-monto.ingreso {color: var(--verde-exito);}
+    .movimiento-monto.egreso {color: var(--rojo-error);}    
+</style>

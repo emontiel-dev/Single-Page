@@ -38,6 +38,13 @@
     --espacio-m: 1rem;
     --espacio-l: 1.5rem;
     --espacio-xl: 2rem;
+
+    /* Nuevos colores para la Navbar */
+    --verde-tablajero: #27AE60;
+    --azul-pedidos: #2980B9;
+    --morado-historial: #8E44AD;
+    --naranja-caja: #F39C12; /* Color para el ícono de Caja */
+
 }
 
 /* Resto de estilos... (Reset, Tipografía, Botones, etc.) */
@@ -46,17 +53,15 @@ html { scroll-behavior: smooth; font-size: var(--tamano-fuente-base); }
 body { font-family: var(--fuente-principal); line-height: var(--line-height-base); background-color: var(--gris-fondo-claro); color: var(--negro-azabache); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 h1, h2, h3 { font-family: var(--fuente-principal); line-height: var(--line-height-titulo); color: var(--negro-azabache); margin-bottom: var(--espacio-m); font-weight: 700; }
 
-/* Modificar main para ser un contenedor flexbox */
+/* --- MODIFICADO: Regla de 'main' consolidada y ajustada --- */
 main {
-    padding: var(--espacio-l);
-    /* padding-bottom: 120px; */ /* Eliminamos el padding inferior fijo */
-    display: flex; /* Añadir display flex */
-    flex-direction: column; /* Apilar elementos verticalmente */
-    gap: var(--espacio-m); /* Añadir espacio entre los elementos hijos (carrito y catalogo) */
-}
-
-main {
-    padding-top: var(--espacio-s);
+    /* Padding: Arriba(S), Lados(L) */
+    padding: var(--espacio-s) var(--espacio-l);
+    /* AÑADIDO: Espacio en la parte inferior para la barra de navegación fija */
+    padding-bottom: 80px; /* Ajusta este valor si la altura de la navbar cambia */
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-m);
 }
 
 /* Eliminamos las reglas order ya que el orden en el DOM es correcto */

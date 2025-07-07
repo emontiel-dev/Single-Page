@@ -16,9 +16,9 @@
             flex-shrink: 0;
         }
         .clientes-list-wrapper {
-            flex-grow: 1;
             overflow-y: auto;
             padding: 0 var(--espacio-m);
+            max-height: calc(100vh - 200px); /* Altura máxima para que el scroll se aplique aquí */
         }
         .cliente-item {
             display: flex;

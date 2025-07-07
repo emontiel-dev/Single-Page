@@ -12,3 +12,9 @@ export default defineConfig({
     host: true // Esto expone el servidor a la red local
   }
 });
+
+// package.json (solo la sección relevante)
+"dependencies"; {
+  "@google/genai"; "^0.14.0",
+  "vite"; "^5.3.1"
+}

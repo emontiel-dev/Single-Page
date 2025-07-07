@@ -1,6 +1,17 @@
 <style>
     a { text-decoration: none; color: var(--amarillo-polleria); }
-    header { background: var(--gris-elemento-claro); padding: var(--espacio-s); text-align: center; position: sticky; top: 0; z-index: 1000; }
+    header { 
+        background: var(--gris-elemento-claro); 
+        padding: var(--espacio-s); 
+        text-align: center; 
+        position: fixed; 
+        bottom: 0; 
+        left: 0;
+        right: 0;
+        z-index: 1000; 
+        border-top: 1px solid var(--gris-borde-sutil);
+        box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+    }
     header h1 { font-size: 1.8em; margin-bottom: var(--espacio-s); }
     header h1 a { color: var(--negro-azabache); }
     /* MODIFICADO: Contenedor para scroll horizontal */
@@ -71,6 +82,10 @@
         <a href="/caja" data-link class="nav-item">
             <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><path d="M16 2V6a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V2"></path><line x1="12" y1="12" x2="12" y2="12"></line><line x1="12" y1="16" x2="12" y2="16"></line></svg></span>
             <span class="nav-label">Caja</span>
+        </a>
+        <a href="/calculadora" data-link class="nav-item">
+            <span class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" y1="7" x2="16" y2="7"></line><line x1="8" y1="12" x2="10" y2="12"></line><line x1="14" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="10" y2="16"></line><line x1="14" y1="16" x2="16" y2="16"></line></svg></span>
+            <span class="nav-label">Calculadora</span>
         </a>
     </nav>
 </header>

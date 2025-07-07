@@ -1,0 +1,32 @@
+<div id="caja-recarga-modal-container" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Recargar Denominaciones</h3>
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="recarga-modal-cancelar-btn">Cancelar</button>
+                <button class="btn btn-primario" id="recarga-modal-guardar-btn">Recargar</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div id="recarga-denominaciones-grid" class="denominaciones-grid">
+                <!-- Inputs para cada denominación se renderizarán aquí -->
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+.denominaciones-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--espacio-m);
+}
+.denominacion-input-group {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-s);
+}
+.denominacion-input-group label {
+    font-weight: 600;
+    min-width: 50px;
+}
+</style>

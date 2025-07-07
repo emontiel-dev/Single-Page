@@ -2,6 +2,7 @@
     <style>
         .cliente-detalle-container {
             padding: var(--espacio-m);
+            padding-top: 60px;
             display: flex;
             flex-direction: column;
             gap: var(--espacio-l);
@@ -31,6 +32,7 @@
             width: auto; /* Ancho automático basado en el contenido */
             min-width: 90px; /* Ancho mínimo para consistencia */
             /* El botón ya no necesita flex-shrink: 0 en este layout */
+            gap: var(--espacio-s);
         }
         .detalle-card {
             background: var(--blanco);
@@ -72,11 +74,15 @@
     </style>
 
     <div class="detalle-header">
+        <div class="acciones">
+            <button class="btn btn-secondary" id="btn-volver-lista">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                <span>Volver</span>
+            </button>
+        </div>
         <div>
             <h3 class="nombre-completo" id="detalle-nombre"></h3><p class="alias" id="detalle-alias"></p>
         </div>
-        <button class="btn btn-secondary" id="btn-volver-lista">Volver</button>
-        
     </div>
     
     <div class="detalle-card">
