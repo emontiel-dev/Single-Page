@@ -1,4 +1,3 @@
-import { clientes } from './clientes.datos.js';
 import { initSearchBar } from './clientes.barra.busqueda.js';
 import { setCliente } from '../venta/carrito/carrito.js'; // <-- IMPORTAR setCliente
 
@@ -39,10 +38,17 @@ function closeClienteModal() {
 // Configura la barra de búsqueda reutilizando la lógica existente
 async function setupSearch() {
     const searchArea = modalElement.querySelector('#cliente-modal-search-area');
-    const searchResponse = await fetch('src/views/clientes.barra.busqueda.html');
-    searchArea.innerHTML = await searchResponse.text();
-    
+    // El HTML de la barra de búsqueda ahora está directamente en cliente.modal.html
     const searchInput = searchArea.querySelector('#cliente-search-input');
+    
+    // Obtenemos los clientes desde el backend para la búsqueda
+    const clientesResponse = await fetch('http://localhost:3000/api/clientes');
+    if (!clientesResponse.ok) {
+        console.error('No se pudo obtener la lista de clientes para el modal.');
+        return;
+    }
+    const clientes = await clientesResponse.json();
+
     initSearchBar(searchInput, clientes, renderSearchResults);
 }
 

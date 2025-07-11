@@ -1,6 +1,6 @@
-import { clientes } from './clientes.datos.js';
 import { initSearchBar } from './clientes.barra.busqueda.js';
-import { renderClienteDetalle } from './cliente.detalle.js'; // <-- Importar la nueva función
+import { renderClienteDetalle } from './cliente.detalle.js';
+//import { openNuevoClienteModal } from './cliente.añadir.modal.js'; // <-- AÑADIR IMPORTACIÓN
 
 // Referencias a elementos del DOM
 let mainContainer = null;
@@ -15,11 +15,13 @@ export async function renderClientes(container) {
         if (!response.ok) throw new Error('No se pudo cargar clientes.html');
         container.innerHTML = await response.text();
 
-        // Cargar e inyectar la barra de búsqueda
-        const searchBarArea = container.querySelector('#clientes-search-bar-area');
-        const searchResponse = await fetch('src/views/clientes.barra.busqueda.html');
-        if (!searchResponse.ok) throw new Error('No se pudo cargar clientes.barra.busqueda.html');
-        searchBarArea.innerHTML = await searchResponse.text();
+        // --- NUEVO: Cargar datos desde el backend ---
+        const clientesResponse = await fetch('http://localhost:3000/api/clientes');
+        if (!clientesResponse.ok) throw new Error('No se pudo obtener la lista de clientes del backend.');
+        const clientes = await clientesResponse.json();
+        // --- FIN NUEVO ---
+
+        // La barra de búsqueda ahora está integrada en clientes.html, no es necesario cargarla.
 
         // Obtener referencias a los elementos clave
         clientesListContainer = container.querySelector('#clientes-list-container');
@@ -33,6 +35,15 @@ export async function renderClientes(container) {
 
         // Añadir event listener para el click en la lista
         clientesListContainer.addEventListener('click', handleClienteClick);
+
+        // --- AÑADIR: Event listener para el botón de nuevo cliente ---
+        const btnAnadirCliente = container.querySelector('#btn-anadir-cliente');
+        if (btnAnadirCliente) {
+            btnAnadirCliente.addEventListener('click', () => {
+                // El callback recarga la lista de clientes después de guardar
+                openNuevoClienteModal(() => renderClientes(mainContainer));
+            });
+        }
 
     } catch (error) {
         console.error('Error al renderizar la vista de clientes:', error);

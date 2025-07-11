@@ -1,0 +1,27 @@
+[
+    {
+        "id": 1,
+        "nombre": "María Elena",
+        "apellidos": "García López",
+        "alias": "Nena",
+        "telefonos": [
+            { "tipo": "Móvil", "numero": "275-123-4567" }
+        ],
+        "direcciones": [
+            { "tipo": "Casa", "direccion": "Av. Principal 45, Col. El Sol", "referencias": "Casa de dos pisos, portón blanco.", "lat": 18.8462, "long": -98.9545 }
+        ]
+    },
+    {
+        "id": 2,
+        "nombre": "Carlos Alberto",
+        "apellidos": "Sánchez",
+        "alias": "Beto",
+        "telefonos": [
+            { "tipo": "Móvil", "numero": "275-987-6543" },
+            { "tipo": "Casa", "numero": "275-555-1234" }
+        ],
+        "direcciones": [
+            { "tipo": "Casa", "direccion": "Calle 5 de Mayo #10, Centro", "referencias": "Junto a la farmacia.", "lat": 18.8488, "long": -98.9511 }
+        ]
+    }
+]
