@@ -1,0 +1,100 @@
+<div class="telefono-container">
+    <style>
+        .telefono-container {
+            max-width: 400px;
+            margin: auto;
+            margin-top: 20px;
+            padding: var(--espacio-m);
+            background-color: var(--blanco);
+            border-radius: var(--radio-borde-l);
+            box-shadow: var(--sombra-md);
+            display: flex;
+            flex-direction: column;
+            gap: var(--espacio-l);
+        }
+        .telefono-display {
+            background-color: var(--gris-fondo-claro);
+            border-radius: var(--radio-borde-m);
+            padding: var(--espacio-m) var(--espacio-l);
+            text-align: center;
+            font-size: 2.5em;
+            color: var(--negro-azabache);
+            min-height: 1.5em;
+            letter-spacing: 2px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .telefono-keys {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--espacio-m);
+        }
+        .telefono-keys button {
+            padding: var(--espacio-l);
+            font-size: 2em;
+            border: none;
+            border-radius: 50%;
+            background-color: var(--gris-elemento-claro);
+            cursor: pointer;
+            transition: background-color var(--transicion-rapida);
+            height: 80px;
+            width: 80px;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .telefono-keys button:hover {
+            background-color: var(--gris-hover-sutil);
+        }
+        .telefono-keys .backspace-key {
+            background-color: transparent;
+        }
+        .telefono-actions {
+            display: flex;
+            gap: var(--espacio-m);
+            margin-top: var(--espacio-s);
+        }
+        .telefono-actions .btn {
+            flex-grow: 1;
+            height: 50px;
+            font-size: 1em;
+        }
+        .telefono-actions .btn-llamar {
+            background-color: var(--verde-accion);
+            color: var(--texto-sobre-verde);
+        }
+        .telefono-actions .btn-whatsapp {
+            background-color: #25D366; /* Color oficial de WhatsApp */
+            color: var(--blanco);
+        }
+        .telefono-actions .btn:disabled {
+            background-color: var(--gris-borde-input);
+            cursor: not-allowed;
+        }
+    </style>
+
+    <div class="telefono-display" id="telefono-display">&nbsp;</div>
+
+    <div class="telefono-keys" id="telefono-keys">
+        <button data-key="1">1</button>
+        <button data-key="2">2</button>
+        <button data-key="3">3</button>
+        <button data-key="4">4</button>
+        <button data-key="5">5</button>
+        <button data-key="6">6</button>
+        <button data-key="7">7</button>
+        <button data-key="8">8</button>
+        <button data-key="9">9</button>
+        <button class="backspace-key"></button> <!-- Espacio vacío -->
+        <button data-key="0">0</button>
+        <button data-key="backspace" class="backspace-key">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path><line x1="18" y1="9" x2="12" y2="15"></line><line x1="12" y1="9" x2="18" y2="15"></line></svg>
+        </button>
+    </div>
+
+    <div class="telefono-actions">
+        <button class="btn btn-llamar" id="btn-llamar" disabled>Llamar</button>
+        <button class="btn btn-whatsapp" id="btn-whatsapp" disabled>WhatsApp</button>
+    </div>
+</div>

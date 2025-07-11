@@ -1,32 +1,72 @@
 <div id="caja-recarga-modal-container" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Recargar Denominaciones</h3>
+            <h3 id="recarga-modal-title"></h3>
             <div class="header-actions">
                 <button class="btn btn-secondary" id="recarga-modal-cancelar-btn">Cancelar</button>
-                <button class="btn btn-primario" id="recarga-modal-guardar-btn">Recargar</button>
+                <button class="btn" id="recarga-modal-atras-btn" style="display: none;">Atrás</button>
+                <button class="btn btn-primario" id="recarga-modal-siguiente-btn">Siguiente</button>
             </div>
         </div>
         <div class="modal-body">
-            <div id="recarga-denominaciones-grid" class="denominaciones-grid">
-                <!-- Inputs para cada denominación se renderizarán aquí -->
+            <div id="recarga-info-total" class="recarga-info" style="display: none;">
+                <!-- Info del total de egreso se mostrará aquí en el paso 2 -->
             </div>
+            <div id="recarga-denominaciones-grid" class="denominaciones-grid">
+                <!-- Inputs para denominaciones se renderizarán aquí -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span>Total del Paso:</span>
+            <span id="recarga-total-paso">$0.00</span>
         </div>
     </div>
 </div>
 <style>
-.denominaciones-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--espacio-m);
-}
-.denominacion-input-group {
-    display: flex;
-    align-items: center;
-    gap: var(--espacio-s);
-}
-.denominacion-input-group label {
-    font-weight: 600;
-    min-width: 50px;
-}
+    /* General modal styles */
+    #caja-recarga-modal-container .modal-content { background-color: var(--blanco); border-radius: var(--radio-borde-l); box-shadow: var(--sombra-md); width: 100%; max-width: 450px; display: flex; flex-direction: column; max-height: 90vh; }
+
+    /* Header styles - CORRECTED */
+    #caja-recarga-modal-container .modal-header {
+        display: flex;
+        justify-content: space-between; /* Distribute space */
+        align-items: center;
+        padding: var(--espacio-m) var(--espacio-l);
+        border-bottom: 1px solid var(--gris-borde-sutil);
+        flex-shrink: 0;
+        gap: var(--espacio-m); /* Ensure minimum space */
+    }
+    #caja-recarga-modal-container .modal-header h3 {
+        margin: 0;
+        font-size: 1.1em;
+        flex-shrink: 1; /* Allow title to shrink and wrap */
+        min-width: 0; /* Important for flex-shrink to work correctly */
+    }
+
+    /* Actions and buttons styles */
+    #caja-recarga-modal-container .header-actions {
+        display: flex;
+        gap: var(--espacio-s); /* Space between buttons */
+        flex-shrink: 0; /* Prevent button container from shrinking */
+    }
+    #caja-recarga-modal-container .header-actions .btn {
+        padding: var(--espacio-xs) var(--espacio-s);
+        font-size: 0.9em;
+        margin-bottom: 0;
+    }
+
+    /* Body and Grid */
+    #caja-recarga-modal-container .modal-body { padding: var(--espacio-l); display: flex; flex-direction: column; gap: var(--espacio-m); overflow-y: auto; }
+    .denominaciones-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--espacio-s); }
+    .denominacion-input-group { display: flex; align-items: center; background-color: var(--gris-elemento-claro); border-radius: var(--radio-borde-m); padding: 0.3rem; gap: var(--espacio-s); }
+    .denominacion-input-group input { flex-grow: 1; text-align: center; font-weight: 600; border: none; background: transparent; padding: var(--espacio-xs) 0; width: 100%; }
+    .denominacion-input-group .denominacion-valor { padding: var(--espacio-pill); border-radius: var(--radio-borde-m); color: var(--blanco); min-width: 45px; text-align: center; font-size: 0.9em; font-weight: 600; }
+
+    /* Info and Footer */
+    .recarga-info { padding: var(--espacio-s) var(--espacio-m); background-color: var(--amarillo-polleria-fondo-claro); border: 1px solid var(--amarillo-polleria); border-radius: var(--radio-borde-m); text-align: center; font-weight: 600; }
+    #caja-recarga-modal-container .modal-footer { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.1em; padding: var(--espacio-m) var(--espacio-l); background-color: var(--gris-elemento-claro); border-top: 1px solid var(--gris-borde-sutil); flex-shrink: 0; }
+
+    /* Dynamic colors for pills */
+    .denominacion-valor.egreso { background-color: var(--rojo-peligro-texto); }
+    .denominacion-valor.ingreso { background-color: var(--verde-exito); }
 </style>

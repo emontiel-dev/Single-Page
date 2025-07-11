@@ -10,12 +10,56 @@
         <div class="modal-body">
             <div class="form-group">
                 <label for="egreso-concepto-input">Concepto</label>
-                <input type="text" id="egreso-concepto-input" placeholder="Ej: Compra de insumos, Gasto">
+                <input type="text" id="egreso-concepto-input" placeholder="Ej: Compra de insumos, Pago de servicio">
             </div>
-            <div class="form-group">
-                <label for="egreso-monto-input">Monto</label>
-                <input type="number" id="egreso-monto-input" placeholder="0.00" step="0.01">
+            <div id="egreso-denominaciones-grid" class="denominaciones-grid">
+                <!-- Los inputs se renderizarán aquí desde JS -->
             </div>
         </div>
     </div>
 </div>
+<style>
+    #caja-egreso-modal-container .modal-content { background-color: var(--blanco); border-radius: var(--radio-borde-l); box-shadow: var(--sombra-md); width: 100%; max-width: 400px; display: flex; flex-direction: column; max-height: 90vh; }
+    #caja-egreso-modal-container .modal-header { display: flex; justify-content: space-between; align-items: center; padding: var(--espacio-m) var(--espacio-l); border-bottom: 1px solid var(--gris-borde-sutil); flex-shrink: 0; }
+    #caja-egreso-modal-container .modal-header h3 { margin: 0; font-size: 1.1em; }
+    #caja-egreso-modal-container .header-actions { display: flex; gap: var(--espacio-s); }
+    #caja-egreso-modal-container .header-actions .btn { padding: var(--espacio-xs) var(--espacio-s); font-size: 0.9em; margin-bottom: 0; }
+    #caja-egreso-modal-container .modal-body { padding: var(--espacio-l); display: flex; flex-direction: column; gap: var(--espacio-m);}
+    #caja-egreso-modal-container .form-group { margin-bottom: 0; }
+    #caja-egreso-modal-container input[type="text"] { text-align: left; }
+    
+    .denominaciones-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--espacio-xs);
+        margin-top: var(--espacio-m);
+    }
+    .denominacion-input-group {
+        display: flex;
+        align-items: center;
+        background-color: var(--gris-elemento-claro);
+        border-radius: var(--radio-borde-m);
+        /*padding: 0.3rem;*/
+        gap: var(--espacio-xs);
+    }
+    .denominacion-input-group input {
+        flex-grow: 1;
+        text-align: center;
+        font-size: 1em;
+        font-weight: 600;
+        border: none;
+        background: transparent;
+        padding: var(--espacio-xs) 0;
+        width: 100%;
+    }
+    .denominacion-input-group .denominacion-valor {
+        padding: var(--espacio-pill) var(--espacio-pill);
+        border-radius: var(--radio-borde-m);
+        color: var(--blanco);
+        min-width: 45px;
+        text-align: center;
+        font-size: 0.9em;
+        font-weight: 600;
+        background-color: var(--rojo-error);
+    }
+</style>

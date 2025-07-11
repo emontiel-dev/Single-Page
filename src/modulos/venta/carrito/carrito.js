@@ -6,6 +6,7 @@
 // import { openCarritoDetalleModal } from './carrito.detalle.js';
 
 import { openCarritoVerItemsModal } from './carrito.ver.items.js'; // <-- Importar la función del nuevo modal
+import { openCobrarModal } from '../../caja/caja.cobrar.modal.js'; // <-- AÑADIR IMPORT
 import { router } from '../../../router.js'; // Importar el router
 import { pedidosGuardados } from '../../pedidos/pedidos.guardados.datos.js'; // Importar los pedidos
 import { FASES_PEDIDO } from '../../pedidos/pedidos.fases.datos.js'; // Importar las fases
@@ -336,8 +337,24 @@ function renderPaItem(item) {
 
 function handleCobrar() {
     console.log('Botón "Cobrar" clicado.');
-    // TODO: Implementar lógica para procesar el pago y finalizar la venta
-    alert('Funcionalidad "Cobrar" pendiente.');
+    if (cartItems.length === 0) {
+        alert('El carrito está vacío. No se puede cobrar.');
+        return;
+    }
+
+    const total = cartItems.reduce((acc, item) => acc + item.cost, 0);
+
+    // Abrir el modal de cobro, pasando el total y una función callback para cuando la venta sea exitosa
+    openCobrarModal(Math.round(total), () => {
+        console.log('Venta completada con éxito desde el callback.');
+        
+        // Limpiar el carrito actual
+        cartItems.length = 0;
+        setCliente(null); // Esto también llama a updateCarritoDisplay para ocultar el carrito
+
+        // Opcional: navegar a otra vista o simplemente quedarse en la venta para un nuevo pedido.
+        // router.navigate('/venta'); 
+    });
 }
 
 // --- AÑADIDO: Función para generar un ID de pedido único ---

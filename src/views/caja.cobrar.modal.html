@@ -1,0 +1,174 @@
+<div id="caja-cobrar-modal-container" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="cobrar-modal-title">Registrar Pago</h3>
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="cobrar-modal-cancelar-btn">Cancelar</button>
+                <button class="btn btn-primario" id="cobrar-modal-siguiente-btn">Siguiente</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="cobrar-info">
+                <span>Total a Pagar:</span>
+                <strong id="cobrar-total-pedido">$0.00</strong>
+            </div>
+
+            <!-- Paso 1: Cliente paga con... -->
+            <div id="cobrar-pago-section">
+                <h4 class="modal-section-title">Cliente paga con:</h4>
+                <div id="cobrar-pago-grid" class="denominaciones-grid">
+                    <!-- Inputs para denominaciones de pago se renderizarán aquí -->
+                </div>
+            </div>
+
+            <!-- Paso 2: Cambio a entregar -->
+            <div id="cobrar-cambio-section" style="display: none;">
+                <h4 class="modal-section-title">Cambio a entregar:</h4>
+                <div class="cobrar-info cambio-total">
+                    <span>Total Cambio:</span>
+                    <strong id="cobrar-total-cambio">$0.00</strong>
+                </div>
+                <div id="cobrar-cambio-grid" class="denominaciones-grid-info">
+                    <!-- Denominaciones de cambio se mostrarán aquí -->
+                </div>
+                <div id="cobrar-cambio-insuficiente" class="alerta-error" style="display: none;">
+                    No hay suficientes denominaciones en caja para dar el cambio exacto.
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span>Total Pagado:</span>
+            <span id="cobrar-total-pagado">$0.00</span>
+        </div>
+    </div>
+</div>
+<style>
+    #caja-cobrar-modal-container .modal-content {
+        max-width: 450px;
+        background-color: var(--blanco); /* Fondo blanco principal */
+    }
+    .cobrar-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--espacio-m) 0;
+        font-size: 1.2em;
+        margin-bottom: var(--espacio-m);
+        border-bottom: 1px solid var(--gris-borde-sutil);
+    }
+    .cobrar-info:last-of-type {
+        border-bottom: none;
+    }
+    .cobrar-info.cambio-total {
+        font-size: 1.1em;
+        background-color: var(--amarillo-polleria-fondo-claro);
+        border: 1px solid var(--amarillo-polleria);
+        border-radius: var(--radio-borde-m);
+        padding: var(--espacio-m);
+        margin-bottom: 0;
+    }
+    .modal-section-title {
+        margin: var(--espacio-l) 0 var(--espacio-s) 0;
+        font-size: 1em;
+        color: var(--gris-texto-secundario);
+        font-weight: 600;
+    }
+    .denominaciones-grid  {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--espacio-s);
+    }
+    .denominacion-input-group {
+        display: flex;
+        align-items: center;
+        gap: var(--espacio-s);
+    }
+    .denominacion-input-group input {
+        flex-grow: 1;
+        text-align: center;
+        font-weight: 600;
+        border: 1px solid var(--gris-borde-input);
+        background: transparent;
+        padding: var(--espacio-s) 0;
+        width: 100%;
+        border-radius: var(--radio-borde-m);
+    }
+    .denominacion-input-group .denominacion-valor {
+        padding: var(--espacio-pill) var(--espacio-pill);
+        border-radius: var(--radio-borde-m);
+        color: var(--blanco);
+        min-width: 45px;
+        text-align: center;
+        font-size: 0.9em;
+        font-weight: 600;
+    }
+    .denominaciones-grid-info {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--espacio-s);
+        margin-top: var(--espacio-m);
+    }
+    .denominacion-info-item {
+        /* Estilo de píldora de solo valor */
+        padding: var(--espacio-s);
+        border-radius: var(--radio-borde-m);
+        color: var(--blanco);
+        font-weight: 700;
+        font-size: 0.9em;
+        min-width: 40px;
+        text-align: center;
+    }
+    /* Se eliminan los estilos para .denominacion-label y .denominacion-cantidad ya que la estructura cambia */
+    .denominacion-info-item .denominacion-label,
+    .denominacion-info-item .denominacion-cantidad {
+        display: none;
+    }
+    .alerta-error {
+        color: var(--rojo-error-texto);
+        background-color: var(--rojo-error-fondo);
+        padding: var(--espacio-m);
+        border-radius: var(--radio-borde-m);
+        text-align: center;
+        margin-top: var(--espacio-m);
+        font-weight: 600;
+    }
+    #caja-cobrar-modal-container .modal-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 700;
+        font-size: 1.2em;
+        padding: var(--espacio-m) var(--espacio-l);
+        background-color: var(--blanco);
+        border-top: 1px solid var(--gris-borde-sutil);
+    }
+</style>
+<script>
+    function renderCambioGrid(cambio) {
+        const grid = modalElement.querySelector('#cobrar-cambio-grid');
+        grid.innerHTML = '';
+        if (Object.keys(cambio).length === 0) {
+            grid.innerHTML = '<p style="width: 100%; text-align: center;">No se requiere cambio (pago exacto).</p>';
+            return;
+        }
+        // Ordenar de mayor a menor para una visualización más natural
+        const sortedCambio = Object.entries(cambio).sort((a, b) => Number(b[0]) - Number(a[0]));
+
+        for (const [valor, cantidad] of sortedCambio) {
+            const color = denominacionColors[valor] || '#7f8c8d';
+            const item = document.createElement('div');
+            item.className = 'denominacion-info-item'; // Esta es la píldora
+            item.style.backgroundColor = color;
+            
+            // El texto va directamente dentro de la píldora
+            item.textContent = `${valor} x ${cantidad}`;
+            
+            grid.appendChild(item);
+        }
+    }
+
+    export async function openCobrarModal(pedidoTotal, onVentaSuccess) {
+        // ...existing code...
+    }
+</script>

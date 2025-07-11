@@ -142,7 +142,7 @@ main {
 .badge-gris { background-color: var(--gris-texto-secundario); color: var(--blanco); }
 .form-group { margin-bottom: var(--espacio-l); }
 .form-group label { display: block; margin-bottom: var(--espacio-s); font-weight: 600; font-size: 0.9em; }
-.form-group input[type="search"], .form-group input[type="number"] { width: 100%; padding: 14px var(--espacio-m); border: 1px solid var(--gris-borde-input); border-radius: var(--radio-borde-m); font-size: 1em; background-color: var(--gris-elemento-claro); }
+.form-group input[type="text"], .form-group input[type="search"], .form-group input[type="number"] { width: 100%; padding: 14px var(--espacio-m); border: 1px solid var(--gris-borde-input); border-radius: var(--radio-borde-m); font-size: 1em; background-color: var(--gris-elemento-claro); }
 .search-results { max-height: 200px; overflow-y: auto; background: var(--blanco); border: 1px solid var(--gris-borde-sutil); border-top: none; border-radius: 0 0 var(--radio-borde-m) var(--radio-borde-m); position: absolute; width: 100%; z-index: 999; box-shadow: var(--sombra-md); }
 .search-result-item { padding: var(--espacio-m); cursor: pointer; }
 .search-result-item:hover { background: var(--gris-hover-sutil); }

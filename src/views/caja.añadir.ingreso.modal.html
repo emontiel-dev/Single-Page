@@ -12,10 +12,62 @@
                 <label for="ingreso-concepto-input">Concepto</label>
                 <input type="text" id="ingreso-concepto-input" placeholder="Ej: Venta manual, Adelanto">
             </div>
-            <div class="form-group">
-                <label for="ingreso-monto-input">Monto</label>
-                <input type="number" id="ingreso-monto-input" placeholder="0.00" step="0.01">
+            <!-- El input de monto se elimina -->
+            <!-- Nuevo contenedor para los inputs de denominaciones -->
+            <div id="ingreso-denominaciones-grid" class="denominaciones-grid">
+                <!-- Los inputs se renderizarán aquí desde JS -->
             </div>
         </div>
     </div>
 </div>
+<style>
+    #caja-ingreso-modal-container .modal-content { background-color: var(--blanco); border-radius: var(--radio-borde-l); box-shadow: var(--sombra-md); width: 100%; max-width: 400px; display: flex; flex-direction: column; max-height: 90vh; }
+    #caja-ingreso-modal-container .modal-header { display: flex; justify-content: space-between; align-items: center; padding: var(--espacio-m) var(--espacio-l); border-bottom: 1px solid var(--gris-borde-sutil); flex-shrink: 0; }
+    #caja-ingreso-modal-container .modal-header h3 { margin: 0; font-size: 1.1em; }
+    #caja-ingreso-modal-container .header-actions { display: flex; gap: var(--espacio-s); }
+    #caja-ingreso-modal-container .header-actions .btn { padding: var(--espacio-xs) var(--espacio-s); font-size: 0.9em; margin-bottom: 0; }
+    #caja-ingreso-modal-container .modal-body { padding: var(--espacio-l); display: flex; flex-direction: column; gap: var(--espacio-m);}
+    #caja-ingreso-modal-container .form-group { margin-bottom: 0; }
+    #caja-ingreso-modal-container input[type="text"] { text-align: left; }
+    
+    /* Estilos para la nueva grid de denominaciones */
+    .denominaciones-grid {
+        display: grid;
+        /* MODIFICADO: 3 columnas para mimetismo */
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--espacio-s); /* Reducir el gap para un layout más compacto */
+        margin-top: var(--espacio-m);
+    }
+    .denominacion-input-group {
+        /* MODIFICADO: Estilo para parecerse al .denominacion-item */
+        display: flex;
+        align-items: center;
+        background-color: var(--gris-elemento-claro);
+        border-radius: var(--radio-borde-m);
+        padding: 0.3rem;
+        gap: var(--espacio-s);
+    }
+    .denominacion-input-group input {
+        /* MODIFICADO: Ajustes al input */
+        flex-grow: 1;
+        text-align: center; /* Centrar la cantidad */
+        font-weight: 600;
+        border: none;
+        background: transparent;
+        padding: var(--espacio-xs) 0;
+        width: 100%; /* Ocupar el espacio restante */
+    }
+    /* ELIMINADO: El label ya no existe, se usa un span */
+
+    /* AÑADIDO: Estilos para el span que simula la píldora de denominación */
+    .denominacion-input-group .denominacion-valor {
+        padding: var(--espacio-pill) var(--espacio-pill);
+        border-radius: var(--radio-borde-m);
+        color: var(--blanco);
+        min-width: 45px; /* Ancho mínimo para consistencia */
+        text-align: center;
+        font-size: 0.9em;
+        font-weight: 600;
+        background-color: var(--color-primario);
+    }
+</style>
