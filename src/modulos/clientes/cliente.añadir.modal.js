@@ -546,4 +546,19 @@ export async function openNuevoClienteModal(callback) {
                     if (group === focusedFieldGroup) {
                         mapContainer.style.display = 'block';
                         const mapInstance = mapInstances[mapContainer.id];
-                        if
+                        if (mapInstance) {
+                            setTimeout(() => mapInstance.invalidateSize(), 10);
+                        }
+                    } else {
+                        mapContainer.style.display = 'none';
+                    }
+                }
+            });
+        });
+
+        setTimeout(() => modalElement.classList.add('visible'), 10);
+
+    } catch (error) {
+        console.error('Error al abrir el modal de nuevo cliente:', error);
+    }
+}
