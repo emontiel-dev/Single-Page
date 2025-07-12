@@ -221,8 +221,62 @@ tbody tr:last-child td { border-bottom: none; }
 .info-linea .tipo { font-weight: 600; }
 .info-linea .valor { color: var(--gris-texto-secundario); }
 .direccion-bloque { margin-bottom: var(--espacio-m); }
-.direccion-bloque .referencias { font-size: 0.9em; color: var(--gris-texto-secundario); padding-left: var(--espacio-s); border-left: 3px solid var(--amarillo-polleria); margin-top: var(--espacio-xs); }
-.no-items-mensaje { color: var(--gris-texto-secundario); font-style: italic; }
+.direccion-bloque .referencias {
+            font-size: 0.9em;
+            color: var(--gris-texto-secundario);
+            padding-left: var(--espacio-s);
+            border-left: 3px solid var(--amarillo-polleria);
+            margin-top: var(--espacio-xs);
+        }
+
+/* AÑADIDO: Estilos para el contenedor del mapa en la vista de detalle */
+.detalle-map-container {
+    height: 150px;
+    width: 100%;
+    border-radius: var(--radio-borde-s);
+    margin-top: var(--espacio-m);
+    z-index: 0; /* Asegura que no interfiera con otros elementos de la UI */
+    position: relative; /* Necesario para posicionar los botones de acción */
+}
+
+/* AÑADIDO: Estilos para los botones de acción sobre el mapa */
+.map-actions {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 401; /* Encima de los tiles de Leaflet */
+    display: flex;
+    gap: 8px;
+}
+
+.btn-map-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    box-shadow: var(--sombra-sm);
+    cursor: pointer;
+    color: #333;
+    transition: background-color 0.2s;
+}
+
+.btn-map-action:hover {
+    background-color: #f4f4f4;
+}
+
+.btn-map-action svg {
+    width: 20px;
+    height: 20px;
+}
+
+        .no-items-mensaje {
+            color: var(--gris-texto-secundario);
+            font-style: italic;
+        }
 .search-results-list { max-height: 150px; overflow-y: auto; margin-bottom: var(--espacio-m); border-radius: var(--radio-borde-m); }
 .search-result-item .nombre { font-weight: 600; }
 .search-result-item .telefono { font-size: 0.9em; color: var(--gris-texto-secundario); }

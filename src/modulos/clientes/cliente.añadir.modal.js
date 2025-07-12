@@ -1,5 +1,6 @@
 let modalElement = null;
 let onSaveComplete = null;
+let mapInstances = {}; // <-- NUEVO: Para almacenar las instancias de los mapas
 
 /**
  * Cierra y elimina el modal del DOM.
@@ -12,6 +13,7 @@ function closeAndRemoveModal() {
             modalElement = null;
         }, { once: true });
     }
+    mapInstances = {}; // Limpiar las instancias de mapa al cerrar
 }
 
 /**
@@ -51,6 +53,7 @@ function initializeMap(mapId) {
 
     const defaultCoords = [18.3000, -98.6039]; // Chiautla de Tapia como vista inicial
     const map = L.map(mapId).setView(defaultCoords, 13);
+    mapInstances[mapId] = map; // Guardar la instancia del mapa
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -96,6 +99,20 @@ function initializeMap(mapId) {
                 alert('Tu navegador no soporta geolocalización.');
             }
         }
+    }
+
+    // --- CORRECCIÓN: Lógica para decidir si usar coordenadas existentes o buscar la ubicación ---
+    const initialLat = parseFloat(latInput.value);
+    const initialLng = parseFloat(lngInput.value);
+
+    if (!isNaN(initialLat) && !isNaN(initialLng)) {
+        // Si ya hay coordenadas en los inputs (modo edición), usarlas.
+        const existingCoords = [initialLat, initialLng];
+        map.setView(existingCoords, 16);
+        marker.setLatLng(existingCoords);
+    } else {
+        // Si no hay coordenadas (modo nuevo), intentar geolocalizar.
+        findUser(false);
     }
 
     // --- AÑADIDO: Botón de "Mi Ubicación" ---
@@ -146,9 +163,6 @@ function initializeMap(mapId) {
     map.addControl(new ResetControl());
     // --- FIN AÑADIDO ---
 
-    // Intento inicial silencioso para obtener la ubicación
-    findUser(false);
-
     marker.on('dragend', (event) => {
         updateInputs(event.target.getLatLng());
     });
@@ -198,9 +212,7 @@ function createDireccionField() {
         <button type="button" class="btn-remove-field" aria-label="Eliminar dirección">-</button>
     `;
 
-    // Retrasamos la inicialización para asegurar que el elemento esté en el DOM
-    setTimeout(() => initializeMap(uniqueId), 0);
-
+    // CORREGIDO: Ya no se inicializa el mapa aquí. Se hará después de poblar los datos.
     return div;
 }
 
@@ -246,7 +258,7 @@ export async function openEditClienteModal(cliente, callback) {
         const direccionesContainer = modalElement.querySelector('#direcciones-container');
         direccionesContainer.innerHTML = ''; // Limpiar campos por defecto
         if (cliente.direcciones && cliente.direcciones.length > 0) {
-            cliente.direcciones.forEach(dir => {
+            cliente.direcciones.forEach((dir, index) => {
                 const field = createDireccionField();
                 field.querySelector('[data-field="direccion"]').value = dir.direccion;
                 field.querySelector('[data-field="referencias"]').value = dir.referencias || '';
@@ -256,6 +268,14 @@ export async function openEditClienteModal(cliente, callback) {
                     field.querySelector('[data-field="longitud"]').value = dir.long;
                 }
                 direccionesContainer.appendChild(field);
+                // CORREGIDO: Inicializar el mapa DESPUÉS de poblar los datos.
+                const mapId = field.querySelector('.map-container').id;
+                initializeMap(mapId);
+
+                // Ocultar todos los mapas excepto el primero
+                if (index > 0) {
+                    field.querySelector('.map-container').style.display = 'none';
+                }
             });
         }
         // --- Fin de la población de datos ---
@@ -267,7 +287,34 @@ export async function openEditClienteModal(cliente, callback) {
             telefonosContainer.appendChild(createTelefonoField());
         });
         modalElement.querySelector('#btn-anadir-direccion').addEventListener('click', () => {
-            direccionesContainer.appendChild(createDireccionField());
+            // Ocultar todos los mapas existentes
+            direccionesContainer.querySelectorAll('.map-container').forEach(map => map.style.display = 'none');
+            
+            const newField = createDireccionField();
+            direccionesContainer.appendChild(newField);
+            const newMapId = newField.querySelector('.map-container').id;
+            initializeMap(newMapId);
+        });
+
+        // AÑADIDO: Listener para mostrar el mapa correcto al hacer foco
+        direccionesContainer.addEventListener('focusin', (event) => {
+            const focusedFieldGroup = event.target.closest('.dynamic-field-group');
+            if (!focusedFieldGroup) return;
+
+            direccionesContainer.querySelectorAll('.dynamic-field-group').forEach(group => {
+                const mapContainer = group.querySelector('.map-container');
+                if (mapContainer) {
+                    if (group === focusedFieldGroup) {
+                        mapContainer.style.display = 'block';
+                        const mapInstance = mapInstances[mapContainer.id];
+                        if (mapInstance) {
+                            setTimeout(() => mapInstance.invalidateSize(), 10);
+                        }
+                    } else {
+                        mapContainer.style.display = 'none';
+                    }
+                }
+            });
         });
 
         modalElement.querySelector('.modal-body').addEventListener('click', (event) => {
@@ -460,8 +507,16 @@ export async function openNuevoClienteModal(callback) {
         modalElement = document.getElementById('cliente-anadir-modal-container');
 
         // Añadir un campo inicial de teléfono y dirección
-        modalElement.querySelector('#telefonos-container').appendChild(createTelefonoField());
-        modalElement.querySelector('#direcciones-container').appendChild(createDireccionField());
+        const telefonosContainer = modalElement.querySelector('#telefonos-container');
+        const direccionesContainer = modalElement.querySelector('#direcciones-container');
+        
+        telefonosContainer.appendChild(createTelefonoField());
+        
+        const direccionField = createDireccionField();
+        direccionesContainer.appendChild(direccionField);
+        // CORREGIDO: Inicializar el mapa para el campo nuevo.
+        const mapId = direccionField.querySelector('.map-container').id;
+        initializeMap(mapId);
 
         // Configurar event listeners
         modalElement.querySelector('#anadir-cliente-guardar-btn').addEventListener('click', handleGuardarCliente);
@@ -470,7 +525,35 @@ export async function openNuevoClienteModal(callback) {
             modalElement.querySelector('#telefonos-container').appendChild(createTelefonoField());
         });
         modalElement.querySelector('#btn-anadir-direccion').addEventListener('click', () => {
-            modalElement.querySelector('#direcciones-container').appendChild(createDireccionField());
+            // Ocultar todos los mapas existentes
+            const direccionesContainer = modalElement.querySelector('#direcciones-container');
+            direccionesContainer.querySelectorAll('.map-container').forEach(map => map.style.display = 'none');
+            
+            const newField = createDireccionField();
+            direccionesContainer.appendChild(newField);
+            const newMapId = newField.querySelector('.map-container').id;
+            initializeMap(newMapId);
+        });
+
+        // AÑADIDO: Listener para mostrar el mapa correcto al hacer foco
+        modalElement.querySelector('#direcciones-container').addEventListener('focusin', (event) => {
+            const focusedFieldGroup = event.target.closest('.dynamic-field-group');
+            if (!focusedFieldGroup) return;
+
+            modalElement.querySelectorAll('#direcciones-container .dynamic-field-group').forEach(group => {
+                const mapContainer = group.querySelector('.map-container');
+                if (mapContainer) {
+                    if (group === focusedFieldGroup) {
+                        mapContainer.style.display = 'block';
+                        const mapInstance = mapInstances[mapContainer.id];
+                        if (mapInstance) {
+                            setTimeout(() => mapInstance.invalidateSize(), 10);
+                        }
+                    } else {
+                        mapContainer.style.display = 'none';
+                    }
+                }
+            });
         });
 
         // Listener para eliminar campos dinámicos (delegación de eventos)
@@ -483,6 +566,6 @@ export async function openNuevoClienteModal(callback) {
         setTimeout(() => modalElement.classList.add('visible'), 10);
 
     } catch (error) {
-        console.error('Error al abrir el modal de nuevo cliente:', error);
+        console.error('Error al abrir el modal para añadir nuevo cliente:', error);
     }
 }
