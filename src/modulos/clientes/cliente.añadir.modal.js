@@ -375,7 +375,7 @@ async function handleUpdateCliente(clienteId) {
     });
 
     try {
-        const response = await fetch(`http://localhost:3000/api/clientes/${clienteId}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/clientes/${clienteId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(clienteData)
@@ -453,7 +453,7 @@ async function handleGuardarCliente() {
     });
 
     try {
-        const response = await fetch('http://localhost:3000/api/clientes', {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/clientes`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(cliente)
@@ -546,26 +546,4 @@ export async function openNuevoClienteModal(callback) {
                     if (group === focusedFieldGroup) {
                         mapContainer.style.display = 'block';
                         const mapInstance = mapInstances[mapContainer.id];
-                        if (mapInstance) {
-                            setTimeout(() => mapInstance.invalidateSize(), 10);
-                        }
-                    } else {
-                        mapContainer.style.display = 'none';
-                    }
-                }
-            });
-        });
-
-        // Listener para eliminar campos dinámicos (delegación de eventos)
-        modalElement.querySelector('.modal-body').addEventListener('click', (event) => {
-            if (event.target.matches('.btn-remove-field')) {
-                event.target.closest('.dynamic-field-group').remove();
-            }
-        });
-
-        setTimeout(() => modalElement.classList.add('visible'), 10);
-
-    } catch (error) {
-        console.error('Error al abrir el modal para añadir nuevo cliente:', error);
-    }
-}
+                        if

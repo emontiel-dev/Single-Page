@@ -10,7 +10,7 @@ export async function cargarClientes() {
         return; // Evita recargar si ya los tenemos
     }
     try {
-        const response = await fetch('http://localhost:3000/api/clientes');
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/clientes`);
         if (!response.ok) {
             throw new Error('No se pudo obtener la lista de clientes del backend.');
         }
@@ -48,7 +48,7 @@ export function findClienteById(id) {
  */
 export async function deleteClienteById(id) {
     try {
-        const response = await fetch(`http://localhost:3000/api/clientes/${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/clientes/${id}`, {
             method: 'DELETE',
         });
 

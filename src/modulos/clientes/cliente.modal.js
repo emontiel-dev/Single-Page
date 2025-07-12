@@ -42,7 +42,7 @@ async function setupSearch() {
     const searchInput = searchArea.querySelector('#cliente-search-input');
     
     // Obtenemos los clientes desde el backend para la búsqueda
-    const clientesResponse = await fetch('http://localhost:3000/api/clientes');
+    const clientesResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/clientes`);
     if (!clientesResponse.ok) {
         console.error('No se pudo obtener la lista de clientes para el modal.');
         return;
