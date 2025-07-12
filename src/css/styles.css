@@ -1,5 +1,5 @@
 /* =========================================================================== */
-/* 1. abstracts/_variables.css                                                 */
+/* 1. ABSTRACTS (Variables)                                                  */
 /* =========================================================================== */
 :root {
     --blanco: #ffffff;
@@ -38,183 +38,382 @@
     --espacio-m: 1rem;
     --espacio-l: 1.5rem;
     --espacio-xl: 2rem;
-
-    /* Nuevos colores para la Navbar */
     --verde-tablajero: #27AE60;
     --azul-pedidos: #2980B9;
     --morado-historial: #8E44AD;
-    --naranja-caja: #F39C12; /* Color para el ícono de Caja */
-
+    --naranja-caja: #F39C12;
 }
 
-/* Resto de estilos... (Reset, Tipografía, Botones, etc.) */
+/* =========================================================================== */
+/* 2. BASE (Reset, Body, Typography, Base Elements)                          */
+/* =========================================================================== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: var(--tamano-fuente-base); }
 body { font-family: var(--fuente-principal); line-height: var(--line-height-base); background-color: var(--gris-fondo-claro); color: var(--negro-azabache); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 h1, h2, h3 { font-family: var(--fuente-principal); line-height: var(--line-height-titulo); color: var(--negro-azabache); margin-bottom: var(--espacio-m); font-weight: 700; }
+main { padding: var(--espacio-s) var(--espacio-l); padding-bottom: 80px; display: flex; flex-direction: column; gap: var(--espacio-m); }
+table { width: 100%; border-collapse: separate; border-spacing: 0; }
+th, td { padding: var(--espacio-m); text-align: left; font-size: .95em; vertical-align: middle; }
+th { background-color: var(--gris-hover-sutil); color: var(--gris-texto-secundario); font-weight: 600; text-transform: uppercase; font-size: .8em; white-space: nowrap; border-bottom: 1px solid var(--gris-borde-sutil); }
+td { color: var(--negro-azabache); border-bottom: 1px solid var(--gris-borde-sutil); }
+tbody tr:last-child td { border-bottom: none; }
 
-/* --- MODIFICADO: Regla de 'main' consolidada y ajustada --- */
-main {
-    /* Padding: Arriba(S), Lados(L) */
-    padding: var(--espacio-s) var(--espacio-l);
-    /* AÑADIDO: Espacio en la parte inferior para la barra de navegación fija */
-    padding-bottom: 80px; /* Ajusta este valor si la altura de la navbar cambia */
-    display: flex;
-    flex-direction: column;
-    gap: var(--espacio-m);
-}
+/* =========================================================================== */
+/* 3. COMPONENTS (Styled, reusable UI elements)                              */
+/* =========================================================================== */
 
-/* Eliminamos las reglas order ya que el orden en el DOM es correcto */
-/*
-#carrito-section {
-    order: 0;
-}
-
-#catalogo-section {
-    order: 1;
-}
-*/
-
-
+/* --- Buttons --- */
 .btn { display: inline-flex; align-items: center; justify-content: center; width: 100%; padding: 14px var(--espacio-l); font-size: 1em; border: 1px solid transparent; border-radius: var(--radio-borde-m); cursor: pointer; text-decoration: none; font-weight: 600; text-align: center; margin-bottom: var(--espacio-m); transition: var(--transicion-suave); }
 .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: var(--sombra-md); }
 .btn-primario { background-color: var(--amarillo-polleria); color: var(--texto-sobre-amarillo); }
 .btn-secondary { background-color: var(--gris-texto-secundario); color: var(--blanco); }
-.btn-cobrar {
-    background-color: var(--verde-accion); /* Color verde */
-    color: var(--texto-sobre-verde);
+.btn-cobrar { background-color: var(--verde-accion); color: var(--texto-sobre-verde); }
+.btn-guardar-pedido { background-color: var(--azul-info); color: var(--blanco); }
+.close-modal-btn { background: none; border: none; cursor: pointer; padding: var(--espacio-xs); border-radius: var(--radio-borde-s); transition: background-color var(--transicion-rapida); flex-shrink: 0; }
+.close-modal-btn:hover { background-color: var(--gris-hover-sutil); }
+
+/* MODIFICADO: Estilo mejorado para el botón de añadir campo */
+.btn-add-field {
+    background-color: var(--gris-hover-sutil);
+    color: var(--amarillo-polleria);
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background-color var(--transicion-suave), color var(--transicion-suave);
 }
-.btn-guardar-pedido {
-    background-color: var(--azul-info); /* Color azul */
+.btn-add-field:hover {
+    background-color: var(--amarillo-polleria);
+    color: var(--texto-sobre-amarillo);
+}
+
+/* MODIFICADO: Estilo mejorado para el botón de eliminar campo */
+.btn-remove-field {
+    background-color: var(--gris-elemento-claro);
+    color: var(--rojo-peligro-texto);
+    border: 1px solid var(--gris-borde-sutil);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 1.5em;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding-bottom: 4px; /* Ajuste visual del guión */
+    flex-shrink: 0;
+    transition: background-color var(--transicion-suave), color var(--transicion-suave), border-color var(--transicion-suave);
+}
+.btn-remove-field:hover {
+    background-color: var(--rojo-peligro-texto);
     color: var(--blanco);
+    border-color: var(--rojo-peligro-texto);
 }
 
-       /* Contenedor para los botones de acción en el header */
-        .header-actions {
-            display: flex;
-            gap: var(--espacio-s); /* Espacio entre los botones Cancelar y Añadir */
-            flex-grow: 1; /* Permite que este contenedor ocupe el espacio disponible */
-            justify-content: flex-end; /* Alinear los botones a la derecha */
-            align-items: center; /* Alinear verticalmente los botones */
-        }
+/* --- Floating Action Button (FAB) --- */
+.fab-add-cliente { position: fixed; bottom: 110px; /* Ajusta para que no choque con la barra de navegación */ right: var(--espacio-l); width: 56px; height: 56px; background-color: var(--amarillo-polleria); color: var(--texto-sobre-amarillo); border-radius: 50%; border: none; box-shadow: var(--sombra-md); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s ease-in-out; z-index: 1000; }
+.fab-add-cliente:hover { transform: scale(1.05) }
+.fab-add-cliente svg { width: 28px; height: 28px; }
 
-        /* Estilos para los botones dentro de header-actions */
-        .header-actions .btn {
-            /* Ajustar padding y tamaño para que sean más compactos en el header */
-            padding: var(--espacio-xs) var(--espacio-s); /* Padding más pequeño */
-            font-size: 0.8em; /* Tamaño de fuente más pequeño */
-            width: 70px;
-            min-height: 35px;
-            flex-grow: 0; /* No permitir que se expandan */
-            margin-bottom: 0; /* Eliminar margen inferior */
-        }
-
-
-        .close-modal-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: var(--espacio-xs);
-            border-radius: var(--radio-borde-s);
-            transition: background-color var(--transicion-rapida);
-            flex-shrink: 0; /* Evita que el botón cerrar se encoja */
-        }
-
-        .close-modal-btn:hover {
-            background-color: var(--gris-hover-sutil);
-        }
-
+/* --- Cards --- */
 .card { background-color: var(--gris-elemento-claro); border-radius: var(--radio-borde-l); border: 1px solid var(--gris-borde-sutil); box-shadow: var(--sombra-sm); margin-bottom: var(--espacio-l); cursor: pointer; }
 .card:hover { transform: translateY(-3px); box-shadow: var(--sombra-md); }
 .card-body { padding: var(--espacio-l); }
-.d-flex { display: flex; }
-.justify-content-between { justify-content: space-between; }
-.align-items-center { align-items: center; }
-.fw-bold { font-weight: 700; }
-.mb-0 { margin-bottom: 0; }
-.text-right { text-align: right; }
-.text-gris-secundario { color: var(--gris-texto-secundario); }
-.text-negro-azabache { color: var(--negro-azabache); }
-.text-success { color: var(--verde-exito); }
+
+/* --- Badges --- */
 .badge { display: inline-block; padding: .35em .7em; font-size: .75em; font-weight: 700; line-height: 1; color: var(--blanco); text-align: center; white-space: nowrap; vertical-align: middle; border-radius: var(--radio-borde-m); text-transform: uppercase; }
 .badge-amarillo-polleria { background-color: var(--amarillo-polleria); color: var(--texto-sobre-amarillo); }
 .badge-azul { background-color: var(--azul-info); color: var(--blanco); }
 .badge-gris { background-color: var(--gris-texto-secundario); color: var(--blanco); }
+
+/* --- Forms & Inputs --- */
 .form-group { margin-bottom: var(--espacio-l); }
 .form-group label { display: block; margin-bottom: var(--espacio-s); font-weight: 600; font-size: 0.9em; }
 .form-group input[type="text"], .form-group input[type="search"], .form-group input[type="number"] { width: 100%; padding: 14px var(--espacio-m); border: 1px solid var(--gris-borde-input); border-radius: var(--radio-borde-m); font-size: 1em; background-color: var(--gris-elemento-claro); }
 .search-results { max-height: 200px; overflow-y: auto; background: var(--blanco); border: 1px solid var(--gris-borde-sutil); border-top: none; border-radius: 0 0 var(--radio-borde-m) var(--radio-borde-m); position: absolute; width: 100%; z-index: 999; box-shadow: var(--sombra-md); }
 .search-result-item { padding: var(--espacio-m); cursor: pointer; }
 .search-result-item:hover { background: var(--gris-hover-sutil); }
-.table-container { overflow-x: auto; margin-bottom: var(--espacio-xl); border-radius: var(--radio-borde-l); background-color: var(--gris-elemento-claro); box-shadow: var(--sombra-sm); }
-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-th, td { padding: var(--espacio-m); text-align: left; font-size: .95em; vertical-align: middle; }
-th { background-color: var(--gris-hover-sutil); color: var(--gris-texto-secundario); font-weight: 600; text-transform: uppercase; font-size: .8em; white-space: nowrap; border-bottom: 1px solid var(--gris-borde-sutil); }
-td { color: var(--negro-azabache); border-bottom: 1px solid var(--gris-borde-sutil); }
-tbody tr:last-child td { border-bottom: none; }
-.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: var(--espacio-s); margin-top: var(--espacio-l); }
-.product-btn { padding: var(--espacio-s); font-size: .8em; height: 80px; display: flex; flex-direction: column; justify-content: center; align-items: center; line-height: 1.2; border: 1px solid var(--gris-borde-input); background: var(--blanco); border-radius: var(--radio-borde-m); cursor: pointer; transition: var(--transicion-suave); }
-.product-btn:hover { transform: translateY(-3px); box-shadow: var(--sombra-md); }
-.product-btn span { font-size: 1.4em; font-weight: 700; color: var(--amarillo-polleria); }
-/* Eliminamos la regla .pos-footer ya que no se usará */
-.pos-footer {
-    /* position: fixed; */
-    /* bottom: 0; */
-    /* left: 0; */
-    /* right: 0; */
-    /* background: var(--gris-elemento-claro); */
-    /* padding: var(--espacio-m); */
-    /* border-top: 1px solid var(--gris-borde-sutil); */
-    /* box-shadow: 0 -4px 12px rgba(0,0,0,.06); */
-    /* display: flex; */
-    /* gap: var(--espacio-m); */
-    /* z-index: 1000; */
-    display: none; /* Aseguramos que esté oculto si la clase se mantiene por error */
-}
-#product-modal-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 2000; padding: var(--espacio-m); }
+.checkbox-label { display: flex; align-items: center; padding: var(--espacio-s); border-radius: var(--radio-borde-m); cursor: pointer; margin-bottom: var(--espacio-xs); }
+.checkbox-label:hover { background-color: var(--gris-hover-sutil); }
+.checkbox-label input { margin-right: var(--espacio-s); width: 1.2em; height: 1.2em; accent-color: var(--amarillo-polleria); }
+.dynamic-field { display: flex; gap: var(--espacio-s); margin-bottom: var(--espacio-s); align-items: center; }
+.dynamic-field select, .dynamic-field input, .dynamic-field textarea { flex-grow: 1; }
+.dynamic-field textarea { resize: vertical; }
+
+/* --- Search Bar --- */
+.search-input-wrapper { position: relative; }
+.search-input-wrapper svg { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; color: var(--gris-texto-secundario); }
+.search-input-wrapper input[type="search"] { width: 100%; border: 1px solid var(--gris-borde-input); border-radius: var(--radio-borde-l); background-color: var(--gris-elemento-claro); font-size: 1em; font-weight: 500; border-radius: var(--radio-borde-pill); padding: 14px 20px 14px 45px; /* Top, Right, Bottom, Left (to make space for the icon) */ }
+
+/* --- Modals --- */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 2000; padding: var(--espacio-m); opacity: 0; visibility: hidden; transition: opacity var(--transicion-suave), visibility var(--transicion-suave); }
+.modal-overlay.visible { opacity: 1; visibility: visible; }
+.modal-overlay .modal-content { transform: translateY(20px); transition: transform var(--transicion-suave) ease-out; }
+.modal-overlay.visible .modal-content { transform: translateY(0); }
 .product-modal-content { background-color: var(--blanco); border-radius: var(--radio-borde-l); box-shadow: var(--sombra-md); width: 100%; max-width: 500px; max-height: 90vh; display: flex; flex-direction: column; }
 .modal-header { padding: var(--espacio-m) var(--espacio-l); border-bottom: 1px solid var(--gris-borde-sutil); display: flex; justify-content: space-between; align-items: center; }
 .modal-header h3 { margin: 0; }
 .modal-body { padding: var(--espacio-l); overflow-y: auto; }
 .modal-footer { padding: var(--espacio-m) var(--espacio-l); border-top: 1px solid var(--gris-borde-sutil); display: flex; gap: var(--espacio-m); }
+.header-actions { display: flex; gap: var(--espacio-s); flex-grow: 1; justify-content: flex-end; align-items: center; }
+.header-actions .btn { padding: var(--espacio-xs) var(--espacio-s); font-size: 0.8em; width: 70px; min-height: 35px; flex-grow: 0; margin-bottom: 0; }
+
+/* --- Other Generic Components --- */
+.table-container { overflow-x: auto; margin-bottom: var(--espacio-xl); border-radius: var(--radio-borde-l); background-color: var(--gris-elemento-claro); box-shadow: var(--sombra-sm); }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: var(--espacio-s); margin-top: var(--espacio-l); }
+.product-btn { padding: var(--espacio-s); font-size: .8em; height: 80px; display: flex; flex-direction: column; justify-content: center; align-items: center; line-height: 1.2; border: 1px solid var(--gris-borde-input); background: var(--blanco); border-radius: var(--radio-borde-m); cursor: pointer; transition: var(--transicion-suave); }
+.product-btn:hover { transform: translateY(-3px); box-shadow: var(--sombra-md); }
+.product-btn span { font-size: 1.4em; font-weight: 700; color: var(--amarillo-polleria); }
 .personalization-group { margin-bottom: var(--espacio-l); border: 1px solid var(--gris-borde-sutil); border-radius: var(--radio-borde-m); padding: var(--espacio-m); }
 .personalization-group h4 { margin-top: 0; margin-bottom: var(--espacio-s); font-size: 1em; color: var(--gris-texto-secundario); font-weight: 600; }
-.checkbox-label { display: flex; align-items: center; padding: var(--espacio-s); border-radius: var(--radio-borde-m); cursor: pointer; margin-bottom: var(--espacio-xs); }
-.checkbox-label:hover { background-color: var(--gris-hover-sutil); }
-.checkbox-label input { margin-right: var(--espacio-s); width: 1.2em; height: 1.2em; accent-color: var(--amarillo-polleria); }
-.hidden{display: hidden;}
 
-/* Estilos para la superposición (overlay) de modales */
-.modal-overlay {
-    position: fixed; /* Posiciona el overlay respecto a la ventana */
-    top: 0;
-    left: 0;
+/* =========================================================================== */
+/* 4. MODULES (Component styles specific to a view/module)                   */
+/* =========================================================================== */
+
+/* --- Module: Clientes --- */
+.search-bar-container {  padding: 20px var(--espacio-m) var(--espacio-m) var(--espacio-m);  position: sticky;  top: 0;  background: var(--gris-fondo-claro);  z-index: 10;  }
+.form-page-container { display: flex; flex-direction: column; height: 100%; }
+.form-page-header { display: flex; justify-content: space-between; align-items: center; padding: var(--espacio-m); border-bottom: 1px solid var(--gris-borde-sutil); background: var(--blanco); flex-shrink: 0; }
+.form-page-header h3 { margin: 0; font-size: 1.2em; }
+.form-page-header .btn { margin-bottom: 0; width: auto; padding: 10px 16px; }
+.form-page-body { flex-grow: 1; overflow-y: auto; padding: var(--espacio-l); }
+.btn-back { background: none; border: none; cursor: pointer; padding: 5px; }
+.btn-back svg { width: 28px; height: 28px; color: var(--negro-azabache); }
+.clientes-list-wrapper { overflow-y: auto; padding: 0 var(--espacio-m); max-height: calc(100vh - 200px);}
+.cliente-item { display: flex; align-items: center; padding: var(--espacio-m); border-bottom: 1px solid var(--gris-borde-sutil); cursor: pointer; transition: background-color var(--transicion-rapida); }
+.cliente-item:hover { background-color: var(--gris-hover-sutil); }
+.cliente-item .info { flex-grow: 1; display: flex; flex-direction: column; gap: 4px; }
+.cliente-item .nombre { font-weight: 600; font-size: 1.1em; color: var(--negro-azabache); }
+.cliente-item .nombre .alias { font-weight: 400; font-style: italic; font-size: 0.9em; color: var(--gris-texto-secundario); }
+.cliente-item .telefono, .cliente-item .direccion { font-size: 0.9em; color: var(--gris-texto-secundario); line-height: 1.3; }
+.cliente-item .tipo-dato, .cliente-item .muted { font-style: italic; color: var(--gris-texto-terciario); }
+.cliente-detalle-container { padding: var(--espacio-m); padding-top: 60px; display: flex; flex-direction: column; gap: var(--espacio-l); }
+.detalle-header { display: flex; flex-direction: column; align-items: flex-start; gap: var(--espacio-m); }
+
+/* AÑADIDO: Estilos para el contenedor de acciones en el detalle del cliente */
+.detalle-header .acciones {
+    display: flex;
+    gap: var(--espacio-m); /* Espacio entre botones */
+    width: 100%; /* Ocupa todo el ancho disponible */
+}
+
+/* AÑADIDO: Ajuste para que los botones dentro de .acciones compartan el espacio */
+.detalle-header .acciones .btn {
+    flex-grow: 1; /* Hace que ambos botones compartan el espacio equitativamente */
+    margin-bottom: 0; /* Elimina el margen inferior que viene por defecto con .btn */
+}
+
+.detalle-header .nombre-completo { font-size: 1.8em; font-weight: 700; line-height: 1.2; }
+.detalle-header .alias { font-size: 1.2em; font-style: italic; color: var(--gris-texto-secundario); margin-left: var(--espacio-s); }
+.detalle-card { background: var(--blanco); border: 1px solid var(--gris-borde-sutil); border-radius: var(--radio-borde-m); padding: var(--espacio-m); box-shadow: var(--sombra-sm); }
+.detalle-card h4 { margin-top: 0; border-bottom: 1px solid var(--gris-borde-sutil); padding-bottom: var(--espacio-s); margin-bottom: var(--espacio-m); }
+.info-linea { display: flex; justify-content: space-between; margin-bottom: var(--espacio-s); }
+.info-linea .tipo { font-weight: 600; }
+.info-linea .valor { color: var(--gris-texto-secundario); }
+.direccion-bloque { margin-bottom: var(--espacio-m); }
+.direccion-bloque .referencias { font-size: 0.9em; color: var(--gris-texto-secundario); padding-left: var(--espacio-s); border-left: 3px solid var(--amarillo-polleria); margin-top: var(--espacio-xs); }
+.no-items-mensaje { color: var(--gris-texto-secundario); font-style: italic; }
+.search-results-list { max-height: 150px; overflow-y: auto; margin-bottom: var(--espacio-m); border-radius: var(--radio-borde-m); }
+.search-result-item .nombre { font-weight: 600; }
+.search-result-item .telefono { font-size: 0.9em; color: var(--gris-texto-secundario); }
+.registro-rapido { margin-top: var(--espacio-l); padding-top: var(--espacio-l); border-top: 1px solid var(--gris-borde-sutil); }
+.registro-rapido h4 { margin-top: 0; margin-bottom: var(--espacio-m); }
+
+/* --- Consolidated Styles for Add Client Modal --- */
+#cliente-anadir-modal-container .modal-content {
+    max-width: 600px;
+    background-color: var(--blanco);
+    border-radius: var(--radio-borde-l);
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh; /* Limita la altura al 90% de la pantalla */
+}
+
+#cliente-anadir-modal-container .modal-header {
+    flex-shrink: 0; /* Evita que el encabezado se encoja */
+}
+
+#cliente-anadir-modal-container .modal-body {
+    flex-grow: 1; /* Permite que el cuerpo del modal ocupe el espacio disponible */
+    overflow-y: auto; /* Añade el scroll vertical cuando sea necesario */
+}
+
+#cliente-anadir-modal-container .header-actions .btn {
+    margin-bottom: 0; /* Override default button margin */
+}
+
+#cliente-anadir-modal-container .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    /*gap: var(--espacio-m);*/
+}
+
+#cliente-anadir-modal-container .modal-section {
+    margin-top: var(--espacio-l);
+}
+
+#cliente-anadir-modal-container .modal-section h4 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--espacio-m);
+    font-size: 1em;
+    color: var(--gris-texto-secundario);
+    font-weight: 600;
+}
+
+/* AÑADIDO: Estilos para campos dinámicos */
+#cliente-anadir-modal-container .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--espacio-m);
+}
+
+#cliente-anadir-modal-container .dynamic-fields-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-m);
+}
+
+#cliente-anadir-modal-container .dynamic-field-group {
+    display: flex;
+    gap: var(--espacio-s);
+    align-items: center;
+}
+
+#cliente-anadir-modal-container .dynamic-field-group .form-group {
+    flex-grow: 1;
+    margin-bottom: 0;
+}
+
+/* AÑADIDO: Ajustes para el grupo de campos de teléfono */
+#cliente-anadir-modal-container .form-group-telefono-tipo {
+    flex-grow: 0; /* No permitir que crezca */
+    flex-basis: 140px; /* Ancho fijo para el selector de tipo */
+}
+
+/* AÑADIDO: Estilos para el selector de tipo de dirección */
+#cliente-anadir-modal-container .form-group-direccion-tipo {
+    flex-grow: 0;
+    flex-basis: 140px;
+}
+
+#cliente-anadir-modal-container .dynamic-field-group .form-group-large {
+    flex-basis: 60%;
+}
+
+/* AÑADIDO: Estilos para el contenedor del mapa */
+.map-container {
+    height: 200px;
+    border-radius: var(--radio-borde-m);
+    margin-top: var(--espacio-s);
+    z-index: 1; /* Asegura que el mapa se renderice correctamente */
+}
+
+/* AÑADIDO: Estilos para el botón de "Mi Ubicación" en el mapa */
+.leaflet-control-locate {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.leaflet-control-locate svg {
+    width: 18px;
+    height: 18px;
+    stroke: #333;
+}
+
+.leaflet-control-custom .leaflet-control-locate:hover {
+    background-color: #f4f4f4;
+}
+
+/* AÑADIDO: Estilos para el botón de "Reset" en el mapa */
+.leaflet-control-reset {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.leaflet-control-reset svg {
+    width: 14px;
+    height: 14px;
+    stroke: var(--rojo-peligro-texto, #e74c3c);
+}
+
+.leaflet-control-custom .leaflet-control-reset:hover {
+    background-color: #f4f4f4;
+}
+
+
+#cliente-anadir-modal-container .form-group label {
+    display: block;
+    margin-bottom: var(--espacio-s);
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+#cliente-anadir-modal-container input[type="text"],
+#cliente-anadir-modal-container input[type="tel"],
+#cliente-anadir-modal-container select,
+#cliente-anadir-modal-container textarea {
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semi-transparente */
-    display: flex; /* Usa flexbox para centrar el contenido del modal */
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Centra verticalmente */
-    z-index: 2000; /* Asegura que esté por encima de la mayoría de los otros elementos */
-    padding: var(--espacio-m); /* Añade un padding para que el contenido no toque los bordes */
-    opacity: 0; /* Inicialmente oculto */
-    visibility: hidden; /* Inicialmente no visible */
-    transition: opacity var(--transicion-suave), visibility var(--transicion-suave); /* Transición suave */
+    padding: var(--espacio-s);
+    border: 1px solid var(--gris-borde-input);
+    border-radius: var(--radio-borde-l);
+    font-size: 1em;
+    background-color: var(--gris-elemento-claro);
+    color: var(--negro-azabache);
+    font-family: var(--fuente-principal);
 }
 
-/* Estilo para hacer visible el overlay */
-.modal-overlay.visible {
-    opacity: 1;
-    visibility: visible;
+#cliente-anadir-modal-container select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right var(--espacio-m) center;
+    background-size: 16px 12px;
+    padding-right: calc(var(--espacio-m) * 2.5);
 }
 
-/* Opcional: Estilo para la transición del contenido del modal */
-/* Puedes añadir una transformación para un efecto de entrada/salida */
-.modal-overlay .modal-content { /* Asumiendo que el contenido del modal tiene la clase .modal-content */
-    transform: translateY(20px); /* Ligeramente desplazado hacia abajo */
-    transition: transform var(--transicion-suave) ease-out;
+#cliente-anadir-modal-container textarea {
+    resize: vertical;
+    min-height: 60px;
 }
 
-.modal-overlay.visible .modal-content {
-    transform: translateY(0); /* Vuelve a su posición original al ser visible */
-}
+/* =========================================================================== */
+/* 5. UTILITIES (High-specificity helper classes)                            */
+/* =========================================================================== */
+.hidden { display: none !important; } /* Usar !important para asegurar que oculte */
+.d-flex { display: flex; }
+.justify-content-between { justify-content: space-between; }
+.align-items-center { align-items: center; }
+.fw-bold { font-weight: 700; }
+.mt-s {margin-top: var(--espacio-xs);}
+.mb-0 { margin-bottom: 0; }
+.mb-xs { margin-bottom: var(--espacio-s); }
+.pt-0 {padding-top: 0;}
+.text-right { text-align: right; }
+.text-gris-secundario { color: var(--gris-texto-secundario); }
+.text-negro-azabache { color: var(--negro-azabache); }
+.text-success { color: var(--verde-exito); }

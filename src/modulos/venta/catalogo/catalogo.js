@@ -12,7 +12,7 @@ import { openClienteModal } from '../../clientes/cliente.modal.js'; // <-- IMPOR
 export async function renderCatalogo(container) {
     try {
         // Cargar el contenido de la plantilla HTML del catálogo
-        const response = await fetch('src/views/catalogo.html');
+        const response = await fetch('src/views/venta/catalogo.html');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

@@ -51,7 +51,7 @@ export async function openPaModal() {
 
     // Cargar la plantilla HTML del modal de PA
     try {
-        const response = await fetch('src/views/pa.modal.html');
+        const response = await fetch('src/views/venta/pa.modal.html');
         if (!response.ok) {
             console.error('Error loading PA modal template:', response.statusText);
             return;

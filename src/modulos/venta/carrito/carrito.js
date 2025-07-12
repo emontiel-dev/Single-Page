@@ -26,7 +26,7 @@ export function setCliente(cliente) {
 export async function renderCarrito(container) {
     try {
         // Cargar el contenido de la plantilla HTML del carrito
-        const response = await fetch('src/views/carrito.html');
+        const response = await fetch('src/views/venta/carrito.html');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

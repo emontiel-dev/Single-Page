@@ -1,7 +1,7 @@
 import { pedidosGuardados } from '../pedidos/pedidos.guardados.datos.js';
 import { findOptionData } from '../venta/catalogo/modal.logica.js';
 import { catalogoProductos } from '../venta/catalogo/catalogo.datos.js';
-import { clientes } from '../clientes/clientes.datos.js';
+import { findClienteById } from '../clientes/clientes.data.js'; // <-- MODIFICADO
 import { getItemDisplayDetails } from './items.tablajero.js';
 import { FASES_PEDIDO } from '../pedidos/pedidos.fases.datos.js'; // <-- AÑADIR IMPORTACIÓN
 
@@ -38,7 +38,7 @@ function populateModal(item) {
     // --- FIN DE LA REFACTORIZACIÓN ---
 
     // Poblar título y cliente (sin cambios)
-    const cliente = clientes.find(c => c.id === currentPedido.clienteId);
+    const cliente = findClienteById(currentPedido.clienteId); // <-- MODIFICADO
     const itemsRelevantes = currentPedido.items.filter(i => i.productId !== 'ENVIO' && i.productId !== 'CARGO');
     const itemActualNumero = itemsRelevantes.findIndex(i => i.optionId === item.optionId && i.cost === item.cost) + 1;
 

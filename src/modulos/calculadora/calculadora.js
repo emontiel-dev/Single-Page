@@ -1,6 +1,6 @@
 export async function renderCalculadora(container) {
     try {
-        const response = await fetch('src/views/calculadora.html');
+        const response = await fetch('src/views/calculadora/calculadora.html');
         if (!response.ok) throw new Error('No se pudo cargar la vista de la calculadora.');
         container.innerHTML = await response.text();
 

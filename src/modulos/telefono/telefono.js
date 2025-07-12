@@ -1,6 +1,6 @@
 export async function renderTelefono(container) {
     try {
-        const response = await fetch('src/views/telefono.html');
+        const response = await fetch('src/views/telefono/telefono.html');
         if (!response.ok) throw new Error('No se pudo cargar la vista del teléfono.');
         container.innerHTML = await response.text();
 

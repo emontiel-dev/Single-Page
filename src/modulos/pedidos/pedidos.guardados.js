@@ -1,6 +1,6 @@
 import { pedidosGuardados } from './pedidos.guardados.datos.js';
 import { FASES_PEDIDO } from './pedidos.fases.datos.js';
-import { clientes } from '../clientes/clientes.datos.js';
+import { findClienteById } from '../clientes/clientes.data.js'; // <-- MODIFICADO
 import { cartItems, setCliente } from '../venta/carrito/carrito.js'; // Importar estado del carrito
 import { router } from '../../router.js'; // Importar el router
 import { renderPedidoGuardadoDetalle } from './pedido.guardado.detalle.js'; // <-- AÑADIR IMPORTACIÓN
@@ -8,7 +8,7 @@ import { renderPedidoGuardadoDetalle } from './pedido.guardado.detalle.js'; // <
 // --- Función principal (modificada para inicializar acciones) ---
 export async function renderPedidosGuardados(container) {
     try {
-        const response = await fetch('src/views/pedidos.guardados.html');
+        const response = await fetch('src/views/pedidos/pedidos.guardados.html');
         if (!response.ok) throw new Error('No se pudo cargar la vista de pedidos.');
         container.innerHTML = await response.text();
 
@@ -41,7 +41,7 @@ function handleEditPedido(pedidoId) {
     // Cargar datos al carrito
     cartItems.length = 0; // Limpiar carrito actual
     pedido.items.forEach(item => cartItems.push(item));
-    const cliente = pedido.clienteId ? clientes.find(c => c.id === pedido.clienteId) : null;
+    const cliente = pedido.clienteId ? findClienteById(pedido.clienteId) : null; // <-- MODIFICADO
     setCliente(cliente);
 
     // Navegar a la vista de venta
@@ -100,15 +100,19 @@ function handleDeletePedido(pedidoId, itemElement) {
 // --- Renderizado y Lógica de Gestos ---
 
 function renderListaPedidos(container, pedidos) {
-    container.innerHTML = ''; // Limpiar lista
+    const pedidosListBody = container;
+    pedidosListBody.innerHTML = '';
 
     pedidos.forEach(pedido => {
-        const cliente = pedido.clienteId ? clientes.find(c => c.id === pedido.clienteId) : null;
-        const fase = FASES_PEDIDO[pedido.faseId];
+        const cliente = pedido.clienteId ? findClienteById(pedido.clienteId) : null; // <-- MODIFICADO
+        const fase = FASES_PEDIDO[pedido.faseId] || FASES_PEDIDO.GUARDADO;
         
-        const totalItems = pedido.items.filter(item => item.productId !== 'ENVIO').length;
-        const totalCosto = pedido.items.reduce((acc, item) => acc + item.cost, 0);
-        
+        // --- CORRECCIÓN ---
+        // Calcular el costo total y el número de items visibles.
+        const totalCosto = pedido.items.reduce((acc, item) => acc + (item.cost || 0), 0);
+        const totalItems = pedido.items.filter(item => item.productId !== 'ENVIO' && item.productId !== 'CARGO').length;
+        // --- FIN DE LA CORRECCIÓN ---
+
         const fecha = new Date(pedido.fechaCreacion);
         const horaRegistro = fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 

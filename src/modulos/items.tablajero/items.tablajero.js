@@ -1,6 +1,6 @@
 import { pedidosGuardados } from '../pedidos/pedidos.guardados.datos.js';
 import { FASES_PEDIDO } from '../pedidos/pedidos.fases.datos.js';
-import { clientes } from '../clientes/clientes.datos.js';
+import { findClienteById } from '../clientes/clientes.data.js'; // <-- MODIFICADO
 import { findOptionData } from '../venta/catalogo/modal.logica.js';
 import { catalogoProductos } from '../venta/catalogo/catalogo.datos.js';
 import { openItemsTablajeroModal } from './items.tablajero.modal.js';
@@ -10,7 +10,7 @@ let mainContainer = null;
 export async function renderItemsTablajero(container) {
     mainContainer = container;
     try {
-        const response = await fetch('src/views/items.tablajero.html');
+        const response = await fetch('src/views/items.tablajero/items.tablajero.html');
         if (!response.ok) throw new Error('No se pudo cargar la vista de tablajero.');
         container.innerHTML = await response.text();
         
@@ -34,7 +34,7 @@ function getTablajeroItems() {
                     ...item,
                     pedidoId: pedido.id,
                     itemIndexInPedido: index,
-                    cliente: clientes.find(c => c.id === pedido.clienteId)
+                    cliente: findClienteById(pedido.clienteId) // <-- MODIFICADO
                 });
             });
         });

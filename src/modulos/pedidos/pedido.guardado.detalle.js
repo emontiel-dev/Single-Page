@@ -1,11 +1,11 @@
 import { pedidosGuardados } from './pedidos.guardados.datos.js';
-import { clientes } from '../clientes/clientes.datos.js';
+import { findClienteById } from '../clientes/clientes.data.js'; // <-- MODIFICADO
 import { catalogoProductos } from '../venta/catalogo/catalogo.datos.js';
 import { findOptionData } from '../venta/catalogo/modal.logica.js';
 
 export async function renderPedidoGuardadoDetalle(container, pedidoId, onVolverCallback) {
     try {
-        const response = await fetch('src/views/pedido.guardado.detalle.html');
+        const response = await fetch('src/views/pedidos/pedido.guardado.detalle.html');
         container.innerHTML = await response.text();
 
         const pedido = pedidosGuardados.find(p => p.id === pedidoId);
@@ -32,7 +32,7 @@ export async function renderPedidoGuardadoDetalle(container, pedidoId, onVolverC
 
 function renderCliente(clienteId) {
     const container = document.getElementById('detalle-cliente-info');
-    const cliente = clienteId ? clientes.find(c => c.id === clienteId) : null;
+    const cliente = clienteId ? findClienteById(clienteId) : null; // <-- MODIFICADO
 
     if (cliente) {
         let nombreMostrado = `${cliente.nombre} ${cliente.apellidos || ''}`.trim();

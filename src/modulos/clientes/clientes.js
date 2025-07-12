@@ -1,6 +1,7 @@
 import { initSearchBar } from './clientes.barra.busqueda.js';
 import { renderClienteDetalle } from './cliente.detalle.js';
-//import { openNuevoClienteModal } from './cliente.añadir.modal.js'; // <-- AÑADIR IMPORTACIÓN
+import { cargarClientes, getClientes, deleteClienteById } from './clientes.data.js';
+import { openNuevoClienteModal } from './cliente.añadir.modal.js'; // <-- AÑADIR IMPORTACIÓN
 
 // Referencias a elementos del DOM
 let mainContainer = null;
@@ -11,14 +12,13 @@ export async function renderClientes(container) {
     mainContainer = container;
     try {
         // Cargar la plantilla principal de clientes
-        const response = await fetch('src/views/clientes.html');
+        const response = await fetch('src/views/clientes/clientes.html');
         if (!response.ok) throw new Error('No se pudo cargar clientes.html');
         container.innerHTML = await response.text();
 
-        // --- NUEVO: Cargar datos desde el backend ---
-        const clientesResponse = await fetch('http://localhost:3000/api/clientes');
-        if (!clientesResponse.ok) throw new Error('No se pudo obtener la lista de clientes del backend.');
-        const clientes = await clientesResponse.json();
+        // --- NUEVO: Cargar datos desde el backend usando el gestor ---
+        await cargarClientes();
+        const clientes = getClientes();
         // --- FIN NUEVO ---
 
         // La barra de búsqueda ahora está integrada en clientes.html, no es necesario cargarla.
@@ -35,13 +35,19 @@ export async function renderClientes(container) {
 
         // Añadir event listener para el click en la lista
         clientesListContainer.addEventListener('click', handleClienteClick);
+        
+        // --- AÑADIDO: Inicializar la lógica de pulsación larga para eliminar ---
+        initLongPressActions(clientesListContainer);
 
         // --- AÑADIR: Event listener para el botón de nuevo cliente ---
         const btnAnadirCliente = container.querySelector('#btn-anadir-cliente');
         if (btnAnadirCliente) {
             btnAnadirCliente.addEventListener('click', () => {
                 // El callback recarga la lista de clientes después de guardar
-                openNuevoClienteModal(() => renderClientes(mainContainer));
+                openNuevoClienteModal(async () => {
+                    await cargarClientes(); // Forzar la recarga de datos
+                    renderClientes(mainContainer);
+                });
             });
         }
 
@@ -111,5 +117,49 @@ function handleClienteClick(event) {
         renderClienteDetalle(mainContainer, clienteId, () => renderClientes(mainContainer));
     }
 }
+
+// --- AÑADIDO: Lógica para manejar la pulsación larga y eliminar clientes ---
+function initLongPressActions(container) {
+    let longPressTimer;
+    const LONG_PRESS_DURATION = 700; // 700ms para considerar una pulsación larga
+
+    container.addEventListener('pointerdown', (e) => {
+        const clienteItem = e.target.closest('.cliente-item');
+        if (!clienteItem) return;
+
+        // Iniciar el temporizador para la pulsación larga
+        longPressTimer = setTimeout(() => {
+            const clienteId = parseInt(clienteItem.dataset.clienteId, 10);
+            handleDeleteCliente(clienteId);
+        }, LONG_PRESS_DURATION);
+    });
+
+    const cancelLongPress = () => {
+        clearTimeout(longPressTimer);
+    };
+
+    // Cancelar la pulsación larga si el puntero se levanta o se mueve
+    container.addEventListener('pointerup', cancelLongPress);
+    container.addEventListener('pointerleave', cancelLongPress);
+    container.addEventListener('pointermove', cancelLongPress);
+}
+
+async function handleDeleteCliente(clienteId) {
+    const cliente = getClientes().find(c => c.id === clienteId);
+    const confirmMessage = `¿Estás seguro de que quieres eliminar a "${cliente ? cliente.nombre : 'este cliente'}"?\n\nEsta acción no se puede deshacer.`;
+
+    if (confirm(confirmMessage)) {
+        try {
+            await deleteClienteById(clienteId);
+            alert('Cliente eliminado con éxito.');
+            // Recargar la vista para reflejar el cambio
+            await renderClientes(mainContainer);
+        } catch (error) {
+            console.error('Fallo al eliminar cliente:', error);
+            alert(`No se pudo eliminar el cliente: ${error.message}`);
+        }
+    }
+}
+
 
 // --- La función renderClienteDetalle ha sido refactorizada y movida a cliente.detalle.js ---

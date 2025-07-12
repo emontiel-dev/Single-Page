@@ -45,7 +45,7 @@ export async function openCargoModal() {
 
     // Cargar la plantilla HTML del modal de cargo
     try {
-        const response = await fetch('src/views/cargo.modal.html');
+        const response = await fetch('src/views/venta/cargo.modal.html');
         if (!response.ok) {
             console.error('Error loading cargo modal template:', response.statusText);
             return;

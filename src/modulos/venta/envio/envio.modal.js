@@ -54,7 +54,7 @@ export async function openEnvioModal() {
 
     // Cargar la plantilla HTML del modal de envío
     try {
-        const response = await fetch('src/views/envio.modal.html');
+        const response = await fetch('src/views/venta/envio.modal.html');
         if (!response.ok) {
             console.error('Error loading envio modal template:', response.statusText);
             return;

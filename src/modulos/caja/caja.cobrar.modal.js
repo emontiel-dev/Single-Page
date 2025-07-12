@@ -122,7 +122,7 @@ export async function openCobrarModal(pedidoTotal, onVentaSuccess) {
     totalPedido = pedidoTotal;
     onVentaSuccessCallback = onVentaSuccess;
 
-    const response = await fetch('src/views/caja.cobrar.modal.html');
+    const response = await fetch('src/views/caja/caja.cobrar.modal.html');
     document.body.insertAdjacentHTML('beforeend', await response.text());
     modalElement = document.getElementById('caja-cobrar-modal-container');
 

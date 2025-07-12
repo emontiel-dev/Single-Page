@@ -59,7 +59,7 @@ export async function openCarritoVerItemsModal() {
 
 
     try {
-        const response = await fetch('src/views/carrito.ver.items.html');
+        const response = await fetch('src/views/venta/carrito.ver.items.html');
         if (!response.ok) throw new Error(`Error loading modal template: ${response.statusText}`);
 
         const modalHtml = await response.text();

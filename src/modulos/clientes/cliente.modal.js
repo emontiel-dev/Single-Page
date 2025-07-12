@@ -9,7 +9,7 @@ export async function openClienteModal() {
     if (document.getElementById('cliente-modal-container')) return;
 
     try {
-        const response = await fetch('src/views/cliente.modal.html');
+        const response = await fetch('src/views/venta/cliente.modal.html');
         const modalHtml = await response.text();
         document.body.insertAdjacentHTML('beforeend', modalHtml);
         modalElement = document.getElementById('cliente-modal-container');

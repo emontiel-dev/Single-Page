@@ -1,4 +1,5 @@
-import { clientes } from './clientes.datos.js';
+import { findClienteById, cargarClientes } from './clientes.data.js';
+import { openEditClienteModal } from './cliente.añadir.modal.js';
 
 /**
  * Renderiza la vista de detalle de un cliente específico.
@@ -7,7 +8,7 @@ import { clientes } from './clientes.datos.js';
  * @param {Function} onVolverCallback - La función a llamar cuando se presiona el botón "Volver".
  */
 export async function renderClienteDetalle(container, clienteId, onVolverCallback) {
-    const cliente = clientes.find(c => c.id === clienteId);
+    const cliente = findClienteById(clienteId);
     if (!cliente) {
         console.error(`Cliente con ID ${clienteId} no encontrado.`);
         container.innerHTML = `<p>Error: Cliente no encontrado.</p>`;
@@ -15,7 +16,7 @@ export async function renderClienteDetalle(container, clienteId, onVolverCallbac
     }
 
     try {
-        const response = await fetch('src/views/cliente.detalle.html');
+        const response = await fetch('src/views/clientes/cliente.detalle.html');
         if (!response.ok) throw new Error('No se pudo cargar cliente.detalle.html');
         container.innerHTML = await response.text();
 
@@ -57,6 +58,15 @@ export async function renderClienteDetalle(container, clienteId, onVolverCallbac
             if (typeof onVolverCallback === 'function') {
                 onVolverCallback();
             }
+        });
+
+        // --- AÑADIDO: Event listener para el botón de editar ---
+        document.getElementById('btn-editar-cliente').addEventListener('click', () => {
+            openEditClienteModal(cliente, async () => {
+                // Callback para recargar los datos y la vista después de editar
+                await cargarClientes();
+                renderClienteDetalle(container, clienteId, onVolverCallback);
+            });
         });
 
     } catch (error) {

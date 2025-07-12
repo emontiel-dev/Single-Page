@@ -65,7 +65,7 @@ export async function openCatalogoModal(productId) {
 
 
     // Cargar la plantilla HTML del modal
-    const response = await fetch('src/views/catalogo.modal.html');
+    const response = await fetch('src/views/venta/catalogo.modal.html');
     if (!response.ok) {
         console.error('Error loading catalogo modal template:', response.statusText);
         return;

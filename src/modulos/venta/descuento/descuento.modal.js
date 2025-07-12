@@ -60,7 +60,7 @@ export async function openDescuentoModal() {
 
     // Cargar la plantilla HTML del modal de descuento
     try {
-        const response = await fetch('src/views/descuento.modal.html');
+        const response = await fetch('src/views/venta/descuento.modal.html');
         if (!response.ok) {
             console.error('Error loading descuento modal template:', response.statusText);
             return;
