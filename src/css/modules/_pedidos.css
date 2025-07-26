@@ -7,15 +7,8 @@
 .pedido-detalle-container {
     display: flex;
     flex-direction: column;
-    background-color: var(--blanco);
-    max-width: 700px;
-    width: 100%;
-    margin: var(--espacio-l) auto;
-    height: auto;
-    max-height: calc(100vh - (var(--espacio-l) * 2));
-    border-radius: var(--radio-borde-l);
-    box-shadow: var(--sombra-md);
-    overflow-y: auto;
+    height: 100%;
+    background-color: var(--gris-fondo-app);
 }
 
 /* --- Vista de Lista de Pedidos --- */

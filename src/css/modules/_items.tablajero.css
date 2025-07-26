@@ -161,11 +161,19 @@
         border-radius: var(--radio-borde-l);
         box-shadow: var(--sombra-md);
         background-color: var(--blanco); /* El contenedor principal se convierte en la tarjeta */
+        overflow-y: auto; /* AÑADIDO: El contenedor principal debe manejar el scroll */
     }
 
     .tablajero-list-container {
         box-shadow: none; /* Se elimina la sombra anidada */
         border-radius: 0;
         padding: 0; /* El padding lo maneja el contenedor padre */
+        overflow-y: visible; /* El body interno ya no necesita scroll */
+    }
+
+    .tablajero-list-header {
+        /* Redondear las esquinas superiores para que coincidan con el contenedor padre */
+        border-top-left-radius: var(--radio-borde-l);
+        border-top-right-radius: var(--radio-borde-l);
     }
 }
