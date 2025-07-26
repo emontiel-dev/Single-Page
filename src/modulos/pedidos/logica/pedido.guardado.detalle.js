@@ -32,14 +32,15 @@ export async function renderPedidoGuardadoDetalle(container, pedidoId, onVolverC
 
 function renderCliente(clienteId) {
     const container = document.getElementById('detalle-cliente-info');
-    const cliente = clienteId ? findClienteById(clienteId) : null; // <-- MODIFICADO
+    const cliente = clienteId ? findClienteById(clienteId) : null;
 
     if (cliente) {
+        container.classList.remove('hidden');
         let nombreMostrado = `${cliente.nombre} ${cliente.apellidos || ''}`.trim();
         if (cliente.alias) nombreMostrado += ` (${cliente.alias})`;
         container.innerHTML = `<h4>Cliente</h4><p>${nombreMostrado}</p>`;
     } else {
-        container.innerHTML = `<h4>Cliente</h4><p>Sin cliente asignado</p>`;
+        container.classList.add('hidden');
     }
 }
 

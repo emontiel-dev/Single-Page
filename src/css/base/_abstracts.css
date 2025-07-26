@@ -1,0 +1,45 @@
+/* =========================================================================== */
+/* ABSTRACTS (Variables)                                                     */
+/* =========================================================================== */
+:root {
+    --blanco: #ffffff;
+    --negro-azabache: #1C1C1E;
+    --gris-fondo-claro: #F9F9F9;
+    --gris-elemento-claro: #FFFFFF;
+    --gris-borde-sutil: #E5E5EA;
+    --gris-borde-input: #D1D1D6;
+    --gris-hover-sutil: #F2F2F7;
+    --gris-texto-secundario: #8A8A8E;
+    --gris-texto-terciario: #AEAEB2;
+    --gris-fondo-deshabilitado: #EFEFF4;
+    --amarillo-polleria: #FFC107;
+    --amarillo-polleria-hover: #E0A800;
+    --amarillo-polleria-focus-ring: rgba(255, 193, 7, 0.3);
+    --texto-sobre-amarillo: var(--negro-azabache);
+    --verde-exito: #34A853;
+    --verde-exito-fondo: #E6F5EA;
+    --verde-accion: #4CAF50;
+    --texto-sobre-verde: var(--blanco);
+    --azul-info: #0072ecd2;
+    --azul-info-fondo: #E5F2FF;
+    --rojo-peligro-texto: #D93025;
+    --rojo-peligro-fondo: #FCE8E6;
+    --fuente-principal: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --tamano-fuente-base: 16px;
+    --line-height-base: 1.6;
+    --line-height-titulo: 1.25;
+    --sombra-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
+    --sombra-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+    --transicion-suave: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --radio-borde-m: 10px;
+    --radio-borde-l: 16px;
+    --radio-borde-pill: 50rem;
+    --espacio-s: 0.5rem;
+    --espacio-m: 1rem;
+    --espacio-l: 1.5rem;
+    --espacio-xl: 2rem;
+    --verde-tablajero: #27AE60;
+    --azul-pedidos: #2980B9;
+    --morado-historial: #8E44AD;
+    --naranja-caja: #F39C12;
+}

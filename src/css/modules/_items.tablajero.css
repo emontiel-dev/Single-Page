@@ -1,0 +1,151 @@
+/* =========================================================================== */
+/* MODULE: Items Tablajero                                                   */
+/* =========================================================================== */
+
+/* --- Vista de Lista de Items --- */
+.tablajero-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--gris-fondo-app);
+}
+
+.tablajero-list-container {
+    flex-grow: 1;
+    background-color: var(--blanco);
+    border-radius: var(--radio-borde-l);
+    box-shadow: var(--sombra-sm);
+    overflow-y: auto;
+    padding: var(--espacio-s);
+}
+
+.tablajero-list-header {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--espacio-s) var(--espacio-m);
+    color: var(--gris-texto-secundario);
+    font-weight: 600;
+    border-bottom: 2px solid var(--gris-borde-sutil);
+    position: sticky;
+    top: 0;
+    background: var(--blanco);
+    z-index: 1;
+}
+
+#tablajero-list-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-s);
+    padding-top: var(--espacio-s);
+}
+
+.tablajero-item {
+    padding: var(--espacio-m);
+    border: 1px solid var(--gris-borde-sutil);
+    border-radius: var(--radio-borde-m);
+    cursor: pointer;
+    transition: background-color var(--transicion-rapida);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tablajero-item.listo {
+    background-color: var(--gris-elemento-claro);
+    color: var(--gris-texto-secundario);
+}
+
+.tablajero-item.listo .item-producto,
+.tablajero-item.listo .item-cliente {
+    color: var(--gris-texto-secundario);
+    text-decoration: line-through;
+}
+
+.item-info .item-cliente {
+    font-weight: 700;
+    font-size: 1.1em;
+    color: var(--negro-azabache);
+}
+
+.item-info .item-producto {
+    font-size: 1em;
+    color: var(--amarillo-polleria-texto);
+    font-weight: 600;
+}
+
+.item-info .item-detalles {
+    font-size: 0.9em;
+    color: var(--gris-texto-secundario);
+    margin-top: 4px;
+}
+
+.item-estado .estado-badge {
+    font-size: 0.9em;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: var(--radio-borde-pill);
+    text-align: center;
+}
+
+/* --- Modal de Item del Tablajero --- */
+.tablajero-modal-content {
+    max-width: 400px;
+    background-color: var(--blanco);
+    border-radius: var(--radio-borde-l);
+    box-shadow: var(--sombra-md);
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.tablajero-modal-content .pedido-info {
+    text-align: center;
+    margin-bottom: var(--espacio-m);
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: var(--espacio-s);
+}
+
+.tablajero-modal-content .pedido-info span {
+    color: var(--gris-texto-secundario);
+}
+
+.tablajero-modal-content .pedido-info strong {
+    font-size: 1.2em;
+}
+
+.tablajero-modal-content .producto-info {
+    text-align: center;
+    margin-bottom: var(--espacio-l);
+}
+
+.tablajero-modal-content .producto-info h4 {
+    font-size: 1.5em;
+    color: var(--amarillo-polleria-texto);
+    margin: 0;
+}
+
+.tablajero-modal-content .producto-info p {
+    font-size: 0.9em;
+    color: var(--gris-texto-secundario);
+    margin: 4px 0 0;
+}
+
+.tablajero-modal-content .form-group {
+    margin-bottom: var(--espacio-m);
+}
+
+.tablajero-modal-content .form-group label {
+    display: block;
+    margin-bottom: var(--espacio-s);
+    font-weight: 600;
+}
+
+.tablajero-modal-content .form-group input {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.2em;
+    text-align: center;
+}

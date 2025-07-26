@@ -1,0 +1,16 @@
+/* =========================================================================== */
+/* UTILITIES (High-specificity helper classes)                               */
+/* =========================================================================== */
+.hidden { display: none !important; }
+.d-flex { display: flex; }
+.justify-content-between { justify-content: space-between; }
+.align-items-center { align-items: center; }
+.fw-bold { font-weight: 700; }
+.mt-s {margin-top: var(--espacio-xs);}
+.mb-0 { margin-bottom: 0; }
+.mb-xs { margin-bottom: var(--espacio-s); }
+.pt-0 {padding-top: 0;}
+.text-right { text-align: right; }
+.text-gris-secundario { color: var(--gris-texto-secundario); }
+.text-negro-azabache { color: var(--negro-azabache); }
+.text-success { color: var(--verde-exito); }

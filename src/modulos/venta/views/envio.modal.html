@@ -1,8 +1,11 @@
 <div id="envio-modal-container" class="modal-overlay">
     <div class="envio-modal-content modal-content">
         <div class="modal-header">
-            <h3 id="modal-envio-title">Elige una forma de entrega para tu pedido.</h3>
-            <!-- Los botones de acción se moverán al footer -->
+            <h3 id="modal-envio-title">Elige una forma de entrega.</h3>
+            <div class="header-actions">
+            <button class="btn btn-secondary" id="volver-envio-btn">volver</button>                
+            <button class="btn btn-primario" id="agregar-envio-btn">agregar</button>
+            </div>
         </div>
         <div class="modal-body">
             <!-- Sección de Opciones de Envío -->
@@ -27,14 +30,9 @@
                 </div>
             </div>
         </div>
-        <!-- AÑADIDO: Footer para los botones -->
-        <div class="modal-footer">
-            <button class="btn btn-secondary" id="volver-envio-btn">volver</button>                
-            <button class="btn btn-primario" id="agregar-envio-btn">agregar</button>                
-        </div>
     </div>
 
-    <style>
+    <!--<style>
         /* Estilos específicos para el Modal de Envío (Inyectados por envio.modal.html) */
 
         /* Hereda la mayoría de los estilos de .modal-overlay y .modal-content */
@@ -200,5 +198,5 @@
             justify-content: flex-end;
             gap: var(--espacio-m);
         }
-    </style>
+    </style>-->
 </div>

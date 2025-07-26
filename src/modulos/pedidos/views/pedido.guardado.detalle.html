@@ -2,33 +2,35 @@
     <header class="detalle-header">
         <h3 id="detalle-pedido-id"></h3>
         <div class="acciones">
-            <button id="btn-volver-pedidos" class="btn volver ">
+            <button id="btn-volver-pedidos" class="btn volver">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                 <span>Volver</span>
-            </button>        
+            </button>
         </div>
     </header>
     
-    <div id="detalle-cliente-info" class="detalle-card">
-        <!-- La información del cliente se renderizará aquí -->
-    </div>
+    <div class="detalle-body">
+        <div id="detalle-cliente-info" class="detalle-card">
+            <!-- La información del cliente se renderizará aquí -->
+        </div>
 
-    <div class="detalle-card">
-        <h4>Items del Pedido</h4>
-        <ul id="detalle-items-lista" class="items-list-ui">
-            <!-- Los items se renderizarán aquí -->
-        </ul>
-    </div>
+        <div class="detalle-card">
+            <h4>Items del Pedido</h4>
+            <ul id="detalle-items-lista" class="items-list-ui">
+                <!-- Los items se renderizarán aquí -->
+            </ul>
+        </div>
 
-    <div class="detalle-card">
-        <h4>Totales</h4>
-        <div id="detalle-totales" class="totals-section">
-            <!-- Los totales se renderizarán aquí -->
+        <div class="detalle-card">
+            <h4>Totales</h4>
+            <div id="detalle-totales" class="totals-section">
+                <!-- Los totales se renderizarán aquí -->
+            </div>
         </div>
     </div>
 </div>
 
-<style>
+<!--<style>
     .volver {
     max-width: 110px;
     margin-top: var(--espacio-m);
@@ -83,4 +85,4 @@
     .total-row-ui .label { color: var(--gris-texto-secundario); }
     .total-row-ui .value { font-weight: 600; }
     .grand-total-ui { margin-top: 10px; padding-top: 15px; border-top: 2px solid var(--negro-azabache); font-size: 1.6em; font-weight: 700; }
-</style>
+</style>-->
