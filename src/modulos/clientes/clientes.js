@@ -1,7 +1,7 @@
-import { initSearchBar } from './clientes.barra.busqueda.js';
-import { renderClienteDetalle } from './cliente.detalle.js';
-import { cargarClientes, getClientes, deleteClienteById } from './clientes.data.js';
-import { openNuevoClienteModal } from './cliente.añadir.modal.js'; // <-- AÑADIR IMPORTACIÓN
+import { initSearchBar } from './logica/clientes.barra.busqueda.js';
+import { renderClienteDetalle } from './logica/cliente.detalle.js';
+import { cargarClientes, getClientes, deleteClienteById } from './logica/clientes.data.js';
+import { openNuevoClienteModal } from './logica/cliente.añadir.modal.js'; // <-- AÑADIR IMPORTACIÓN
 
 // Referencias a elementos del DOM
 let mainContainer = null;
@@ -12,7 +12,7 @@ export async function renderClientes(container) {
     mainContainer = container;
     try {
         // Cargar la plantilla principal de clientes
-        const response = await fetch('src/views/clientes/clientes.html');
+        const response = await fetch('src/modulos/clientes/views/clientes.html');
         if (!response.ok) throw new Error('No se pudo cargar clientes.html');
         container.innerHTML = await response.text();
 

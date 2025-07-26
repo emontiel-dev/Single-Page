@@ -3,8 +3,8 @@
 // Este archivo se encargará de la conexión entre el módulo de venta y el router.
 // Actuará como el punto de entrada para la vista de venta.
 
-import { renderCatalogo } from './catalogo/catalogo.js';
-import { renderCarrito } from './carrito/carrito.js'; // Importamos la función de renderizado del carrito
+import { renderCatalogo } from './logica/catalogo.js';
+import { renderCarrito } from './logica/carrito.js'; // Importamos la función de renderizado del carrito
 
 export function renderVenta(container) {
     // Limpiar el contenedor principal de la vista de venta

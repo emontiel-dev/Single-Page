@@ -1,8 +1,8 @@
-import { initCajaLogic } from './caja.logica.js';
+import { initCajaLogic } from './logica/caja.logica.js';
 
 export async function renderCaja(container) {
     try {
-        const response = await fetch('src/views/caja/caja.html');
+        const response = await fetch('src/modulos/caja/views/caja.html');
         if (!response.ok) {
             throw new Error('No se pudo cargar la vista de caja.');
         }

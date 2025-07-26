@@ -2,11 +2,9 @@
 import { renderInicio } from './modulos/interfaz/inicio.js';
 import { renderVenta } from './modulos/venta/venta.js';
 import { renderClientes } from './modulos/clientes/clientes.js';
-import { renderPedidosGuardados } from './modulos/pedidos/pedidos.guardados.js';
-import { renderItemsTablajero } from './modulos/items.tablajero/items.tablajero.js'; // <-- AÑADIR
+import { renderPedidosGuardados } from './modulos/pedidos/logica/pedidos.guardados.js';
+import { renderItemsTablajero } from './modulos/items.tablajero/logica/items.tablajero.js'; // <-- AÑADIR
 import { renderCaja } from './modulos/caja/caja.js';
-import { renderCalculadora } from './modulos/calculadora/calculadora.js';
-import { renderTelefono } from './modulos/telefono/telefono.js';
 
 const routes = {
     '/': renderInicio,
@@ -15,8 +13,6 @@ const routes = {
     '/pedidos': renderPedidosGuardados,
     '/items-tablajero': renderItemsTablajero, // <-- AÑADIR
     '/caja': renderCaja,
-    '/calculadora': renderCalculadora,
-    '/telefono': renderTelefono,
     // Agrega más rutas aquí
 };
 

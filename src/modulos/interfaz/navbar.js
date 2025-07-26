@@ -5,7 +5,7 @@ export async function initNavbar() {
     if (navbarElement) {
         try {
             // Cargar el contenido de la plantilla HTML
-            const response = await fetch('src/views/interfaz/navbar.html');
+            const response = await fetch('src/modulos/interfaz/navbar.html');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
