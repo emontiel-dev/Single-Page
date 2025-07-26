@@ -23,6 +23,7 @@
 @import url('./modules/_venta.css');
 @import url('./modules/_pedidos.css');
 @import url('./modules/_items.tablajero.css');
+@import url('./modules/_caja.css');
 
 /* 5. UTILITIES */
 @import url('./utils/_utilities.css');

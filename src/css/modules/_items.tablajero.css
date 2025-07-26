@@ -149,3 +149,23 @@
     font-size: 1.2em;
     text-align: center;
 }
+
+/* --- Media Queries para Pantallas Grandes --- */
+@media (min-width: 768px) {
+    .tablajero-container {
+        max-width: 700px;
+        width: 100%;
+        margin: var(--espacio-l) auto;
+        height: auto;
+        max-height: calc(100vh - (var(--espacio-l) * 2));
+        border-radius: var(--radio-borde-l);
+        box-shadow: var(--sombra-md);
+        background-color: var(--blanco); /* El contenedor principal se convierte en la tarjeta */
+    }
+
+    .tablajero-list-container {
+        box-shadow: none; /* Se elimina la sombra anidada */
+        border-radius: 0;
+        padding: 0; /* El padding lo maneja el contenedor padre */
+    }
+}

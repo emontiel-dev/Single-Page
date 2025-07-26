@@ -1,0 +1,304 @@
+/* =========================================================================== */
+/* MODULE: Caja                                                              */
+/* =========================================================================== */
+
+/* --- Vista Principal de Caja --- */
+.caja {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-m);
+}
+
+.stock-container,
+.movimientos-container {
+    background-color: var(--blanco);
+    border: 1px solid var(--gris-borde-sutil);
+    border-radius: var(--radio-borde-l);
+    padding: var(--espacio-m);
+}
+
+.total-acumulado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: var(--negro-azabache);
+    padding-bottom: var(--espacio-m);
+    margin-bottom: var(--espacio-m);
+    border-bottom: 1px solid var(--gris-borde-sutil);
+}
+
+.stock-container h4,
+.movimientos-container h4 {
+    margin: 0 0 var(--espacio-s) 0;
+    font-size: 1em;
+    color: var(--gris-texto-secundario);
+}
+
+.stock-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--espacio-s);
+}
+
+.denominacion-columna {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-xs);
+}
+
+.denominacion-item {
+    display: flex;
+    align-items: center;
+    background-color: var(--gris-elemento-claro);
+    padding: 0.3rem;
+    gap: var(--espacio-s);
+    border-radius: var(--radio-borde-m);
+    font-weight: 600;
+}
+
+.denominacion-item .denominacion-valor {
+    padding: var(--espacio-s);
+    border-radius: var(--radio-borde-m);
+    color: var(--blanco);
+    min-width: 50px;
+    text-align: center;
+    font-size: 1em;
+    font-weight: 700;
+}
+
+.denominacion-item .denominacion-cantidad {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+}
+
+.denominacion-item .multiplicador {
+    font-size: 0.9em;
+    color: var(--gris-texto-secundario);
+}
+
+.denominacion-item .cantidad-valor {
+    font-size: 1em;
+    color: var(--negro-azabache);
+    font-weight: 700;
+}
+
+.caja-acciones-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--espacio-s);
+}
+
+.caja-acciones-container .btn-accion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 60px;
+    padding: var(--espacio-s);
+    border: 1px solid var(--gris-borde-input);
+    background-color: var(--gris-elemento-claro);
+    color: var(--negro-azabache);
+    border-radius: var(--radio-borde-m);
+    cursor: pointer;
+    font-weight: 600;
+    text-align: center;
+    font-size: 0.8em;
+    transition: var(--transicion-rapida);
+}
+
+.caja-acciones-container .btn-accion:hover {
+    background-color: var(--gris-hover-sutil);
+    border-color: var(--amarillo-polleria);
+    color: var(--amarillo-polleria-texto);
+}
+
+.caja-acciones-container .btn-accion svg {
+    width: 20px;
+    height: 20px;
+}
+
+.movimientos-container {
+    min-height: 200px;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.movimientos-container h4 {
+    position: sticky;
+    top: 0;
+    background: var(--blanco);
+    z-index: 1;
+    padding: var(--espacio-m) var(--espacio-m) var(--espacio-s) var(--espacio-m);
+    border-bottom: 1px solid var(--gris-borde-sutil);
+}
+
+.movimientos-lista {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-s);
+    padding: var(--espacio-s) var(--espacio-m) var(--espacio-m) var(--espacio-m);
+}
+
+.movimiento-item {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+    padding-bottom: var(--espacio-s);
+    border-bottom: 1px solid var(--gris-borde-sutil);
+}
+
+.movimiento-origen-hora {
+    font-size: 0.8em;
+    color: var(--gris-texto-secundario);
+}
+
+.movimiento-origen-hora .origen {
+    font-weight: 600;
+}
+
+.movimiento-tipo {
+    font-size: 0.9em;
+    font-weight: 700;
+    text-align: center;
+}
+
+.movimiento-monto {
+    font-weight: 600;
+    text-align: right;
+}
+
+.movimiento-monto.ingreso {
+    color: var(--verde-exito);
+}
+
+.movimiento-monto.egreso {
+    color: var(--rojo-peligro-texto);
+}
+
+/* --- Modales de Caja (Estilos Comunes) --- */
+.denominaciones-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--espacio-s);
+    margin-top: var(--espacio-m);
+}
+
+.denominacion-input-group {
+    display: flex;
+    align-items: center;
+    background-color: var(--gris-elemento-claro);
+    border-radius: var(--radio-borde-m);
+    padding: 0.3rem;
+    gap: var(--espacio-s);
+}
+
+.denominacion-input-group input {
+    flex-grow: 1;
+    text-align: center;
+    font-weight: 600;
+    border: none;
+    background: transparent;
+    padding: var(--espacio-xs) 0;
+    width: 100%;
+}
+
+.denominacion-input-group .denominacion-valor {
+    padding: var(--espacio-s);
+    border-radius: var(--radio-borde-m);
+    color: var(--blanco);
+    min-width: 45px;
+    text-align: center;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.denominacion-valor.ingreso {
+    background-color: var(--verde-exito);
+}
+
+.denominacion-valor.egreso {
+    background-color: var(--rojo-peligro-texto);
+}
+
+/* --- Modal de Cobrar --- */
+.cobrar-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--espacio-m) 0;
+    font-size: 1.2em;
+    margin-bottom: var(--espacio-m);
+    border-bottom: 1px solid var(--gris-borde-sutil);
+}
+
+.cobrar-info:last-of-type {
+    border-bottom: none;
+}
+
+.cobrar-info.cambio-total {
+    font-size: 1.1em;
+    background-color: var(--amarillo-polleria-fondo-claro);
+    border: 1px solid var(--amarillo-polleria);
+    border-radius: var(--radio-borde-m);
+    padding: var(--espacio-m);
+    margin-bottom: 0;
+}
+
+.modal-section-title {
+    margin: var(--espacio-l) 0 var(--espacio-s) 0;
+    font-size: 1em;
+    color: var(--gris-texto-secundario);
+    font-weight: 600;
+}
+
+.denominaciones-grid-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--espacio-s);
+    margin-top: var(--espacio-m);
+}
+
+.denominacion-info-item {
+    padding: var(--espacio-s);
+    border-radius: var(--radio-borde-m);
+    color: var(--blanco);
+    font-weight: 700;
+    font-size: 0.9em;
+    min-width: 40px;
+    text-align: center;
+}
+
+.alerta-error {
+    color: var(--rojo-peligro-texto);
+    background-color: var(--rojo-peligro-fondo);
+    padding: var(--espacio-m);
+    border-radius: var(--radio-borde-m);
+    text-align: center;
+    margin-top: var(--espacio-m);
+    font-weight: 600;
+}
+
+/* --- Modal de Recarga --- */
+.recarga-info {
+    padding: var(--espacio-s) var(--espacio-m);
+    background-color: var(--amarillo-polleria-fondo-claro);
+    border: 1px solid var(--amarillo-polleria);
+    border-radius: var(--radio-borde-m);
+    text-align: center;
+    font-weight: 600;
+}
+
+/* --- Media Queries para Pantallas Grandes --- */
+@media (min-width: 768px) {
+    .caja {
+        max-width: 700px;
+         width: 100%;
+        margin: var(--espacio-l) auto;
+    }
+}
