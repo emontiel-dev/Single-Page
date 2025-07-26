@@ -3,118 +3,139 @@ import { stockDenominaciones, registrarVenta, calcularCambioGreedy, denominacion
 let modalElement = null;
 const denominaciones = [1000, 500, 200, 100, 50, 20, 10, 5, 2, 1, 0.5];
 let totalPedido = 0;
-let denominacionesPago = {};
-let denominacionesCambio = {};
+let pagoSeleccionado = [];
 let onVentaSuccessCallback = null;
-let currentStep = 'pago';
 
 function closeCobrarModal() {
     if (modalElement) {
         modalElement.remove();
         modalElement = null;
-        totalPedido = 0;
-        denominacionesPago = {};
-        denominacionesCambio = {};
+        pagoSeleccionado = [];
         onVentaSuccessCallback = null;
-        currentStep = 'pago';
     }
 }
 
-function updateTotalPagado() {
-    let total = 0;
-    denominacionesPago = {};
-    denominaciones.forEach(valor => {
-        const input = modalElement.querySelector(`#pago-denominacion-${String(valor).replace('.', '')}`);
-        const cantidad = parseInt(input.value, 10) || 0;
-        if (cantidad > 0) {
-            total += cantidad * valor;
-            denominacionesPago[valor] = cantidad;
-        }
-    });
-    modalElement.querySelector('#cobrar-total-pagado').textContent = `$${total.toFixed(2)}`;
-    return total;
-}
+function renderPagoSeleccionado() {
+    const container = modalElement.querySelector('#cobrar-pago-seleccion');
+    container.innerHTML = '';
+    const conteo = pagoSeleccionado.reduce((acc, valor) => {
+        acc[valor] = (acc[valor] || 0) + 1;
+        return acc;
+    }, {});
 
-function renderPagoInputs() {
-    const grid = modalElement.querySelector('#cobrar-pago-grid');
-    grid.innerHTML = '';
-    denominaciones.forEach(valor => {
-        const inputId = `pago-denominacion-${String(valor).replace('.', '')}`;
+    Object.entries(conteo).sort((a, b) => b[0] - a[0]).forEach(([valor, cantidad]) => {
         const color = denominacionColors[valor] || '#7f8c8d';
-        const group = document.createElement('div');
-        group.className = 'denominacion-input-group';
-        group.innerHTML = `
-            <span class="denominacion-valor" style="background-color: ${color};">${valor}</span>
-            <input type="number" id="${inputId}" placeholder="0" min="0" inputmode="numeric" pattern="[0-9]*">
-        `;
-        grid.appendChild(group);
+        const pill = document.createElement('div');
+        pill.className = 'pago-seleccion-item';
+        pill.style.backgroundColor = color;
+        pill.innerHTML = `<span>${valor} x ${cantidad}</span><button class="remover-denominacion-btn" data-valor="${valor}">&times;</button>`;
+        container.appendChild(pill);
     });
-    grid.addEventListener('input', updateTotalPagado);
-}
-
-function handleSiguiente() {
-    if (currentStep === 'pago') {
-        const totalPagado = updateTotalPagado();
-        if (totalPagado < totalPedido) {
-            alert('El monto pagado es insuficiente.');
-            return;
-        }
-
-        const cambio = totalPagado - totalPedido;
-        modalElement.querySelector('#cobrar-total-cambio').textContent = `$${cambio.toFixed(2)}`;
-
-        if (cambio > 0) {
-            const resultadoCambio = calcularCambioGreedy(cambio);
-            if (!resultadoCambio.success) {
-                modalElement.querySelector('#cobrar-cambio-insuficiente').style.display = 'block';
-                modalElement.querySelector('#cobrar-modal-siguiente-btn').disabled = true;
-            } else {
-                modalElement.querySelector('#cobrar-cambio-insuficiente').style.display = 'none';
-                modalElement.querySelector('#cobrar-modal-siguiente-btn').disabled = false;
-                denominacionesCambio = resultadoCambio.cambioDenominaciones;
-                renderCambioGrid(denominacionesCambio);
-            }
-        } else {
-            denominacionesCambio = {}; // No hay cambio
-        }
-
-        // Transition to next step
-        currentStep = 'cambio';
-        modalElement.querySelector('#cobrar-pago-section').style.display = 'none';
-        modalElement.querySelector('#cobrar-cambio-section').style.display = 'block';
-        modalElement.querySelector('#cobrar-modal-title').textContent = 'Confirmar Transacción';
-        modalElement.querySelector('#cobrar-modal-siguiente-btn').textContent = 'Confirmar Venta';
-
-    } else if (currentStep === 'cambio') {
-        registrarVenta(totalPedido, denominacionesPago, denominacionesCambio);
-        if (onVentaSuccessCallback) {
-            onVentaSuccessCallback();
-        }
-        closeCobrarModal();
-    }
 }
 
 function renderCambioGrid(cambio) {
     const grid = modalElement.querySelector('#cobrar-cambio-grid');
     grid.innerHTML = '';
-    if (Object.keys(cambio).length === 0) {
-        grid.innerHTML = '<p style="width: 100%; text-align: center;">No se requiere cambio (pago exacto).</p>';
+    if (!cambio || Object.keys(cambio).length === 0) {
+        grid.innerHTML = '<p style="width: 100%; text-align: center; font-size: 0.9em; color: var(--gris-texto-secundario);">No se requiere cambio.</p>';
         return;
     }
-    // Ordenar de mayor a menor para una visualización más natural
     const sortedCambio = Object.entries(cambio).sort((a, b) => Number(b[0]) - Number(a[0]));
-
     for (const [valor, cantidad] of sortedCambio) {
         const color = denominacionColors[valor] || '#7f8c8d';
         const item = document.createElement('div');
-        item.className = 'denominacion-info-item';
+        item.className = 'pago-seleccion-item';
         item.style.backgroundColor = color;
-        
-        // MODIFICADO: Mostrar el valor y la cantidad en la píldora
         item.textContent = `${valor} x ${cantidad}`;
-        
         grid.appendChild(item);
     }
+}
+
+// NUEVA FUNCIÓN: Actualiza todo el estado del cobro en tiempo real
+function updateCobroState() {
+    const totalPagado = pagoSeleccionado.reduce((acc, valor) => acc + valor, 0);
+    modalElement.querySelector('#cobrar-total-pagado').textContent = `$${totalPagado.toFixed(2)}`;
+
+    const cambio = totalPagado - totalPedido;
+    const confirmarBtn = modalElement.querySelector('#cobrar-modal-confirmar-btn');
+    const alertaInsuficiente = modalElement.querySelector('#cobrar-cambio-insuficiente');
+
+    if (cambio < 0) {
+        modalElement.querySelector('#cobrar-total-cambio').textContent = '$0.00';
+        renderCambioGrid(null);
+        confirmarBtn.disabled = true;
+        alertaInsuficiente.style.display = 'none';
+        return;
+    }
+
+    modalElement.querySelector('#cobrar-total-cambio').textContent = `$${cambio.toFixed(2)}`;
+    const resultadoCambio = calcularCambioGreedy(cambio);
+
+    if (resultadoCambio.success) {
+        renderCambioGrid(resultadoCambio.cambioDenominaciones);
+        alertaInsuficiente.style.display = 'none';
+        confirmarBtn.disabled = false;
+    } else {
+        renderCambioGrid(null);
+        alertaInsuficiente.style.display = 'block';
+        confirmarBtn.disabled = true;
+    }
+}
+
+function handleDenominacionClick(event) {
+    const button = event.target.closest('.denominacion-btn');
+    if (!button) return;
+    pagoSeleccionado.push(parseFloat(button.dataset.valor));
+    renderPagoSeleccionado();
+    updateCobroState();
+}
+
+function handleRemoverDenominacionClick(event) {
+    if (!event.target.classList.contains('remover-denominacion-btn')) return;
+    const valor = parseFloat(event.target.dataset.valor);
+    const index = pagoSeleccionado.lastIndexOf(valor);
+    if (index > -1) {
+        pagoSeleccionado.splice(index, 1);
+    }
+    renderPagoSeleccionado();
+    updateCobroState();
+}
+
+function renderPagoDenominaciones() {
+    const grid = modalElement.querySelector('#cobrar-pago-grid');
+    grid.innerHTML = '';
+    denominaciones.forEach(valor => {
+        const color = denominacionColors[valor] || '#7f8c8d';
+        const button = document.createElement('button');
+        button.className = 'denominacion-btn';
+        button.dataset.valor = valor;
+        button.style.backgroundColor = color;
+        button.textContent = valor;
+        grid.appendChild(button);
+    });
+}
+
+// Ya no hay pasos, esta función confirma la transacción final
+function handleConfirmarVenta() {
+    const totalPagado = pagoSeleccionado.reduce((acc, valor) => acc + valor, 0);
+    const cambio = totalPagado - totalPedido;
+    const resultadoCambio = calcularCambioGreedy(cambio);
+
+    if (totalPagado < totalPedido || !resultadoCambio.success) {
+        alert('No se puede confirmar la venta. Verifique el pago o el cambio disponible.');
+        return;
+    }
+
+    const denominacionesPago = pagoSeleccionado.reduce((acc, valor) => {
+        acc[valor] = (acc[valor] || 0) + 1;
+        return acc;
+    }, {});
+
+    registrarVenta(totalPedido, denominacionesPago, resultadoCambio.cambioDenominaciones);
+    if (onVentaSuccessCallback) {
+        onVentaSuccessCallback();
+    }
+    closeCobrarModal();
 }
 
 export async function openCobrarModal(pedidoTotal, onVentaSuccess) {
@@ -127,10 +148,13 @@ export async function openCobrarModal(pedidoTotal, onVentaSuccess) {
     modalElement = document.getElementById('caja-cobrar-modal-container');
 
     modalElement.querySelector('#cobrar-total-pedido').textContent = `$${totalPedido.toFixed(2)}`;
-    renderPagoInputs();
+    renderPagoDenominaciones();
+    updateCobroState(); // Llamada inicial para establecer el estado
 
     modalElement.querySelector('#cobrar-modal-cancelar-btn').addEventListener('click', closeCobrarModal);
-    modalElement.querySelector('#cobrar-modal-siguiente-btn').addEventListener('click', handleSiguiente);
+    modalElement.querySelector('#cobrar-modal-confirmar-btn').addEventListener('click', handleConfirmarVenta);
+    modalElement.querySelector('#cobrar-pago-grid').addEventListener('click', handleDenominacionClick);
+    modalElement.querySelector('#cobrar-pago-seleccion').addEventListener('click', handleRemoverDenominacionClick);
 
     modalElement.classList.add('visible');
 }

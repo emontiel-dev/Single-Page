@@ -225,7 +225,87 @@
     background-color: var(--rojo-peligro-texto);
 }
 
+/* --- Estilos para la nueva UI de selección de denominaciones --- */
+
+/* Contenedor para los botones interactivos */
+.denominaciones-grid-botones {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: var(--espacio-s);
+    margin-top: var(--espacio-m);
+}
+
+/* Botón de denominación individual */
+.denominacion-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--espacio-m);
+    border-radius: var(--radio-borde-m);
+    color: var(--blanco);
+    font-weight: 700;
+    font-size: 1.1em;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.1s ease;
+}
+
+.denominacion-btn:active {
+    transform: scale(0.95);
+}
+
+/* Contenedor para las píldoras de denominaciones seleccionadas */
+.pago-seleccion-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--espacio-s);
+    padding: var(--espacio-m);
+    margin-top: var(--espacio-s);
+    background-color: var(--gris-elemento-claro);
+    border-radius: var(--radio-borde-m);
+    min-height: 50px;
+    border: 1px solid var(--gris-borde-sutil);
+}
+
+/* Píldora de denominación seleccionada */
+.pago-seleccion-item {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-xs);
+    padding: var(--espacio-s);
+    border-radius: var(--radio-borde-m);
+    color: var(--blanco);
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+/* Botón para remover una denominación */
+.remover-denominacion-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    margin-left: var(--espacio-s);
+    background-color: rgba(0, 0, 0, 0.2);
+    border: none;
+    border-radius: 50%;
+    color: var(--blanco);
+    cursor: pointer;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.remover-denominacion-btn:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+
 /* --- Modal de Cobrar --- */
+#caja-cobrar-modal-container .modal-content {
+    max-width: 450px;
+}
 .cobrar-info {
     display: flex;
     justify-content: space-between;
@@ -294,11 +374,27 @@
     font-weight: 600;
 }
 
+/* --- Estilos para Modales de Ingreso, Egreso, Recarga y Corte --- */
+#caja-ingreso-modal-container .modal-content,
+#caja-egreso-modal-container .modal-content,
+#caja-recarga-modal-container .modal-content,
+#caja-corte-modal-container .modal-content {
+    max-width: 450px;
+}
+
 /* --- Media Queries para Pantallas Grandes --- */
 @media (min-width: 768px) {
     .caja {
         max-width: 700px;
-         width: 100%;
+        width: 100%;
         margin: var(--espacio-l) auto;
+    }
+
+    #caja-cobrar-modal-container .modal-content,
+    #caja-ingreso-modal-container .modal-content,
+    #caja-egreso-modal-container .modal-content,
+    #caja-recarga-modal-container .modal-content,
+    #caja-corte-modal-container .modal-content {
+        max-width: 700px;
     }
 }

@@ -1,20 +1,38 @@
 <div id="caja-egreso-modal-container" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Añadir Egreso Manual</h3>
+            <h3>Registrar Egreso</h3>
             <div class="header-actions">
                 <button class="btn btn-secondary" id="egreso-modal-cancelar-btn">Cancelar</button>
-                <button class="btn btn-primario" id="egreso-modal-guardar-btn">Guardar</button>
+                <button class="btn btn-primario" id="egreso-modal-guardar-btn">Guardar Egreso</button>
             </div>
         </div>
         <div class="modal-body">
-            <div class="form-group">
-                <label for="egreso-concepto-input">Concepto</label>
-                <input type="text" id="egreso-concepto-input" placeholder="Ej: Compra de insumos, Pago de servicio">
+            <div class="form-group-inline">
+                <div class="form-group">
+                    <label for="egreso-monto-input">Monto del Egreso</label>
+                    <input type="number" id="egreso-monto-input" placeholder="125.00">
+                </div>
+                <div class="form-group">
+                    <label for="egreso-concepto-input">Concepto</label>
+                    <input type="text" id="egreso-concepto-input" placeholder="Ej: Compra de insumos">
+                </div>
             </div>
-            <div id="egreso-denominaciones-grid" class="denominaciones-grid">
-                <!-- Los inputs se renderizarán aquí desde JS -->
-            </div>
+
+            <h4 class="modal-section-title">Se Paga Con (de Caja):</h4>
+            <div id="egreso-pago-seleccion" class="pago-seleccion-container"></div>
+            <div id="egreso-denominaciones-grid" class="denominaciones-grid-botones"></div>
+
+            <h4 class="modal-section-title">Cambio Recibido (a Caja):</h4>
+            <div id="egreso-cambio-seleccion" class="pago-seleccion-container"></div>
+            <div id="egreso-cambio-grid" class="denominaciones-grid-botones"></div>
+
+            <!-- NUEVO: Sección de validación -->
+            <div id="egreso-validacion" class="alerta-error" style="display: none;"></div>
+        </div>
+        <div class="modal-footer">
+            <span>Balance de la Operación:</span>
+            <span id="egreso-balance-footer">$0.00</span>
         </div>
     </div>
 </div>

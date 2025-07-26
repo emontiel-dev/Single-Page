@@ -1,22 +1,49 @@
 <div id="caja-ingreso-modal-container" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Añadir Ingreso Manual</h3>
+            <h3>Registrar Ingreso</h3>
             <div class="header-actions">
                 <button class="btn btn-secondary" id="ingreso-modal-cancelar-btn">Cancelar</button>
-                <button class="btn btn-primario" id="ingreso-modal-guardar-btn">Guardar</button>
+                <button class="btn btn-primario" id="ingreso-modal-guardar-btn">Guardar Ingreso</button>
             </div>
         </div>
         <div class="modal-body">
-            <div class="form-group">
-                <label for="ingreso-concepto-input">Concepto</label>
-                <input type="text" id="ingreso-concepto-input" placeholder="Ej: Venta manual, Adelanto">
+            <!-- NUEVO: Campos para el monto y concepto del ingreso -->
+            <div class="form-group-inline">
+                <div class="form-group">
+                    <label for="ingreso-monto-input">Monto del Ingreso</label>
+                    <input type="number" id="ingreso-monto-input" placeholder="230.00">
+                </div>
+                <div class="form-group">
+                    <label for="ingreso-concepto-input">Concepto</label>
+                    <input type="text" id="ingreso-concepto-input" placeholder="Ej: Venta manual, Adelanto">
+                </div>
             </div>
-            <!-- El input de monto se elimina -->
-            <!-- Nuevo contenedor para los inputs de denominaciones -->
-            <div id="ingreso-denominaciones-grid" class="denominaciones-grid">
-                <!-- Los inputs se renderizarán aquí desde JS -->
+            
+            <h4 class="modal-section-title">Cliente Paga Con:</h4>
+            <div id="ingreso-pago-seleccion" class="pago-seleccion-container">
+                <!-- Píldoras de pago se renderizan aquí -->
             </div>
+            <div id="ingreso-denominaciones-grid" class="denominaciones-grid-botones">
+                <!-- Botones de denominaciones se renderizan aquí -->
+            </div>
+
+            <!-- NUEVO: Sección de Cambio en tiempo real -->
+            <div id="ingreso-cambio-section">
+                <h4 class="modal-section-title">Cambio a Devolver:</h4>
+                <div class="cobrar-info cambio-total">
+                    <span>Total Cambio:</span>
+                    <strong id="ingreso-total-cambio">$0.00</strong>
+                </div>
+                <div id="ingreso-cambio-grid" class="denominaciones-grid-info"></div>
+                <div id="ingreso-cambio-insuficiente" class="alerta-error" style="display: none;">
+                    No hay suficientes denominaciones en caja para dar el cambio.
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span>Total Recibido:</span>
+            <span id="ingreso-total-recibido">$0.00</span>
         </div>
     </div>
 </div>

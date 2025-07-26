@@ -1,35 +1,37 @@
 <div id="caja-cobrar-modal-container" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 id="cobrar-modal-title">Registrar Pago</h3>
+            <h3 id="cobrar-modal-title">Registrar Venta</h3>
             <div class="header-actions">
                 <button class="btn btn-secondary" id="cobrar-modal-cancelar-btn">Cancelar</button>
-                <button class="btn btn-primario" id="cobrar-modal-siguiente-btn">Siguiente</button>
+                <button class="btn btn-primario" id="cobrar-modal-confirmar-btn">Confirmar Venta</button>
             </div>
         </div>
         <div class="modal-body">
+            <!-- Info del total a pagar (sin cambios) -->
             <div class="cobrar-info">
                 <span>Total a Pagar:</span>
                 <strong id="cobrar-total-pedido">$0.00</strong>
             </div>
 
-            <!-- Paso 1: Cliente paga con... -->
-            <div id="cobrar-pago-section">
-                <h4 class="modal-section-title">Cliente paga con:</h4>
-                <div id="cobrar-pago-grid" class="denominaciones-grid">
-                    <!-- Inputs para denominaciones de pago se renderizarán aquí -->
-                </div>
+            <!-- Sección de Pago (sin cambios en la estructura) -->
+            <h4 class="modal-section-title">Cliente paga con:</h4>
+            <div id="cobrar-pago-seleccion" class="pago-seleccion-container">
+                <!-- Píldoras de pago se renderizan aquí -->
+            </div>
+            <div id="cobrar-pago-grid" class="denominaciones-grid-botones">
+                <!-- Botones de denominaciones se renderizan aquí -->
             </div>
 
-            <!-- Paso 2: Cambio a entregar -->
-            <div id="cobrar-cambio-section" style="display: none;">
+            <!-- NUEVO: Sección de Cambio en tiempo real -->
+            <div id="cobrar-cambio-section">
                 <h4 class="modal-section-title">Cambio a entregar:</h4>
                 <div class="cobrar-info cambio-total">
                     <span>Total Cambio:</span>
                     <strong id="cobrar-total-cambio">$0.00</strong>
                 </div>
                 <div id="cobrar-cambio-grid" class="denominaciones-grid-info">
-                    <!-- Denominaciones de cambio se mostrarán aquí -->
+                    <!-- Denominaciones de cambio se renderizan aquí -->
                 </div>
                 <div id="cobrar-cambio-insuficiente" class="alerta-error" style="display: none;">
                     No hay suficientes denominaciones en caja para dar el cambio exacto.
@@ -143,7 +145,7 @@
         background-color: var(--blanco);
         border-top: 1px solid var(--gris-borde-sutil);
     }
-</style>-->
+</style>
 <script>
     function renderCambioGrid(cambio) {
         const grid = modalElement.querySelector('#cobrar-cambio-grid');
@@ -171,4 +173,4 @@
     export async function openCobrarModal(pedidoTotal, onVentaSuccess) {
         // ...existing code...
     }
-</script>
+</script>-->

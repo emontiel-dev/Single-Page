@@ -8,6 +8,13 @@ export const stockDenominaciones = {
     1000: 0, 500: 0, 200: 6, 100: 6, 50: 6, 20: 8, 10: 20, 5: 20, 2: 10, 1: 10, 0.5: 10
 };
 
+// AÑADIDO: Exportar los colores para que sean reutilizables
+export const denominacionColors = {
+    1000: '#A774F2', 500: '#3498DB', 200: '#2ECC71', 100: '#E74C3C',
+    50: '#F1C40F', 20: '#E67E22', 10: '#95A5A6', 5: '#7D3C98',
+    2: '#1ABC9C', 1: '#34495E', 0.5: '#F39C12'
+};
+
 const movimientos = [
     //{ origen: 'Sistema', hora: '10:01 AM', tipo: 'Ingreso(Venta)', monto: 26, tipoMonto: 'ingreso' },
     //{ origen: 'Sistema', hora: '09:54 AM', tipo: 'Ingreso(Venta)', monto: 63, tipoMonto: 'ingreso' },
@@ -16,12 +23,6 @@ const movimientos = [
     //{ origen: 'Sistema', hora: '09:25 AM', tipo: 'Egreso(Compra PA)', monto: -25, tipoMonto: 'egreso' },
     //{ origen: 'Sistema', hora: '09:23 AM', tipo: 'Ingreso(Venta)', monto: 215, tipoMonto: 'ingreso' },
 ];
-
-export const denominacionColors = { // <-- EXPORTAR COLORES
-    1000: '#A774F2', 500: '#3498DB', 200: '#2ECC71', 100: '#E74C3C',
-    50: '#F1C40F', 20: '#E67E22', 10: '#95A5A6', 5: '#7D3C98',
-    2: '#1ABC9C', 1: '#34495E', 0.5: '#F39C12'
-};
 
 function renderStock() {
     const grid = document.getElementById('caja-stock-grid');
@@ -93,17 +94,17 @@ function renderMovimientos() {
     });
 }
 
-// --- NUEVA FUNCIÓN EXPORTADA ---
-export function registrarIngresoManual(concepto, monto, denominacionesIngresadas) {
-    // 1. Actualizar el stock de denominaciones
+// --- MODIFICADA: Acepta denominaciones de ingreso y egreso (cambio) ---
+export function registrarIngresoManual(concepto, monto, denominacionesIngresadas, denominacionesDeCambio) {
+    // 1. Actualizar el stock: entra el pago, sale el cambio
     for (const valor in denominacionesIngresadas) {
-        const cantidad = denominacionesIngresadas[valor];
-        if (stockDenominaciones.hasOwnProperty(valor)) {
-            stockDenominaciones[valor] += cantidad;
-        }
+        stockDenominaciones[valor] = (stockDenominaciones[valor] || 0) + denominacionesIngresadas[valor];
+    }
+    for (const valor in denominacionesDeCambio) {
+        stockDenominaciones[valor] -= denominacionesDeCambio[valor];
     }
 
-    // 2. Añadir el nuevo movimiento al historial
+    // 2. Añadir un único movimiento de ingreso por el monto real
     const nuevoMovimiento = {
         origen: 'Manual',
         hora: new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }),
@@ -111,33 +112,34 @@ export function registrarIngresoManual(concepto, monto, denominacionesIngresadas
         monto: monto,
         tipoMonto: 'ingreso'
     };
-    movimientos.unshift(nuevoMovimiento); // Añadir al principio
+    movimientos.unshift(nuevoMovimiento);
 
-    // 3. Re-renderizar la UI para reflejar los cambios
+    // 3. Re-renderizar la UI
     renderStock();
     renderMovimientos();
 }
 
-export function registrarEgresoManual(concepto, monto, denominacionesEgresadas) {
-    // 1. Actualizar el stock de denominaciones
+// --- MODIFICADA: Acepta denominaciones de egreso y de ingreso (cambio recibido) ---
+export function registrarEgresoManual(concepto, monto, denominacionesEgresadas, denominacionesDeCambioRecibido) {
+    // 1. Actualizar el stock: sale el pago, entra el cambio
     for (const valor in denominacionesEgresadas) {
-        const cantidad = denominacionesEgresadas[valor];
-        if (stockDenominaciones.hasOwnProperty(valor)) {
-            stockDenominaciones[valor] -= cantidad;
-        }
+        stockDenominaciones[valor] -= denominacionesEgresadas[valor];
+    }
+    for (const valor in denominacionesDeCambioRecibido) {
+        stockDenominaciones[valor] = (stockDenominaciones[valor] || 0) + denominacionesDeCambioRecibido[valor];
     }
 
-    // 2. Añadir el nuevo movimiento al historial
+    // 2. Añadir un único movimiento de egreso por el monto real
     const nuevoMovimiento = {
         origen: 'Manual',
         hora: new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }),
         tipo: `Egreso (${concepto})`,
-        monto: -monto, // El monto del egreso es negativo
+        monto: -monto,
         tipoMonto: 'egreso'
     };
-    movimientos.unshift(nuevoMovimiento); // Añadir al principio
+    movimientos.unshift(nuevoMovimiento);
 
-    // 3. Re-renderizar la UI para reflejar los cambios
+    // 3. Re-renderizar la UI
     renderStock();
     renderMovimientos();
 }
