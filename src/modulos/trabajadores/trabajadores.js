@@ -1,6 +1,6 @@
-import { trabajadoresDB } from './logica/trabajadores.datos.js';
-import { openTrabajadorModal } from './logica/trabajador.añadir.modal.js';
+import { trabajadoresDB, nominaConfig } from './logica/trabajadores.datos.js';
 import { openTrabajadorIntegralModal } from './logica/trabajador.modal-integral.js';
+import { openTrabajadorModal } from './logica/trabajador.añadir.modal.js'; // <-- Mantener para AÑADIR
 
 let mainContainer = null;
 
@@ -34,7 +34,15 @@ function renderListaTrabajadores(container, trabajadores) {
  */
 function renderKPIs(trabajadores) {
     const activos = trabajadores.filter(t => t.activo);
-    const nominaSemanal = activos.reduce((total, t) => total + (t.salarioDiario * 6), 0); // Asumiendo 6 días de trabajo
+    
+    const nominaSemanal = activos.reduce((total, t) => {
+        const cargoConfig = nominaConfig.cargos[t.cargo];
+        if (cargoConfig) {
+            const pagoDiario = cargoConfig.valorHora * nominaConfig.horasNormales;
+            return total + (pagoDiario * nominaConfig.diasParaDescansoCompleto);
+        }
+        return total;
+    }, 0);
 
     document.getElementById('kpi-trabajadores-activos').textContent = activos.length;
     document.getElementById('kpi-nomina-semanal').textContent = `$${nominaSemanal.toFixed(2)}`;
@@ -49,7 +57,7 @@ function initEventListeners() {
         const item = event.target.closest('.trabajador-item');
         if (item) {
             const trabajadorId = parseInt(item.dataset.trabajadorId, 10);
-            // Pasamos un callback para que la vista principal se refresque después de una edición.
+            // La llamada ahora es más simple
             openTrabajadorIntegralModal(trabajadorId, () => {
                 renderTrabajadores(mainContainer);
             });
@@ -58,7 +66,7 @@ function initEventListeners() {
 
     const btnAnadir = mainContainer.querySelector('#btn-anadir-trabajador');
     btnAnadir.addEventListener('click', () => {
-        // El primer argumento es el callback, el segundo (trabajador) es null para crear.
+        // Usamos el modal de añadir solo para CREAR. El primer argumento es el callback.
         openTrabajadorModal(() => {
             renderTrabajadores(mainContainer);
         });

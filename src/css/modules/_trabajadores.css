@@ -125,7 +125,180 @@
     margin-bottom: var(--espacio-m);
 }
 
-/* NUEVO: Estilo para los items de información */
+/* --- NUEVO: Estilos para Pestañas del Modal --- */
+.modal-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--gris-borde-sutil);
+    margin-bottom: var(--espacio-l);
+}
+.tab-link {
+    padding: var(--espacio-s) var(--espacio-m);
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 0.95em;
+    color: var(--gris-texto-secundario);
+    border-bottom: 3px solid transparent;
+    transition: all var(--transicion-suave);
+}
+.tab-link:hover {
+    color: var(--negro-azabache);
+}
+.tab-link.active {
+    color: var(--amarillo-polleria);
+    font-weight: 600;
+    border-bottom-color: var(--amarillo-polleria);
+}
+.tab-content {
+    display: none;
+    flex-direction: column;
+    gap: var(--espacio-m);
+}
+.tab-content.active {
+    display: flex;
+}
+/* --- Fin Estilos para Pestañas --- */
+
+/* --- NUEVO: Estilos para la Asistencia --- */
+.asistencia-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: var(--espacio-s);
+    margin-bottom: var(--espacio-xs);
+}
+
+.dia-asistencia {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--espacio-s);
+    border-radius: var(--radio-borde-m);
+    cursor: pointer;
+    transition: all var(--transicion-suave);
+    border: 1px solid var(--gris-borde-sutil);
+    background-color: var(--blanco);
+    text-align: center;
+}
+
+.dia-asistencia .nombre-dia {
+    font-size: 0.8em;
+    font-weight: 600;
+    color: var(--gris-texto-secundario);
+}
+
+.dia-asistencia .fecha-dia {
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+.dia-asistencia.asistio { background-color: var(--verde-exito-fondo); border-color: var(--verde-exito); color: var(--verde-exito-texto); }
+.dia-asistencia.falta { background-color: var(--rojo-peligro-fondo); border-color: var(--rojo-peligro); color: var(--rojo-peligro-texto); text-decoration: line-through; }
+.dia-asistencia.retardo { background-color: var(--amarillo-advertencia-fondo); border-color: var(--amarillo-advertencia); color: var(--amarillo-advertencia-texto); }
+.dia-asistencia.descanso { background-color: var(--azul-info-claro); border-color: var(--azul-info); color: var(--azul-info-oscuro); cursor: not-allowed; opacity: 0.8; }
+.dia-asistencia.pendiente { background-color: var(--gris-elemento-claro); }
+
+/* MODIFICADO: .nomina-calculo a .nomina-detalle y .nomina-total */
+.nomina-calculo {
+    margin-top: var(--espacio-xs);
+    padding: var(--espacio-xs) var(--espacio-s) var(--espacio-xs) var(--espacio-s);
+    background-color: var(--gris-elemento-claro);
+    border-radius: var(--radio-borde-m);
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-s);
+}
+.nomina-detalle {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95em;
+    color: var(--gris-texto-secundario);
+}
+.nomina-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5em;
+    font-weight: 400;
+    color: var(--negro-azabache);
+    margin-top: var(--espacio-s);
+    padding-top: var(--espacio-s);
+    border-top: 1px solid var(--gris-borde-sutil);
+}
+
+/* --- NUEVO: Estilos para el detalle de asistencia --- */
+.detalle-dia-container {
+    background-color: var(--gris-elemento-claro);
+    padding: var(--espacio-xs) var(--espacio-s) var(--espacio-xs) var(--espacio-s);
+    border-radius: var(--radio-borde-m);
+    margin-top: var(--espacio-xs);
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-m);
+}
+
+/* NUEVO: Estilo para la etiqueta de Bonos */
+.detalle-dia-container h5 {
+    margin: 0;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--gris-texto-secundario);
+}
+
+.detalle-dia-container .form-group-inline {
+    display: flex;
+    gap: var(--espacio-m);
+}
+
+/* MODIFICADO: De grid a flex con scroll */
+.detalle-dia-container .bonos-scroll-container {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--espacio-s);
+    overflow-x: auto;
+    padding-bottom: var(--espacio-s); /* Espacio para la barra de scroll */
+}
+
+.bono-btn-label {
+    position: relative;
+    display: block;
+    flex-shrink: 0; /* Evita que los botones se encojan */
+}
+
+.bono-btn-label .hidden-checkbox {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.bono-btn-label .bono-btn-text {
+    display: block;
+    padding: var(--espacio-s);
+    background-color: var(--blanco);
+    border: 1px solid var(--gris-borde-input);
+    border-radius: var(--radio-borde-m);
+    text-align: center;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all var(--transicion-suave);
+    width: 110px; /* Ancho mínimo para cada botón */
+}
+
+.bono-btn-label .hidden-checkbox:checked + .bono-btn-text {
+    background-color: var(--amarillo-polleria);
+    border-color: var(--amarillo-polleria);
+    color: var(--texto-sobre-amarillo);
+    font-weight: 600;
+}
+
+/* NUEVO: Estilo para la fila de puntos */
+.nomina-detalle.puntos span:last-child {
+    font-weight: 700;
+    color: var(--azul-info);
+}
+
+/* --- Fin de Estilos para la Asistencia --- */
+
 .info-item {
     display: flex;
     justify-content: space-between;

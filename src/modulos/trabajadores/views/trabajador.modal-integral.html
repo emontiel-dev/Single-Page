@@ -3,41 +3,79 @@
         <div class="detalle-header modal-header">
             <h3 id="detalle-trabajador-nombre">Nombre del Trabajador</h3>
             <div class="acciones header-actions">
-                <button class="btn btn-secondary" id="integral-trabajador-volver-btn">Volver</button>
-                <button class="btn btn-primario" id="integral-trabajador-editar-btn">Editar</button>
+                <button class="btn btn-secondary" id="integral-trabajador-cancelar-btn">Cancelar</button>
+                <button class="btn btn-primario" id="integral-trabajador-guardar-btn">Guardar Cambios</button>
             </div>
         </div>
         <div class="modal-body">
-            <div class="detalle-card">
-                <h4>Información General</h4>
-                <div class="info-item">
-                    <strong>Cargo:</strong> <span id="detalle-trabajador-cargo"></span>
+            <!-- Navegación de Pestañas -->
+            <div class="modal-tabs">
+                <button class="tab-link active" data-tab="general">Información General</button>
+                <button class="tab-link" data-tab="asistencia">Asistencia y Nómina</button>
+                <button class="tab-link" data-tab="usuario">Usuario y Permisos</button>
+            </div>
+
+            <!-- Contenido de Pestañas -->
+            <div id="tab-general" class="tab-content active">
+                <div class="form-group">
+                    <label for="trabajador-nombre">Nombre(s)</label>
+                    <input type="text" id="trabajador-nombre" required>
                 </div>
-                <div class="info-item">
-                    <strong>Fecha de Ingreso:</strong> <span id="detalle-trabajador-ingreso"></span>
+                <div class="form-group">
+                    <label for="trabajador-apellidos">Apellidos</label>
+                    <input type="text" id="trabajador-apellidos" required>
                 </div>
-                <div class="info-item">
-                    <strong>Salario Diario:</strong> <span id="detalle-trabajador-salario"></span>
+                <div class="form-group">
+                    <label for="trabajador-cargo">Cargo</label>
+                    <input type="text" id="trabajador-cargo">
                 </div>
-                <div class="info-item">
-                    <strong>Día de Descanso:</strong> <span id="detalle-trabajador-descanso"></span>
+                <div class="form-group">
+                    <label for="trabajador-descanso">Día de Descanso</label>
+                    <select id="trabajador-descanso">
+                        <option value="Lunes">Lunes</option>
+                        <option value="Martes">Martes</option>
+                        <option value="Miércoles">Miércoles</option>
+                        <option value="Jueves">Jueves</option>
+                        <option value="Viernes">Viernes</option>
+                        <option value="Sábado">Sábado</option>
+                        <option value="Domingo">Domingo</option>
+                    </select>
                 </div>
             </div>
 
-            <div class="detalle-card">
-                <h4>Asistencia y Nómina (Semana Actual)</h4>
-                <div class="tabla-container">
-                    <!-- Aquí iría una tabla o grid con los días de la semana para marcar asistencia -->
-                    <p>Próximamente...</p>
+            <div id="tab-asistencia" class="tab-content">
+                <div id="asistencia-grid" class="asistencia-grid"></div>
+                
+                <!-- NUEVO: Contenedor para editar el detalle del día seleccionado -->
+                <div id="asistencia-detalle-dia" class="detalle-dia-container" style="display: none;">
+                    <div class="form-group-inline">
+                        <div class="form-group">
+                            <label for="detalle-dia-entrada">Hora Entrada</label>
+                            <input type="time" id="detalle-dia-entrada">
+                        </div>
+                        <div class="form-group">
+                            <label for="detalle-dia-salida">Hora Salida</label>
+                            <input type="time" id="detalle-dia-salida">
+                        </div>
+                    </div>
+                    <h5>Bonos del Día</h5>
+                    <div id="detalle-dia-bonos-container" class="bonos-scroll-container"></div>
                 </div>
+
+                <div id="nomina-semanal-calculo" class="nomina-calculo"></div>
             </div>
 
-            <div class="detalle-card">
-                <h4>Usuario y Permisos</h4>
-                <div id="detalle-trabajador-usuario-info">
-                    <!-- La información del usuario y sus permisos se renderizará aquí -->
+            <div id="tab-usuario" class="tab-content">
+                <div class="form-group">
+                    <label for="usuario-username">Nombre de Usuario</label>
+                    <input type="text" id="usuario-username" placeholder="Dejar en blanco para no tener usuario">
                 </div>
-                <button id="btn-gestionar-usuario" class="btn btn-secondary" style="margin-top: var(--espacio-m);">Gestionar Usuario</button>
+                <div class="form-group">
+                    <label for="usuario-rol">Rol</label>
+                    <select id="usuario-rol"></select>
+                </div>
+                <h4>Permisos Asignados</h4>
+                <div id="usuario-permisos-container" class="checkbox-grid"></div>
             </div>
         </div>
     </div>

@@ -25,7 +25,6 @@ function handleSave() {
     const nombre = modalElement.querySelector('#trabajador-nombre').value.trim();
     const apellidos = modalElement.querySelector('#trabajador-apellidos').value.trim();
     const cargo = modalElement.querySelector('#trabajador-cargo').value.trim();
-    const salarioDiario = parseFloat(modalElement.querySelector('#trabajador-salario').value) || 0;
     const diaDescanso = modalElement.querySelector('#trabajador-descanso').value;
 
     if (!nombre || !apellidos) {
@@ -40,7 +39,6 @@ function handleSave() {
             trabajadorToUpdate.nombre = nombre;
             trabajadorToUpdate.apellidos = apellidos;
             trabajadorToUpdate.cargo = cargo;
-            trabajadorToUpdate.salarioDiario = salarioDiario;
             trabajadorToUpdate.diaDescanso = diaDescanso;
             console.log('Trabajador actualizado:', trabajadorToUpdate);
         }
@@ -53,7 +51,6 @@ function handleSave() {
             apellidos,
             cargo,
             fechaIngreso: new Date().toISOString().split('T')[0],
-            salarioDiario,
             diaDescanso,
             activo: true,
             usuario: null
