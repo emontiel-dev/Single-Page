@@ -1,0 +1,209 @@
+/* --- Contenedor Principal de Trabajadores --- */
+.trabajadores-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: var(--espacio-m);
+    background-color: var(--gris-fondo-claro);
+}
+
+.trabajadores-container .header {
+    text-align: center;
+    padding: 0 var(--espacio-m);
+}
+
+/* --- KPIs --- */
+.kpi-container {
+    display: flex;
+    gap: var(--espacio-m);
+    justify-content: space-around;
+    padding: 0 var(--espacio-m);
+}
+
+.kpi-card {
+    flex: 1;
+    text-align: center;
+    background: var(--blanco);
+    padding: var(--espacio-m);
+    border-radius: var(--radio-borde-m);
+    box-shadow: var(--sombra-sm);
+}
+
+.kpi-card h3 {
+    margin: 0;
+    font-size: 1.8em;
+}
+
+.kpi-card p {
+    margin: 0;
+    color: var(--gris-texto-secundario);
+    font-size: 0.8em;
+}
+
+/* --- Lista de Trabajadores --- */
+.trabajadores-list-wrapper {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: var(--blanco);
+    border-radius: var(--radio-borde-l);
+    padding: var(--espacio-s);
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-s);
+    margin: 0 var(--espacio-m);
+}
+
+.trabajador-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--espacio-m);
+    background-color: var(--gris-elemento-claro);
+    border-radius: var(--radio-borde-m);
+    cursor: pointer;
+    transition: background-color var(--transicion-suave);
+}
+
+.trabajador-item:hover {
+    background-color: var(--gris-hover-sutil);
+}
+
+.trabajador-info .nombre {
+    font-weight: 600;
+    color: var(--negro-azabache);
+}
+
+.trabajador-info .cargo {
+    font-size: 0.9em;
+    color: var(--gris-texto-secundario);
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+.status-indicator.activo { background-color: var(--verde-accion); }
+.status-indicator.inactivo { background-color: var(--rojo-error); }
+
+
+.fab-add-trabajador {
+    position: fixed; bottom: 110px; right: var(--espacio-l); width: 56px; height: 56px; background-color: var(--amarillo-polleria); color: var(--texto-sobre-amarillo); border-radius: 50%; border: none; box-shadow: var(--sombra-md); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s ease-in-out; z-index: 1000;
+}
+
+
+/* --- Vista de Detalle del Trabajador (Modal Integral) --- */
+.trabajador-detalle-container .detalle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.trabajador-detalle-container .detalle-header h3 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.trabajador-detalle-container .acciones {
+    display: flex;
+    gap: var(--espacio-s);
+}
+
+.detalle-card {
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde-sutil);
+    border-radius: var(--radio-borde-m);
+    padding: var(--espacio-m);
+    box-shadow: var(--sombra-sm);
+}
+
+.detalle-card h4 {
+    margin-top: 0;
+    border-bottom: 1px solid var(--gris-borde-sutil);
+    padding-bottom: var(--espacio-s);
+    margin-bottom: var(--espacio-m);
+}
+
+/* NUEVO: Estilo para los items de información */
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--espacio-xs) 0;
+    font-size: 0.95em;
+}
+
+.info-item strong {
+    color: var(--gris-texto-secundario);
+    font-weight: 500;
+}
+
+.info-item span {
+    font-weight: 600;
+    color: var(--negro-azabache);
+}
+
+/* --- Estilos para el modal de añadir/editar trabajador --- */
+#trabajador-anadir-modal-container .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-l);
+}
+
+/* NUEVO: Estilos para los inputs y selects del formulario */
+#trabajador-anadir-modal-container .form-section h4 {
+    font-size: 1em;
+    color: var(--gris-texto-secundario);
+    font-weight: 600;
+    margin-bottom: var(--espacio-m);
+    padding-bottom: var(--espacio-s);
+    border-bottom: 1px solid var(--gris-borde-sutil);
+}
+
+#trabajador-anadir-modal-container input[type="text"],
+#trabajador-anadir-modal-container input[type="number"],
+#trabajador-anadir-modal-container select {
+    width: 100%;
+    padding: 14px var(--espacio-m);
+    border: 1px solid var(--gris-borde-input);
+    border-radius: var(--radio-borde-m);
+    background-color: var(--gris-elemento-claro);
+    color: var(--negro-azabache);
+    font-size: 1em;
+    font-weight: 500;
+}
+
+#trabajador-anadir-modal-container select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right var(--espacio-m) center;
+    background-size: 16px 12px;
+    padding-right: calc(var(--espacio-m) * 2 + 16px);
+    cursor: pointer;
+}
+
+/* --- Media Queries para Pantallas Grandes --- */
+@media (min-width: 768px) {
+    .trabajadores-container {
+        max-width: 700px;
+        width: 100%;
+        margin: var(--espacio-l) auto;
+        height: auto;
+        position: relative; /* Para el posicionamiento del FAB */
+    }
+
+    .fab-add-trabajador {
+        position: absolute;
+        bottom: var(--espacio-l);
+        right: var(--espacio-l);
+    }
+
+    /* Ajustar el modal de añadir trabajador en pantallas grandes */
+    #trabajador-anadir-modal-container .modal-content {
+        max-width: 900px;
+        width: 100%;
+    }
+}

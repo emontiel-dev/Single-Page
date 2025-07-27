@@ -1,0 +1,47 @@
+<div id="trabajador-anadir-modal-container" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Registrar Nuevo Trabajador</h3>
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="anadir-trabajador-cancelar-btn">Cancelar</button>
+                <button class="btn btn-primario" id="anadir-trabajador-guardar-btn">Guardar</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="modal-section">
+                <h4>Datos Personales</h4>
+                <div class="form-group">
+                    <label for="trabajador-nombre">Nombre(s)</label>
+                    <input type="text" id="trabajador-nombre" placeholder="Ej: Juan" required>
+                </div>
+                <div class="form-group">
+                    <label for="trabajador-apellidos">Apellidos</label>
+                    <input type="text" id="trabajador-apellidos" placeholder="Ej: Pérez García" required>
+                </div>
+            </div>
+            <div class="modal-section">
+                <h4>Datos Laborales</h4>
+                <div class="form-group">
+                    <label for="trabajador-cargo">Cargo</label>
+                    <input type="text" id="trabajador-cargo" placeholder="Ej: Tablajero">
+                </div>
+                <div class="form-group">
+                    <label for="trabajador-salario">Salario Diario</label>
+                    <input type="number" id="trabajador-salario" placeholder="0.00" step="0.01">
+                </div>
+                 <div class="form-group">
+                    <label for="trabajador-descanso">Día de Descanso</label>
+                    <select id="trabajador-descanso">
+                        <option value="Lunes">Lunes</option>
+                        <option value="Martes">Martes</option>
+                        <option value="Miércoles">Miércoles</option>
+                        <option value="Jueves">Jueves</option>
+                        <option value="Viernes">Viernes</option>
+                        <option value="Sábado">Sábado</option>
+                        <option value="Domingo">Domingo</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

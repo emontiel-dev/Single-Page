@@ -3,16 +3,18 @@ import { renderInicio } from './modulos/interfaz/inicio.js';
 import { renderVenta } from './modulos/venta/venta.js';
 import { renderClientes } from './modulos/clientes/clientes.js';
 import { renderPedidosGuardados } from './modulos/pedidos/logica/pedidos.guardados.js';
-import { renderItemsTablajero } from './modulos/items.tablajero/logica/items.tablajero.js'; // <-- AÑADIR
+import { renderItemsTablajero } from './modulos/items.tablajero/logica/items.tablajero.js';
 import { renderCaja } from './modulos/caja/caja.js';
+import { renderTrabajadores } from './modulos/trabajadores/trabajadores.js'; // <-- CORREGIDO
 
 const routes = {
     '/': renderInicio,
     '/venta': renderVenta,
     '/clientes': renderClientes,
     '/pedidos': renderPedidosGuardados,
-    '/items-tablajero': renderItemsTablajero, // <-- AÑADIR
+    '/items-tablajero': renderItemsTablajero,
     '/caja': renderCaja,
+    '/trabajadores': renderTrabajadores,
     // Agrega más rutas aquí
 };
 

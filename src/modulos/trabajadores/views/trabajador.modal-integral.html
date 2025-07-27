@@ -1,0 +1,44 @@
+<div id="trabajador-integral-modal-container" class="modal-overlay">
+    <div class="trabajador-detalle-container modal-content" style="max-width: 700px;">
+        <div class="detalle-header modal-header">
+            <h3 id="detalle-trabajador-nombre">Nombre del Trabajador</h3>
+            <div class="acciones header-actions">
+                <button class="btn btn-secondary" id="integral-trabajador-volver-btn">Volver</button>
+                <button class="btn btn-primario" id="integral-trabajador-editar-btn">Editar</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="detalle-card">
+                <h4>Información General</h4>
+                <div class="info-item">
+                    <strong>Cargo:</strong> <span id="detalle-trabajador-cargo"></span>
+                </div>
+                <div class="info-item">
+                    <strong>Fecha de Ingreso:</strong> <span id="detalle-trabajador-ingreso"></span>
+                </div>
+                <div class="info-item">
+                    <strong>Salario Diario:</strong> <span id="detalle-trabajador-salario"></span>
+                </div>
+                <div class="info-item">
+                    <strong>Día de Descanso:</strong> <span id="detalle-trabajador-descanso"></span>
+                </div>
+            </div>
+
+            <div class="detalle-card">
+                <h4>Asistencia y Nómina (Semana Actual)</h4>
+                <div class="tabla-container">
+                    <!-- Aquí iría una tabla o grid con los días de la semana para marcar asistencia -->
+                    <p>Próximamente...</p>
+                </div>
+            </div>
+
+            <div class="detalle-card">
+                <h4>Usuario y Permisos</h4>
+                <div id="detalle-trabajador-usuario-info">
+                    <!-- La información del usuario y sus permisos se renderizará aquí -->
+                </div>
+                <button id="btn-gestionar-usuario" class="btn btn-secondary" style="margin-top: var(--espacio-m);">Gestionar Usuario</button>
+            </div>
+        </div>
+    </div>
+</div>

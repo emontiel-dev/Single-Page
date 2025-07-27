@@ -1,0 +1,32 @@
+<div id="trabajador-usuario-modal-container" class="modal-overlay">
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+            <h3 id="usuario-modal-title">Gestionar Usuario</h3>
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="usuario-modal-cancelar-btn">Cancelar</button>
+                <button class="btn btn-primario" id="usuario-modal-guardar-btn">Guardar</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="modal-section">
+                <h4>Datos de Acceso</h4>
+                <div class="form-group">
+                    <label for="usuario-username">Nombre de Usuario</label>
+                    <input type="text" id="usuario-username" placeholder="Ej: juanp">
+                </div>
+                <div class="form-group">
+                    <label for="usuario-rol">Rol</label>
+                    <select id="usuario-rol">
+                        <!-- Los roles se cargarán aquí dinámicamente -->
+                    </select>
+                </div>
+            </div>
+            <div class="modal-section">
+                <h4>Permisos Asignados</h4>
+                <div id="usuario-permisos-container" class="checkbox-grid">
+                    <!-- Los permisos se cargarán aquí como checkboxes -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
