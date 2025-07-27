@@ -4,10 +4,8 @@ export const nominaConfig = {
     cargos: {
         'Administrador': { valorHora: 30, valorExtra: 35, horario: null }, // Sin horario definido
         'Procesador': { valorHora: 24, valorExtra: 28, horario: '04:00-14:00' },
-        'Tablajero Principal': { valorHora: 27, valorExtra: 31, horario: '06:30-16:00' },
         'Tablajero': { valorHora: 27, valorExtra: 31, horario: '06:30-16:00' },
         'Cajero': { valorHora: 25, valorExtra: 29, horario: '06:30-16:00' },
-        'Vendedora de Mostrador': { valorHora: 25, valorExtra: 29, horario: '06:30-16:00' },
         'Repartidor': { valorHora: 25, valorExtra: 30, horario: '06:30-16:00' }
     },
     bonos: {
@@ -22,67 +20,87 @@ export const nominaConfig = {
 export const trabajadoresDB = [
     {
         id: 1,
-        nombre: 'Juan',
-        apellidos: 'Pérez García',
-        cargo: 'Tablajero Principal',
+        nombre: 'Juan Valentin',
+        apellidos: 'Herrera Torres',
+        cargo: 'Procesador',
         fechaIngreso: '2023-01-15',
         diaDescanso: 'Martes',
         activo: true,
         asistencia: [],
         usuario: {
-            username: 'juanp',
-            rol: 'admin', // roles: admin, tablajero, vendedor
-            permisos: ['venta', 'caja', 'pedidos', 'items.tablajero', 'clientes', 'trabajadores']
+            username: 'juanv',
+            rol: 'procesador', // roles: admin, tablajero, vendedor
+            permisos: ['pedidos', 'items.tablajero', 'clientes']
         }
     },
     {
         id: 2,
-        nombre: 'Maria',
-        apellidos: 'López Hernández',
-        cargo: 'Vendedora de Mostrador',
+        nombre: 'Nora',
+        apellidos: 'Chavez Cortéz',
+        cargo: 'Tablajero',
         fechaIngreso: '2023-05-20',
-        diaDescanso: 'Miércoles',
+        diaDescanso: 'Viernes',
         activo: true,
         asistencia: [],
         usuario: {
-            username: 'marial',
+            username: 'nora',
             rol: 'vendedor',
-            permisos: ['venta', 'clientes']
+            permisos: ['venta', 'items.tablajero', 'clientes']
         }
     },
     {
         id: 3,
-        nombre: 'Carlos',
-        apellidos: 'Gómez Cruz',
-        cargo: 'Tablajero',
+        nombre: 'Ciro',
+        apellidos: 'Montiel Oropeza',
+        cargo: 'Administrador',
         fechaIngreso: '2024-02-01',
         diaDescanso: 'Jueves',
         activo: true,
         asistencia: [],
         usuario: {
-            username: 'carlosg',
-            rol: 'tablajero',
-            permisos: ['items.tablajero']
+            username: 'ciro',
+            rol: 'admin',
+            permisos: ['venta', 'caja', 'pedidos', 'items.tablajero', 'clientes', 'trabajadores']
         }
     },
     {
         id: 4,
-        nombre: 'Ana',
-        apellidos: 'Martínez Díaz',
-        cargo: 'Cajera',
-        fechaIngreso: '2022-11-10',
-        diaDescanso: 'Lunes',
-        activo: false,
+        nombre: 'Rosy',
+        apellidos: 'Sanchez Perez',
+        cargo: 'Administrador',
+        fechaIngreso: '2025-02-01',
+        diaDescanso: 'Sábado',
+        activo: true,
         asistencia: [],
-        usuario: null
+        usuario: {
+            username: 'rozy',
+            rol: 'admin',
+            permisos: ['venta', 'caja', 'pedidos', 'items.tablajero', 'clientes', 'trabajadores']
+        }
+    },
+    {
+        id: 5,
+        nombre: 'Yesenia',
+        apellidos: 'Aguilar Morales',
+        cargo: 'Cajero',
+        fechaIngreso: '2022-11-10',
+        diaDescanso: 'Miércoles',
+        activo: true,
+        asistencia: [],
+        usuario: {
+            username: 'yess',
+            rol: 'cajero',
+            permisos: ['venta', 'caja', 'pedidos', 'clientes']
+        }
     }
 ];
 
 export const ROLES = {
     ADMIN: 'admin',
-    VENDEDOR: 'vendedor',
+    PROCESADOR: 'procesador',
     TABLAJERO: 'tablajero',
-    CAJERO: 'cajero'
+    CAJERO: 'cajero',
+    REPARTIDOR: 'repartidor'
 };
 
 export const PERMISOS = {

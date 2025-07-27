@@ -293,8 +293,8 @@
 
 /* NUEVO: Estilo para la fila de puntos */
 .nomina-detalle.puntos span:last-child {
-    font-weight: 700;
-    color: var(--azul-info);
+    font-weight: 600;
+    
 }
 
 /* --- Fin de Estilos para la Asistencia --- */
