@@ -53,6 +53,7 @@ function handleSave() {
             fechaIngreso: new Date().toISOString().split('T')[0],
             diaDescanso,
             activo: true,
+            asistencia: [], // <-- AÑADIR ESTA LÍNEA
             usuario: null
         };
         trabajadoresDB.push(nuevoTrabajador);

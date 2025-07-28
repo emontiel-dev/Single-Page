@@ -17,6 +17,8 @@ export const nominaConfig = {
 };
 
 // La estructura de asistencia ahora será: { fecha: 'YYYY-MM-DD', estatus: 'asistio', horaEntrada: 'HH:MM', horaSalida: 'HH:MM', bonos: ['produccion'] }
+// NUEVO: Se puede añadir un objeto `nominaOverrides` a cada trabajador para valores personalizados.
+// Ejemplo: nominaOverrides: { valorHora: 28, horario: '07:00-15:00' }
 export const trabajadoresDB = [
     {
         id: 1,
