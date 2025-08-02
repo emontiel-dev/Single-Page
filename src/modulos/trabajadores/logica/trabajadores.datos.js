@@ -2,11 +2,11 @@ export const nominaConfig = {
     horasNormales: 8,
     diasParaDescansoCompleto: 6,
     cargos: {
-        'Administrador': { valorHora: 30, valorExtra: 35, horario: null }, // Sin horario definido
-        'Procesador': { valorHora: 24, valorExtra: 28, horario: '04:00-14:00' },
-        'Tablajero': { valorHora: 27, valorExtra: 31, horario: '06:30-16:00' },
-        'Cajero': { valorHora: 25, valorExtra: 29, horario: '06:30-16:00' },
-        'Repartidor': { valorHora: 25, valorExtra: 30, horario: '06:30-16:00' }
+        'Administrador': { valorHora: 30, valorExtra: 35, horario: null, rol: 'admin' },
+        'Procesador': { valorHora: 24, valorExtra: 28, horario: '04:00-14:00', rol: 'procesador' },
+        'Tablajero': { valorHora: 27, valorExtra: 31, horario: '06:30-16:00', rol: 'tablajero' },
+        'Cajero': { valorHora: 25, valorExtra: 29, horario: '06:30-16:00', rol: 'cajero' },
+        'Repartidor': { valorHora: 25, valorExtra: 30, horario: '06:30-16:00', rol: 'repartidor' }
     },
     bonos: {
         produccion: { id: 'produccion', descripcion: 'Bono de Producción', tipo: 'monto', valor: 25 },
@@ -31,7 +31,6 @@ export const trabajadoresDB = [
         asistencia: [],
         usuario: {
             username: 'juanv',
-            rol: 'procesador', // roles: admin, tablajero, vendedor
             permisos: ['pedidos', 'items.tablajero', 'clientes']
         }
     },
@@ -46,7 +45,6 @@ export const trabajadoresDB = [
         asistencia: [],
         usuario: {
             username: 'nora',
-            rol: 'vendedor',
             permisos: ['venta', 'items.tablajero', 'clientes']
         }
     },
@@ -61,7 +59,6 @@ export const trabajadoresDB = [
         asistencia: [],
         usuario: {
             username: 'ciro',
-            rol: 'admin',
             permisos: ['venta', 'caja', 'pedidos', 'items.tablajero', 'clientes', 'trabajadores']
         }
     },
@@ -76,7 +73,6 @@ export const trabajadoresDB = [
         asistencia: [],
         usuario: {
             username: 'rozy',
-            rol: 'admin',
             permisos: ['venta', 'caja', 'pedidos', 'items.tablajero', 'clientes', 'trabajadores']
         }
     },

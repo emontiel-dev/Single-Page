@@ -88,12 +88,43 @@
 .status-indicator.inactivo { background-color: var(--rojo-error); }
 
 
+/* MODIFICADO: Estilos del Botón Flotante de Añadir */
 .fab-add-trabajador {
-    position: fixed; bottom: 110px; right: var(--espacio-l); width: 56px; height: 56px; background-color: var(--amarillo-polleria); color: var(--texto-sobre-amarillo); border-radius: 50%; border: none; box-shadow: var(--sombra-md); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s ease-in-out; z-index: 1000;
+    position: fixed;
+    bottom: 110px;
+    right: var(--espacio-l);
+    width: 56px;
+    height: 56px;
+    background-color: var(--amarillo-polleria);
+    color: var(--texto-sobre-amarillo);
+    border-radius: 50%;
+    border: none;
+    box-shadow: var(--sombra-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    z-index: 1000;
+}
+
+.fab-add-trabajador:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* Sombra más pronunciada */
+}
+
+.fab-add-trabajador svg {
+    width: 28px;
+    height: 28px;
 }
 
 
 /* --- Vista de Detalle del Trabajador (Modal Integral) --- */
+.trabajador-detalle-container {
+    border-radius: var(--radio-borde-l); /* Añade bordes redondeados */
+    overflow: hidden; /* Asegura que el contenido interno respete los bordes */
+}
+
 .trabajador-detalle-container .detalle-header {
     display: flex;
     justify-content: space-between;
@@ -239,9 +270,118 @@
     display: flex;
     justify-content: flex-end;
 }
+
+/* MODIFICADO: Estilo específico para el botón de editar en la pestaña */
+#btn-editar-general {
+    width: auto; /* Anular el 100% de .btn */
+    min-width: 120px; /* Un ancho mínimo razonable */
+    padding: var(--espacio-s) var(--espacio-m); /* Hacerlo un poco más pequeño */
+    font-size: 0.9em;
+    background-color: var(--gris-elemento-claro);
+    border-color: var(--gris-borde-input);
+    color: var(--negro-azabache);
+    gap: var(--espacio-s);
+}
+
+#btn-editar-general:hover {
+    background-color: var(--gris-hover-sutil);
+    border-color: var(--amarillo-polleria);
+    color: var(--amarillo-polleria-texto);
+}
+
 /* --- Fin de Estilos para la pestaña General --- */
 
-/* --- NUEVO: Estilos para la Asistencia --- */
+/* --- Estilos para la pestaña Usuario y Permisos --- */
+#tab-usuario {
+    flex-direction: column;
+    gap: var(--espacio-l);
+}
+
+#tab-usuario .form-group-inline {
+    display: flex;
+    gap: var(--espacio-m);
+}
+
+#tab-usuario .form-group-inline .form-group {
+    flex: 1;
+}
+
+#tab-usuario h4 {
+    margin-bottom: calc(var(--espacio-l) * -1 + var(--espacio-s));
+}
+
+/* MODIFICADO: Hacer que la grilla de permisos use dos columnas */
+#usuario-permisos-container.checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--espacio-s) var(--espacio-l); /* Espacio vertical y horizontal */
+}
+
+/* NUEVO: Estilos para los checkboxes personalizados */
+#usuario-permisos-container .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-m);
+    padding: var(--espacio-s);
+    border-radius: var(--radio-borde-m);
+    cursor: pointer;
+    transition: background-color var(--transicion-rapida);
+}
+
+#usuario-permisos-container .checkbox-label:hover {
+    background-color: var(--gris-hover-sutil);
+}
+
+#usuario-permisos-container .checkbox-label input[type="checkbox"] {
+    display: none; /* Ocultar el checkbox nativo */
+}
+
+#usuario-permisos-container .checkbox-label .checkbox-custom {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--gris-borde-input);
+    border-radius: var(--radio-borde-s);
+    background-color: var(--blanco);
+    transition: all var(--transicion-rapida);
+    flex-shrink: 0; /* Evitar que se encoja */
+}
+
+#usuario-permisos-container .checkbox-label input[type="checkbox"]:checked + .checkbox-custom {
+    background-color: var(--amarillo-polleria);
+    border-color: var(--amarillo-polleria);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%233a2d0c' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M2 8l4 4 8-8'/%3e%3c/svg%3e");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 12px 12px;
+}
+
+/* NUEVO: Estilos para los inputs y selects en la pestaña de usuario */
+#tab-usuario input,
+#tab-usuario select {
+    width: 100%;
+    padding: 14px var(--espacio-m);
+    border: 1px solid var(--gris-borde-input);
+    border-radius: var(--radio-borde-m);
+    background-color: var(--gris-elemento-claro);
+    color: var(--negro-azabache);
+    font-size: 1em;
+    font-weight: 500;
+}
+
+#tab-usuario select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right var(--espacio-m) center;
+    background-size: 16px 12px;
+    padding-right: calc(var(--espacio-m) * 2 + 16px);
+    cursor: pointer;
+}
+
+/* --- Estilos para la Asistencia --- */
 .asistencia-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -419,6 +559,16 @@
     gap: var(--espacio-l);
 }
 
+/* NUEVO: Estilos para la fila de formulario */
+#trabajador-anadir-modal-container .form-row {
+    display: flex;
+    gap: var(--espacio-m);
+}
+
+#trabajador-anadir-modal-container .form-row .form-group {
+    flex: 1; /* Hace que cada campo ocupe el mismo espacio */
+}
+
 /* NUEVO: Estilos para los inputs y selects del formulario */
 #trabajador-anadir-modal-container .form-section h4 {
     font-size: 1em;
@@ -442,6 +592,7 @@
     font-weight: 500;
 }
 
+/* NUEVO: Estilo para la flecha del select en el modal de añadir */
 #trabajador-anadir-modal-container select {
     appearance: none;
     -webkit-appearance: none;
@@ -465,14 +616,14 @@
     }
 
     .fab-add-trabajador {
-        position: absolute;
-        bottom: var(--espacio-l);
+        position: fixed;
+        bottom: 110px;
         right: var(--espacio-l);
     }
 
     /* Ajustar el modal de añadir trabajador en pantallas grandes */
     #trabajador-anadir-modal-container .modal-content {
-        max-width: 900px;
+        max-width: 700px;
         width: 100%;
     }
 }

@@ -35,49 +35,9 @@ function switchTab(event) {
     modalElement.querySelector(`#tab-${tabId}`).classList.add('active');
 }
 
-// --- LÓGICA DE GUARDADO CENTRALIZADA (MODIFICADA) ---
-function handleSave() {
-    // Guardar datos de la pestaña "Información General"
-    currentTrabajador.nombre = modalElement.querySelector('#trabajador-nombre').value.trim();
-    currentTrabajador.apellidos = modalElement.querySelector('#trabajador-apellidos').value.trim();
-    currentTrabajador.cargo = modalElement.querySelector('#trabajador-cargo').value.trim();
-    currentTrabajador.diaDescanso = modalElement.querySelector('#trabajador-descanso').value;
+// --- ELIMINADA: La función handleSave ya no es necesaria ---
 
-    // Lógica para guardar overrides de nómina
-    const baseConfig = nominaConfig.cargos[currentTrabajador.cargo] || {};
-    const overrides = currentTrabajador.nominaOverrides || {};
-
-    const newHorario = modalElement.querySelector('#trabajador-horario').value.trim();
-    const newValorHora = parseFloat(modalElement.querySelector('#trabajador-valor-hora').value);
-    const newValorExtra = parseFloat(modalElement.querySelector('#trabajador-valor-extra').value);
-
-    // Guardar solo si es diferente del default
-    if (newHorario && newHorario !== baseConfig.horario) overrides.horario = newHorario; else delete overrides.horario;
-    if (!isNaN(newValorHora) && newValorHora !== baseConfig.valorHora) overrides.valorHora = newValorHora; else delete overrides.valorHora;
-    if (!isNaN(newValorExtra) && newValorExtra !== baseConfig.valorExtra) overrides.valorExtra = newValorExtra; else delete overrides.valorExtra;
-
-    // Si no hay overrides, asegurarse de que el objeto sea null
-    currentTrabajador.nominaOverrides = Object.keys(overrides).length > 0 ? overrides : null;
-
-    // Guardar datos de la pestaña "Usuario y Permisos"
-    const username = modalElement.querySelector('#usuario-username').value.trim();
-    if (!username) {
-        currentTrabajador.usuario = null;
-    } else {
-        if (!currentTrabajador.usuario) currentTrabajador.usuario = {};
-        currentTrabajador.usuario.username = username;
-        currentTrabajador.usuario.rol = modalElement.querySelector('#usuario-rol').value;
-        const permisosSeleccionados = [];
-        modalElement.querySelectorAll('#usuario-permisos-container input:checked').forEach(cb => permisosSeleccionados.push(cb.value));
-        currentTrabajador.usuario.permisos = permisosSeleccionados;
-    }
-
-    console.log('Trabajador actualizado:', currentTrabajador);
-    if (onUpdateCallback) onUpdateCallback();
-    closeAndRemoveModal();
-}
-
-// --- LÓGICA DE RENDERIZADO DE PESTAÑAS (MODIFICADA) ---
+// --- LÓGICA DE RENDERIZADO DE PESTAÑAS (Sin cambios) ---
 function populateGeneralTab() {
     const effectiveConfig = getEffectiveNominaConfig(currentTrabajador);
 
@@ -117,42 +77,41 @@ function toggleGeneralEdit(isEditing) {
     const displayView = modalElement.querySelector('#general-display-view');
     const editView = modalElement.querySelector('#general-edit-view');
     const editButton = modalElement.querySelector('#btn-editar-general');
+    const buttonIcon = editButton.querySelector('svg');
+    const buttonText = editButton.querySelector('span');
 
     if (isEditing) {
         displayView.style.display = 'none';
         editView.style.display = 'grid';
-        editButton.textContent = 'Cancelar';
+        buttonText.textContent = 'Cancelar';
+        if (buttonIcon) buttonIcon.style.display = 'none';
     } else {
         displayView.style.display = 'grid';
         editView.style.display = 'none';
-        editButton.textContent = 'Editar';
+        buttonText.textContent = 'Editar';
+        if (buttonIcon) buttonIcon.style.display = 'inline-block';
         // Revertir cambios no guardados al cancelar
         populateGeneralTab();
     }
 }
 
 function populateUsuarioTab() {
-    const rolSelect = modalElement.querySelector('#usuario-rol');
-    rolSelect.innerHTML = Object.values(ROLES).map(rol => `<option value="${rol}">${rol.charAt(0).toUpperCase() + rol.slice(1)}</option>`).join('');
-
     const permisosContainer = modalElement.querySelector('#usuario-permisos-container');
-    permisosContainer.innerHTML = Object.values(PERMISOS).map(p => `
-        <div class="form-group-checkbox">
-            <input type="checkbox" id="permiso-${p.id}" value="${p.id}">
-            <label for="permiso-${p.id}">${p.descripcion}</label>
-        </div>`).join('');
+    permisosContainer.innerHTML = Object.values(PERMISOS).map(permiso => {
+        const isChecked = (currentTrabajador.usuario && currentTrabajador.usuario.permisos.includes(permiso.id)) ? 'checked' : '';
+        return `
+            <label class="checkbox-label">
+                <input type="checkbox" value="${permiso.id}" ${isChecked}>
+                <span class="checkbox-custom"></span>
+                <span>${permiso.descripcion}</span>
+            </label>
+        `;
+    }).join('');
 
     if (currentTrabajador.usuario) {
         modalElement.querySelector('#usuario-username').value = currentTrabajador.usuario.username;
-        rolSelect.value = currentTrabajador.usuario.rol;
-        currentTrabajador.usuario.permisos.forEach(permisoId => {
-            const checkbox = modalElement.querySelector(`#permiso-${permisoId}`);
-            if (checkbox) checkbox.checked = true;
-        });
     }
 }
-
-// --- LÓGICA DE ASISTENCIA REFACTORIZADA ---
 
 /** Obtiene las fechas de la semana actual (Dom-Sáb) */
 function getSemanaActual() {
@@ -355,39 +314,83 @@ export async function openTrabajadorIntegralModal(trabajadorId, onUpdate) {
     modalElement.querySelector('#detalle-trabajador-nombre').textContent = `${currentTrabajador.nombre} ${currentTrabajador.apellidos}`;
     populateGeneralTab();
     populateUsuarioTab();
-    renderAsistenciaYNomina(); // La función de asistencia ya existente
+    renderAsistenciaYNomina();
 
-    // Configurar Listeners
+    // --- LISTENERS REFACTORIZADOS ---
     modalElement.querySelector('.modal-tabs').addEventListener('click', switchTab);
-    modalElement.querySelector('#integral-trabajador-guardar-btn').addEventListener('click', handleSave);
-    modalElement.querySelector('#integral-trabajador-cancelar-btn').addEventListener('click', closeAndRemoveModal);
+    modalElement.querySelector('#integral-trabajador-cerrar-btn').addEventListener('click', closeAndRemoveModal);
     
-    // Listener para el nuevo botón de editar
-    const editButton = modalElement.querySelector('#btn-editar-general');
-    editButton.addEventListener('click', () => {
-        const isCurrentlyEditing = editButton.textContent === 'Cancelar';
+    // Listener para el botón de editar
+    modalElement.querySelector('#btn-editar-general').addEventListener('click', (event) => {
+        // CORRECCIÓN: Usar el span interno para una detección más fiable del estado.
+        const button = event.currentTarget;
+        const buttonText = button.querySelector('span');
+        const isCurrentlyEditing = buttonText.textContent.trim() === 'Cancelar';
         toggleGeneralEdit(!isCurrentlyEditing);
     });
 
-    // Listener para el cambio de cargo
-    modalElement.querySelector('#trabajador-cargo').addEventListener('change', (event) => {
-        const nuevoCargo = event.target.value;
-        const config = nominaConfig.cargos[nuevoCargo];
-        if (config) {
-            modalElement.querySelector('#trabajador-horario').value = config.horario || '';
-            modalElement.querySelector('#trabajador-valor-hora').value = config.valorHora;
-            modalElement.querySelector('#trabajador-valor-extra').value = config.valorExtra;
+    // Listeners para guardado automático en "Información General"
+    const editView = modalElement.querySelector('#general-edit-view');
+    editView.addEventListener('change', (event) => {
+        const target = event.target;
+        const field = target.id.replace('trabajador-', '');
+
+        if (['nombre', 'apellidos', 'cargo', 'diaDescanso'].includes(field)) {
+            currentTrabajador[field] = target.value;
+            if (field === 'nombre' || field === 'apellidos') {
+                 modalElement.querySelector('#detalle-trabajador-nombre').textContent = `${currentTrabajador.nombre} ${currentTrabajador.apellidos}`;
+            }
+            // Si cambia el cargo, y el trabajador tiene un usuario, actualizamos su rol.
+            if (field === 'cargo' && currentTrabajador.usuario) {
+                const newCargoConfig = nominaConfig.cargos[target.value];
+                currentTrabajador.usuario.rol = newCargoConfig ? newCargoConfig.rol : null;
+            }
+        } else if (['horario', 'valor-hora', 'valor-extra'].includes(field)) {
+            const overrides = currentTrabajador.nominaOverrides || {};
+            const baseConfig = nominaConfig.cargos[currentTrabajador.cargo] || {};
+            const keyMap = { 'valor-hora': 'valorHora', 'valor-extra': 'valorExtra' };
+            const overrideKey = keyMap[field] || field;
+            
+            let value = target.type === 'number' ? parseFloat(target.value) : target.value.trim();
+
+            if (value !== baseConfig[overrideKey]) {
+                overrides[overrideKey] = value;
+            } else {
+                delete overrides[overrideKey];
+            }
+            currentTrabajador.nominaOverrides = Object.keys(overrides).length > 0 ? overrides : null;
         }
+        
+        if (onUpdateCallback) onUpdateCallback();
+        console.log('Trabajador actualizado (auto-save):', currentTrabajador);
     });
 
+    // Listeners para guardado automático en "Usuario y Permisos"
+    const usuarioTab = modalElement.querySelector('#tab-usuario');
+    usuarioTab.addEventListener('change', () => {
+        const username = modalElement.querySelector('#usuario-username').value.trim();
+        if (!username) {
+            currentTrabajador.usuario = null;
+        } else {
+            if (!currentTrabajador.usuario) currentTrabajador.usuario = { permisos: [] };
+            
+            const cargoConfig = nominaConfig.cargos[currentTrabajador.cargo];
+
+            currentTrabajador.usuario.username = username;
+            currentTrabajador.usuario.rol = cargoConfig ? cargoConfig.rol : null; // Asignar rol desde el cargo
+            const permisosSeleccionados = [];
+            modalElement.querySelectorAll('#usuario-permisos-container input:checked').forEach(cb => permisosSeleccionados.push(cb.value));
+            currentTrabajador.usuario.permisos = permisosSeleccionados;
+        }
+        if (onUpdateCallback) onUpdateCallback();
+        console.log('Usuario actualizado (auto-save):', currentTrabajador.usuario);
+    });
+
+    // Listeners de Asistencia (sin cambios)
     modalElement.querySelector('#asistencia-grid').addEventListener('click', handleAsistenciaClick);
-    
-    // NUEVOS LISTENERS para el detalle del día
-    const detalleContainer = modalElement.querySelector('#asistencia-detalle-dia');
-    detalleContainer.addEventListener('change', handleDetalleDiaChange); // 'change' es más eficiente que 'input' para time/checkbox
+    modalElement.querySelector('#asistencia-detalle-dia').addEventListener('change', handleDetalleDiaChange);
 
     modalElement.addEventListener('click', e => e.target === modalElement && closeAndRemoveModal());
-
     setTimeout(() => modalElement.classList.add('visible'), 10);
 }
 

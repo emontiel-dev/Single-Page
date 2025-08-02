@@ -1,4 +1,4 @@
-import { trabajadoresDB } from './trabajadores.datos.js';
+import { trabajadoresDB, nominaConfig } from './trabajadores.datos.js';
 
 let modalElement = null;
 let onSaveCallback = null;
@@ -22,8 +22,8 @@ function closeAndRemoveModal() {
  * Maneja el evento de clic en el botón "Guardar".
  */
 function handleSave() {
-    const nombre = modalElement.querySelector('#trabajador-nombre').value.trim();
-    const apellidos = modalElement.querySelector('#trabajador-apellidos').value.trim();
+    const nombre = modalElement.querySelector('#anadir-trabajador-nombre').value.trim();
+    const apellidos = modalElement.querySelector('#anadir-trabajador-apellidos').value.trim();
     const cargo = modalElement.querySelector('#trabajador-cargo').value.trim();
     const diaDescanso = modalElement.querySelector('#trabajador-descanso').value;
 
@@ -85,6 +85,13 @@ export async function openTrabajadorModal(callback, trabajador = null) {
         modalElement = document.getElementById('trabajador-anadir-modal-container');
         const headerTitle = modalElement.querySelector('.modal-header h3');
         const saveButton = modalElement.querySelector('#anadir-trabajador-guardar-btn');
+        
+        // --- NUEVO: Poblar el select de cargos ---
+        const cargoSelect = modalElement.querySelector('#trabajador-cargo');
+        const cargos = Object.keys(nominaConfig.cargos);
+        cargoSelect.innerHTML = '<option value="" disabled selected>Selecciona un cargo</option>' + 
+                                cargos.map(cargo => `<option value="${cargo}">${cargo}</option>`).join('');
+        // --- Fin del nuevo código ---
 
         if (trabajador) {
             // Poblar para editar
@@ -92,8 +99,7 @@ export async function openTrabajadorModal(callback, trabajador = null) {
             saveButton.textContent = 'Guardar Cambios';
             modalElement.querySelector('#trabajador-nombre').value = trabajador.nombre;
             modalElement.querySelector('#trabajador-apellidos').value = trabajador.apellidos;
-            modalElement.querySelector('#trabajador-cargo').value = trabajador.cargo;
-            modalElement.querySelector('#trabajador-salario').value = trabajador.salarioDiario;
+            cargoSelect.value = trabajador.cargo; // <-- Se actualiza para usar el select
             modalElement.querySelector('#trabajador-descanso').value = trabajador.diaDescanso;
         } else {
             // Configurar para crear
