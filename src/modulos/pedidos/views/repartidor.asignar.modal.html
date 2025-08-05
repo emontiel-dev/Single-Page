@@ -2,38 +2,47 @@
 <div id="repartidor-asignar-modal-container" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
-            <h2>Asignar Repartidor</h2>
+            <h2>Preparar Entrega</h2>
             <button class="close-btn" id="repartidor-asignar-modal-cerrar-btn">&times;</button>
         </div>
         <div class="modal-body">
-            <!-- NUEVO: Info del total del pedido -->
             <div class="cobrar-info">
                 <span>Total del Pedido:</span>
                 <strong id="repartidor-pedido-total">$0.00</strong>
             </div>
 
             <div class="form-group">
-                <label for="repartidor-select">Seleccionar Repartidor:</label>
+                <label for="repartidor-select">Asignar a Repartidor:</label>
                 <select id="repartidor-select" class="form-control">
                     <option value="">-- Elija un repartidor --</option>
                 </select>
             </div>
-            <!-- REEMPLAZAMOS EL INPUT DE CAMBIO POR LA INTERFAZ DE DENOMINACIONES -->
-            <div class="form-group">
-                <label>Cambio Entregado al Repartidor:</label>
-                <div id="repartidor-cambio-seleccion" class="pago-seleccion-container">
-                    <!-- Píldoras de cambio entregado se renderizan aquí -->
+
+            <h4 class="modal-section-title">Cliente Paga Con:</h4>
+            <div id="repartidor-pago-seleccion" class="pago-seleccion-container">
+                <!-- Píldoras de pago se renderizan aquí -->
+            </div>
+            <div id="repartidor-pago-grid" class="denominaciones-grid-botones">
+                <!-- Botones de denominaciones se renderizan aquí -->
+            </div>
+
+            <div id="repartidor-cambio-section">
+                <h4 class="modal-section-title">Cambio a Preparar:</h4>
+                <div class="cobrar-info cambio-total">
+                    <span>Total Cambio:</span>
+                    <strong id="repartidor-total-cambio">$0.00</strong>
                 </div>
-                <div id="repartidor-cambio-grid" class="denominaciones-grid-botones">
-                    <!-- Botones de denominaciones se renderizan aquí -->
+                <div id="repartidor-cambio-grid" class="denominaciones-grid-info">
+                    <!-- Denominaciones de cambio se renderizan aquí -->
+                </div>
+                <div id="repartidor-cambio-insuficiente" class="alerta-error" style="display: none;">
+                    No hay suficientes denominaciones en caja para preparar el cambio.
                 </div>
             </div>
-            <div id="repartidor-asignar-alerta" class="alerta-error" style="display: none;"></div>
         </div>
         <div class="modal-footer">
-            <!-- AÑADIMOS UN TOTAL PARA VERIFICAR -->
-            <span>Total Cambio:</span>
-            <strong id="repartidor-cambio-total">$0.00</strong>
+            <span>Total Pagado:</span>
+            <strong id="repartidor-total-pagado">$0.00</strong>
             <button class="btn btn-primary" id="repartidor-asignar-modal-confirmar-btn">Confirmar y Poner en Ruta</button>
         </div>
     </div>

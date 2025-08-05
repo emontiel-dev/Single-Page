@@ -212,6 +212,36 @@ export function registrarEgresoParaRepartidor(repartidor, montoCambio, denominac
     }
 }
 
+// --- NUEVA FUNCIÓN PARA PREPARAR CAMBIO DE ENTREGA ---
+export function registrarCambioParaEntrega(pedido, repartidor, cambioDenominaciones) {
+    let montoCambio = 0;
+    // 1. Actualizar (descontar) el stock de denominaciones
+    for (const valor in cambioDenominaciones) {
+        const cantidad = cambioDenominaciones[valor];
+        if (stockDenominaciones.hasOwnProperty(valor)) {
+            stockDenominaciones[valor] -= cantidad;
+            montoCambio += valor * cantidad;
+        }
+    }
+
+    // 2. Registrar el movimiento para seguimiento
+    const nuevoMovimiento = {
+        origen: 'Sistema',
+        hora: new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }),
+        tipo: `Egreso (Cambio p/ Ped. ${pedido.id} - ${repartidor.nombre})`,
+        monto: -montoCambio,
+        tipoMonto: 'egreso'
+    };
+    movimientos.unshift(nuevoMovimiento);
+
+    // 3. Re-renderizar la UI de caja si está visible
+    if (document.getElementById('caja-movimientos-lista')) {
+        renderStock();
+        renderMovimientos();
+    }
+}
+
+
 // --- NUEVA FUNCIÓN DE VALIDACIÓN CENTRALIZADA ---
 /**
  * Valida una selección de denominaciones contra un monto objetivo y el stock disponible.
@@ -237,7 +267,7 @@ export function validarSeleccionDenominaciones(montoObjetivo, denominacionesSele
         }
     }
 
-    // 2. Validar si el monto seleccionado coincide con el objetivo
+    // 2. Validar si el monto seleccionado coincide con el objetivo (solo si el objetivo es mayor a cero)
     if (montoObjetivo > 0 && parseFloat(totalSeleccionado.toFixed(2)) !== parseFloat(montoObjetivo.toFixed(2))) {
         return {
             esValido: false,

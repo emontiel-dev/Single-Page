@@ -1,91 +1,119 @@
 // filepath: src/modulos/pedidos/logica/repartidor.asignar.modal.js
 import { trabajadoresDB as trabajadores } from '../../trabajadores/logica/trabajadores.datos.js';
 import { FASES_PEDIDO } from '../logica/pedidos.fases.datos.js';
-import { registrarEgresoParaRepartidor } from '../../caja/logica/caja.logica.js';
-// --- AÑADIR IMPORTACIONES DE LAS NUEVAS FUNCIONES REUTILIZABLES ---
+// --- MODIFICADO: Importar lógica de caja necesaria ---
+import { registrarCambioParaEntrega, calcularCambioGreedy, denominacionColors } from '../../caja/logica/caja.logica.js';
 import { renderDenominacionBotones, renderDenominacionSeleccion } from '../../caja/logica/caja.cobrar.modal.js';
 
 let modalElement = null;
 let currentPedido = null;
 let onCompleteCallback = null;
-let cambioSeleccionado = []; // <-- NUEVO: Estado para las denominaciones del cambio
+let pagoSeleccionado = []; // <-- Renombrado de 'cambioSeleccionado' a 'pagoSeleccionado'
 
 function closeAsignarModal() {
     if (modalElement) {
         modalElement.remove();
         modalElement = null;
-        cambioSeleccionado = []; // Limpiar estado al cerrar
+        pagoSeleccionado = []; // Limpiar estado
     }
 }
 
-// --- NUEVAS FUNCIONES PARA MANEJAR LA SELECCIÓN DE DENOMINACIONES ---
-function updateTotalDisplay() {
-    const total = cambioSeleccionado.reduce((acc, val) => acc + val, 0);
-    modalElement.querySelector('#repartidor-cambio-total').textContent = `$${total.toFixed(2)}`;
+// --- LÓGICA REFACTORIZADA ---
+function updateAsignacionState() {
+    const totalPedido = currentPedido.items.reduce((acc, item) => acc + item.cost, 0);
+    const totalPagado = pagoSeleccionado.reduce((acc, val) => acc + val, 0);
+    const cambio = totalPagado - totalPedido;
+
+    modalElement.querySelector('#repartidor-total-pagado').textContent = `$${totalPagado.toFixed(2)}`;
+    
+    const confirmarBtn = modalElement.querySelector('#repartidor-asignar-modal-confirmar-btn');
+    const alertaInsuficiente = modalElement.querySelector('#repartidor-cambio-insuficiente');
+    const cambioGrid = modalElement.querySelector('#repartidor-cambio-grid');
+
+    if (cambio < 0) {
+        modalElement.querySelector('#repartidor-total-cambio').textContent = '$0.00';
+        cambioGrid.innerHTML = '<p style="width: 100%; text-align: center; font-size: 0.9em; color: var(--gris-texto-secundario);">El pago es insuficiente.</p>';
+        confirmarBtn.disabled = true;
+        alertaInsuficiente.style.display = 'none';
+        return;
+    }
+
+    modalElement.querySelector('#repartidor-total-cambio').textContent = `$${cambio.toFixed(2)}`;
+    const resultadoCambio = calcularCambioGreedy(cambio);
+
+    if (resultadoCambio.success) {
+        renderCambioGrid(cambioGrid, resultadoCambio.cambioDenominaciones);
+        alertaInsuficiente.style.display = 'none';
+        confirmarBtn.disabled = false;
+    } else {
+        cambioGrid.innerHTML = '';
+        alertaInsuficiente.style.display = 'block';
+        confirmarBtn.disabled = true;
+    }
+}
+
+function renderCambioGrid(grid, cambio) {
+    grid.innerHTML = '';
+    if (!cambio || Object.keys(cambio).length === 0) {
+        grid.innerHTML = '<p style="width: 100%; text-align: center; font-size: 0.9em; color: var(--gris-texto-secundario);">No se requiere cambio.</p>';
+        return;
+    }
+    // Lógica de renderizado (idéntica a caja.cobrar.modal.js)
+    Object.entries(cambio).sort((a, b) => Number(b[0]) - Number(a[0])).forEach(([valor, cantidad]) => {
+        const item = document.createElement('div');
+        item.className = 'pago-seleccion-item';
+        // --- AÑADIDO: Aplicar color de fondo ---
+        item.style.backgroundColor = denominacionColors[valor] || '#7f8c8d';
+        item.textContent = `${valor} x ${cantidad}`;
+        grid.appendChild(item);
+    });
 }
 
 function handleDenominacionClick(event) {
     const button = event.target.closest('.denominacion-btn');
     if (!button) return;
-    cambioSeleccionado.push(parseFloat(button.dataset.valor));
-    renderDenominacionSeleccion(modalElement.querySelector('#repartidor-cambio-seleccion'), cambioSeleccionado);
-    updateTotalDisplay();
+    pagoSeleccionado.push(parseFloat(button.dataset.valor));
+    renderDenominacionSeleccion(modalElement.querySelector('#repartidor-pago-seleccion'), pagoSeleccionado);
+    updateAsignacionState();
 }
 
 function handleRemoverDenominacionClick(event) {
     if (!event.target.classList.contains('remover-denominacion-btn')) return;
     const valor = parseFloat(event.target.dataset.valor);
-    const index = cambioSeleccionado.lastIndexOf(valor);
-    if (index > -1) {
-        cambioSeleccionado.splice(index, 1);
-    }
-    renderDenominacionSeleccion(modalElement.querySelector('#repartidor-cambio-seleccion'), cambioSeleccionado);
-    updateTotalDisplay();
+    const index = pagoSeleccionado.lastIndexOf(valor);
+    if (index > -1) pagoSeleccionado.splice(index, 1);
+    renderDenominacionSeleccion(modalElement.querySelector('#repartidor-pago-seleccion'), pagoSeleccionado);
+    updateAsignacionState();
 }
-
 
 async function handleConfirmarAsignacion() {
     const repartidorId = modalElement.querySelector('#repartidor-select').value;
-    // --- MODIFICADO: Calcular el total desde el array de selección ---
-    const cambioEntregado = cambioSeleccionado.reduce((acc, val) => acc + val, 0);
-    const alerta = modalElement.querySelector('#repartidor-asignar-alerta');
-
     if (!repartidorId) {
-        alerta.textContent = 'Debe seleccionar un repartidor.';
-        alerta.style.display = 'block';
+        alert('Debe seleccionar un repartidor.');
+        return;
+    }
+
+    const totalPedido = currentPedido.items.reduce((acc, item) => acc + item.cost, 0);
+    const totalPagado = pagoSeleccionado.reduce((acc, val) => acc + val, 0);
+    const cambio = totalPagado - totalPedido;
+    const resultadoCambio = calcularCambioGreedy(cambio);
+
+    if (cambio < 0 || !resultadoCambio.success) {
+        alert('No se puede confirmar. Verifique el monto pagado o el cambio disponible en caja.');
         return;
     }
 
     const repartidor = trabajadores.find(t => t.id === repartidorId);
-    if (!repartidor) {
-        alerta.textContent = 'El repartidor seleccionado no es válido.';
-        alerta.style.display = 'block';
-        return;
-    }
-
-    // Asignar repartidor y cambio al pedido
-    currentPedido.repartidorAsignado = {
-        id: repartidor.id,
-        nombre: repartidor.nombre
-    };
-    currentPedido.cambioEntregado = cambioEntregado;
+    
+    // Guardar información en el pedido
+    currentPedido.repartidorAsignado = { id: repartidor.id, nombre: repartidor.nombre };
+    currentPedido.cambioPreparado = resultadoCambio.cambioDenominaciones;
     currentPedido.faseId = FASES_PEDIDO.EN_RUTA.id;
 
     // Registrar el egreso del cambio en caja
-    if (cambioEntregado > 0) {
-        // --- NUEVO: Crear objeto de denominaciones para un registro preciso en caja ---
-        const denominacionesEgreso = cambioSeleccionado.reduce((acc, valor) => {
-            acc[valor] = (acc[valor] || 0) + 1;
-            return acc;
-        }, {});
-        registrarEgresoParaRepartidor(repartidor, cambioEntregado, denominacionesEgreso);
-    }
+    registrarCambioParaEntrega(currentPedido, repartidor, resultadoCambio.cambioDenominaciones);
 
-    // Ejecutar callback para refrescar la lista de pedidos
-    if (onCompleteCallback) {
-        onCompleteCallback();
-    }
-
+    if (onCompleteCallback) onCompleteCallback();
     closeAsignarModal();
 }
 
@@ -100,11 +128,9 @@ export async function openAsignarRepartidorModal(pedido, callback) {
         document.body.insertAdjacentHTML('beforeend', await response.text());
         modalElement = document.getElementById('repartidor-asignar-modal-container');
 
-        // --- NUEVO: Calcular y mostrar el total del pedido ---
         const totalPedido = currentPedido.items.reduce((acc, item) => acc + item.cost, 0);
         modalElement.querySelector('#repartidor-pedido-total').textContent = `$${Math.round(totalPedido).toFixed(2)}`;
 
-        // Poblar select con repartidores
         const select = modalElement.querySelector('#repartidor-select');
         const repartidores = trabajadores.filter(t => t.cargo === 'Repartidor' && t.activo);
         repartidores.forEach(rep => {
@@ -114,13 +140,12 @@ export async function openAsignarRepartidorModal(pedido, callback) {
             select.appendChild(option);
         });
 
-        // --- NUEVO: Renderizar botones de denominaciones y añadir listeners ---
-        renderDenominacionBotones(modalElement.querySelector('#repartidor-cambio-grid'));
-        modalElement.querySelector('#repartidor-cambio-grid').addEventListener('click', handleDenominacionClick);
-        modalElement.querySelector('#repartidor-cambio-seleccion').addEventListener('click', handleRemoverDenominacionClick);
-
+        renderDenominacionBotones(modalElement.querySelector('#repartidor-pago-grid'));
+        updateAsignacionState();
 
         // Listeners
+        modalElement.querySelector('#repartidor-pago-grid').addEventListener('click', handleDenominacionClick);
+        modalElement.querySelector('#repartidor-pago-seleccion').addEventListener('click', handleRemoverDenominacionClick);
         modalElement.querySelector('#repartidor-asignar-modal-cerrar-btn').addEventListener('click', closeAsignarModal);
         modalElement.querySelector('#repartidor-asignar-modal-confirmar-btn').addEventListener('click', handleConfirmarAsignacion);
 
