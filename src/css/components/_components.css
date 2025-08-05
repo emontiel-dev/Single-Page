@@ -78,7 +78,7 @@
 /* --- Other Generic Components --- */
 .table-container { overflow-x: auto; margin-bottom: var(--espacio-xl); border-radius: var(--radio-borde-l); background-color: var(--gris-elemento-claro); box-shadow: var(--sombra-sm); }
 .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: var(--espacio-s); margin-top: var(--espacio-l); }
-.product-btn { padding: var(--espacio-s); font-size: .8em; height: 80px; display: flex; flex-direction: column; justify-content: center; align-items: center; line-height: 1.2; border: 1px solid var(--gris-borde-input); background: var(--blanco); border-radius: var(--radio-borde-m); cursor: pointer; transition: var(--transicion-suave); }
+.product-btn { padding: var(--espacio-s); font-size: .8em; height: 80px; display: flex; flex-direction: column; justify-content: center; align-items: center; line-height: 1.2; border: 1px solid var(--gris-borde-input); background: var(--blanco); border-radius: var(--radio-borde-xl); cursor: pointer; transition: var(--transicion-suave); }
 .product-btn:hover { transform: translateY(-3px); box-shadow: var(--sombra-md); }
 .product-btn span { font-size: 1.4em; font-weight: 700; color: var(--amarillo-polleria); }
 .personalization-group { margin-bottom: var(--espacio-l); border: 1px solid var(--gris-borde-sutil); border-radius: var(--radio-borde-m); padding: var(--espacio-m); }

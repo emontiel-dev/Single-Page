@@ -7,27 +7,25 @@ import { renderCatalogo } from './logica/catalogo.js';
 import { renderCarrito } from './logica/carrito.js'; // Importamos la función de renderizado del carrito
 
 export function renderVenta(container) {
-    // Limpiar el contenedor principal de la vista de venta
+    // Limpiar el contenedor principal de la aplicación
     container.innerHTML = '';
 
-    // Crear un contenedor para el carrito
-    const carritoContainer = document.createElement('div');
-    carritoContainer.id = 'carrito-section';
-    // Añadir el contenedor del carrito PRIMERO
-    container.appendChild(carritoContainer);
+    // Crear un wrapper específico para la vista de venta que contendrá nuestro layout
+    const ventaLayout = document.createElement('div');
+    ventaLayout.className = 'venta-layout'; // Aplicar la clase de layout a este wrapper
 
-    // Renderizar el carrito dentro de su contenedor
-    renderCarrito(carritoContainer);
-
-    // Crear un contenedor para el catálogo
+    // Renderizar el catálogo y añadirlo al wrapper de venta
     const catalogoContainer = document.createElement('div');
     catalogoContainer.id = 'catalogo-section';
-    // Añadir el contenedor del catálogo DESPUÉS del carrito
-    container.appendChild(catalogoContainer);
-
-    // Renderizar el catálogo dentro de su contenedor
+    ventaLayout.appendChild(catalogoContainer);
     renderCatalogo(catalogoContainer);
 
+    // Renderizar el carrito y añadirlo también al wrapper de venta
+    const carritoContainer = document.createElement('div');
+    carritoContainer.id = 'carrito-section';
+    ventaLayout.appendChild(carritoContainer);
+    renderCarrito(carritoContainer);
 
-    // Agrega aquí la renderización de otras partes de la interfaz de venta si es necesario
+    // Finalmente, añadir el layout de venta completo al contenedor principal de la aplicación
+    container.appendChild(ventaLayout);
 }
