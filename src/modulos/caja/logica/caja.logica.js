@@ -186,6 +186,75 @@ export function registrarRecargaDenominaciones(denominacionesEgreso, denominacio
     renderMovimientos();
 }
 
+// --- NUEVA FUNCIÓN PARA CAMBIO DE REPARTIDOR (AHORA ROBUSTA) ---
+export function registrarEgresoParaRepartidor(repartidor, montoCambio, denominacionesEgreso) {
+    // 1. Actualizar el stock de denominaciones
+    for (const valor in denominacionesEgreso) {
+        if (stockDenominaciones.hasOwnProperty(valor)) {
+            stockDenominaciones[valor] -= denominacionesEgreso[valor];
+        }
+    }
+
+    // 2. Registrar el movimiento para seguimiento
+    const nuevoMovimiento = {
+        origen: 'Sistema',
+        hora: new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }),
+        tipo: `Egreso (Cambio a ${repartidor.nombre})`,
+        monto: -montoCambio,
+        tipoMonto: 'egreso'
+    };
+    movimientos.unshift(nuevoMovimiento);
+
+    // 3. Re-renderizar la UI de caja si está visible
+    if (document.getElementById('caja-movimientos-lista')) {
+        renderStock(); // <-- AÑADIDO: Actualizar el stock visualmente
+        renderMovimientos();
+    }
+}
+
+// --- NUEVA FUNCIÓN DE VALIDACIÓN CENTRALIZADA ---
+/**
+ * Valida una selección de denominaciones contra un monto objetivo y el stock disponible.
+ * @param {number} montoObjetivo - El monto que se debe alcanzar.
+ * @param {number[]} denominacionesSeleccionadas - Array de las denominaciones seleccionadas.
+ * @param {string} tipoOperacion - 'egreso' para validar contra el stock, 'ingreso' para ignorar el stock.
+ * @returns {{esValido: boolean, mensaje: string, totalSeleccionado: number}}
+ */
+export function validarSeleccionDenominaciones(montoObjetivo, denominacionesSeleccionadas, tipoOperacion = 'egreso') {
+    const totalSeleccionado = denominacionesSeleccionadas.reduce((acc, val) => acc + val, 0);
+
+    // 1. Validar si hay stock suficiente (solo para egresos)
+    if (tipoOperacion === 'egreso') {
+        const conteoSeleccion = denominacionesSeleccionadas.reduce((acc, v) => ({ ...acc, [v]: (acc[v] || 0) + 1 }), {});
+        for (const valor in conteoSeleccion) {
+            if (stockDenominaciones[valor] < conteoSeleccion[valor]) {
+                return {
+                    esValido: false,
+                    mensaje: `Stock insuficiente para $${valor}. Disponible: ${stockDenominaciones[valor]}.`,
+                    totalSeleccionado
+                };
+            }
+        }
+    }
+
+    // 2. Validar si el monto seleccionado coincide con el objetivo
+    if (montoObjetivo > 0 && parseFloat(totalSeleccionado.toFixed(2)) !== parseFloat(montoObjetivo.toFixed(2))) {
+        return {
+            esValido: false,
+            mensaje: `El monto seleccionado ($${totalSeleccionado.toFixed(2)}) no coincide con el objetivo ($${montoObjetivo.toFixed(2)}).`,
+            totalSeleccionado
+        };
+    }
+
+    // 3. Si todo es correcto
+    return {
+        esValido: true,
+        mensaje: 'Selección válida.',
+        totalSeleccionado
+    };
+}
+
+
 // --- NUEVAS FUNCIONES PARA EL PROCESO DE COBRO ---
 
 export function calcularCambioGreedy(montoCambio) {

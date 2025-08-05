@@ -4,6 +4,8 @@ import { findClienteById } from '../../clientes/logica/clientes.data.js'; // <--
 import { cartItems, setCliente } from '../../venta/logica/carrito.js'; // Importar estado del carrito
 import { router } from '../../../router.js'; // Importar el router
 import { renderPedidoGuardadoDetalle } from './pedido.guardado.detalle.js'; // <-- AÑADIR IMPORTACIÓN
+import { openAsignarRepartidorModal } from './repartidor.asignar.modal.js';
+import { openLiquidarEntregaModal } from './repartidor.liquidar.modal.js';
 
 // --- Función principal (modificada para inicializar acciones) ---
 export async function renderPedidosGuardados(container) {
@@ -51,6 +53,21 @@ function handleEditPedido(pedidoId) {
 function handleAdvancePhase(pedidoId, itemElement) {
     const pedido = pedidosGuardados.find(p => p.id === pedidoId);
     if (!pedido) return;
+
+    // Controlador de flujo basado en la fase actual
+    switch (pedido.faseId) {
+        case FASES_PEDIDO.LISTO_PARA_ENTREGA.id:
+            // Pasamos una función callback para que el modal pueda refrescar la lista
+            openAsignarRepartidorModal(pedido, () => {
+                const pedidosListBody = document.querySelector('#pedidos-list-body');
+                if (pedidosListBody) renderListaPedidos(pedidosListBody, pedidosGuardados);
+            });
+            return; // Detenemos para no ejecutar la lógica de avance de fase de abajo
+
+        case FASES_PEDIDO.EN_RUTA.id:
+            openLiquidarEntregaModal(pedido);
+            return; // Detenemos para no ejecutar la lógica de avance de fase de abajo
+    }
 
     // --- VALIDACIÓN AÑADIDA ---
     // Si el pedido está en 'Procesando', verificar que todos los items estén 'LISTO'.

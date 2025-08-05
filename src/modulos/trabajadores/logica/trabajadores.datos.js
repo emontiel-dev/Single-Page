@@ -90,6 +90,21 @@ export const trabajadoresDB = [
             rol: 'cajero',
             permisos: ['venta', 'caja', 'pedidos', 'clientes']
         }
+    },
+    {
+        id: 6,
+        nombre: 'Essau',
+        apellidos: 'Montiel Sánchez',
+        cargo: 'Repartidor',
+        fechaIngreso: '2022-11-10',
+        diaDescanso: 'Miércoles',
+        activo: true,
+        asistencia: [],
+        usuario: {
+            username: 'fab',
+            rol: 'repartidor',
+            permisos: ['venta', 'caja', 'pedidos', 'clientes']
+        }
     }
 ];
 

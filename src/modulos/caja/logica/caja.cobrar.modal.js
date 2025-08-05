@@ -15,10 +15,35 @@ function closeCobrarModal() {
     }
 }
 
-function renderPagoSeleccionado() {
-    const container = modalElement.querySelector('#cobrar-pago-seleccion');
+// --- NUEVAS FUNCIONES EXPORTABLES Y REUTILIZABLES ---
+
+/**
+ * Renderiza los botones de todas las denominaciones disponibles.
+ * @param {HTMLElement} gridContainer - El contenedor donde se renderizarán los botones.
+ */
+export function renderDenominacionBotones(gridContainer) {
+    if (!gridContainer) return;
+    gridContainer.innerHTML = '';
+    denominaciones.forEach(valor => {
+        const color = denominacionColors[valor] || '#7f8c8d';
+        const button = document.createElement('button');
+        button.className = 'denominacion-btn';
+        button.dataset.valor = valor;
+        button.style.backgroundColor = color;
+        button.textContent = valor;
+        gridContainer.appendChild(button);
+    });
+}
+
+/**
+ * Renderiza las "píldoras" de las denominaciones seleccionadas.
+ * @param {HTMLElement} container - El contenedor para las píldoras.
+ * @param {number[]} seleccionArray - El array con las denominaciones seleccionadas.
+ */
+export function renderDenominacionSeleccion(container, seleccionArray) {
+    if (!container) return;
     container.innerHTML = '';
-    const conteo = pagoSeleccionado.reduce((acc, valor) => {
+    const conteo = seleccionArray.reduce((acc, valor) => {
         acc[valor] = (acc[valor] || 0) + 1;
         return acc;
     }, {});
@@ -31,6 +56,14 @@ function renderPagoSeleccionado() {
         pill.innerHTML = `<span>${valor} x ${cantidad}</span><button class="remover-denominacion-btn" data-valor="${valor}">&times;</button>`;
         container.appendChild(pill);
     });
+}
+
+
+// --- FUNCIONES INTERNAS DEL MODAL (AHORA USAN LAS REUTILIZABLES) ---
+
+function renderPagoSeleccionado() {
+    const container = modalElement.querySelector('#cobrar-pago-seleccion');
+    renderDenominacionSeleccion(container, pagoSeleccionado);
 }
 
 function renderCambioGrid(cambio) {
@@ -103,16 +136,7 @@ function handleRemoverDenominacionClick(event) {
 
 function renderPagoDenominaciones() {
     const grid = modalElement.querySelector('#cobrar-pago-grid');
-    grid.innerHTML = '';
-    denominaciones.forEach(valor => {
-        const color = denominacionColors[valor] || '#7f8c8d';
-        const button = document.createElement('button');
-        button.className = 'denominacion-btn';
-        button.dataset.valor = valor;
-        button.style.backgroundColor = color;
-        button.textContent = valor;
-        grid.appendChild(button);
-    });
+    renderDenominacionBotones(grid);
 }
 
 // Ya no hay pasos, esta función confirma la transacción final

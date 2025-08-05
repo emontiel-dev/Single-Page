@@ -230,7 +230,7 @@
 /* Contenedor para los botones interactivos */
 .denominaciones-grid-botones {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
     gap: var(--espacio-s);
     margin-top: var(--espacio-m);
 }
@@ -240,11 +240,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--espacio-m);
+    padding: var(--espacio-xs);
     border-radius: var(--radio-borde-m);
     color: var(--blanco);
     font-weight: 700;
-    font-size: 1.1em;
+    font-size: 1.05em;
     cursor: pointer;
     border: 2px solid transparent;
     transition: transform 0.1s ease;
@@ -287,7 +287,7 @@
     justify-content: center;
     width: 20px;
     height: 20px;
-    margin-left: var(--espacio-s);
+    margin-left: var(--espacio-xs);
     background-color: rgba(0, 0, 0, 0.2);
     border: none;
     border-radius: 50%;
@@ -310,8 +310,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--espacio-m) 0;
-    font-size: 1.2em;
+    padding: var(--espacio-s) 0;
+    font-size: 1em;
     margin-bottom: var(--espacio-m);
     border-bottom: 1px solid var(--gris-borde-sutil);
 }
@@ -321,7 +321,7 @@
 }
 
 .cobrar-info.cambio-total {
-    font-size: 1.1em;
+    font-size: 1em;
     background-color: var(--amarillo-polleria-fondo-claro);
     border: 1px solid var(--amarillo-polleria);
     border-radius: var(--radio-borde-m);
@@ -345,12 +345,12 @@
 }
 
 .denominacion-info-item {
-    padding: var(--espacio-s);
+    padding: var(--espacio-xs);
     border-radius: var(--radio-borde-m);
     color: var(--blanco);
     font-weight: 700;
-    font-size: 0.9em;
-    min-width: 40px;
+    font-size: 0.7em;
+    min-width: 35px;
     text-align: center;
 }
 
