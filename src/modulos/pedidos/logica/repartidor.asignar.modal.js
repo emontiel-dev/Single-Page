@@ -20,7 +20,8 @@ function closeAsignarModal() {
 
 // --- LÓGICA REFACTORIZADA ---
 function updateAsignacionState() {
-    const totalPedido = currentPedido.items.reduce((acc, item) => acc + item.cost, 0);
+    const totalPedidoRaw = currentPedido.items.reduce((acc, item) => acc + item.cost, 0);
+    const totalPedido = Math.round(totalPedidoRaw);
     const totalPagado = pagoSeleccionado.reduce((acc, val) => acc + val, 0);
     const cambio = totalPagado - totalPedido;
 
@@ -93,7 +94,8 @@ async function handleConfirmarAsignacion() {
         return;
     }
 
-    const totalPedido = currentPedido.items.reduce((acc, item) => acc + item.cost, 0);
+    const totalPedidoRaw = currentPedido.items.reduce((acc, item) => acc + item.cost, 0);
+    const totalPedido = Math.round(totalPedidoRaw);
     const totalPagado = pagoSeleccionado.reduce((acc, val) => acc + val, 0);
     const cambio = totalPagado - totalPedido;
     const resultadoCambio = calcularCambioGreedy(cambio);
@@ -132,7 +134,7 @@ export async function openAsignarRepartidorModal(pedido, callback) {
         modalElement.querySelector('#repartidor-pedido-total').textContent = `$${Math.round(totalPedido).toFixed(2)}`;
 
         const select = modalElement.querySelector('#repartidor-select');
-        const repartidores = trabajadores.filter(t => t.cargo === 'Repartidor' && t.activo);
+        const repartidores = trabajadores.filter(t => t.activo);
         repartidores.forEach(rep => {
             const option = document.createElement('option');
             option.value = rep.id;

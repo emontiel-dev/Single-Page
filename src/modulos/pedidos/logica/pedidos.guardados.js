@@ -77,8 +77,11 @@ function handleAdvancePhase(pedidoId, itemElement) {
         const todosListos = itemsAProcesar.every(item => item.estado === 'LISTO');
 
         if (!todosListos) {
-            alert('No se puede avanzar el pedido. Todavía hay productos que se están procesando.');
-            return; // Detener la ejecución y no cambiar de fase.
+            // MEJORA: Usar confirm para guiar al usuario a la pantalla de 'Items'.
+            if (confirm('No se puede avanzar el pedido, aún hay productos pendientes. ¿Deseas ir a la pantalla de "Items" para procesarlos?')) {
+                router.navigate('/items-tablajero');
+            }
+            return; // Detener la ejecución en cualquier caso.
         }
     }
     // --- FIN DE LA VALIDACIÓN ---

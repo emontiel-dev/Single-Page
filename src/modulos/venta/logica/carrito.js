@@ -123,7 +123,7 @@ export function updateCarritoDisplay() {
     const itemCountSpan = document.getElementById('item-count');
 
     if (!itemsListBody || !totalValueSpan || !carritoContainer || !mainContent || !itemCountSpan) {
-        console.error('Elementos del carrito o main content no encontrados en el DOM.');
+        // No es un error, simplemente no estamos en la vista de venta. Salir silenciosamente.
         return;
     }
 
