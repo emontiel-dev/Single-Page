@@ -127,6 +127,40 @@ export function updateCarritoDisplay() {
         return;
     }
 
+    // --- INICIO: Lógica de Comisión por Productos Adicionales (PA) ---
+    const commissionId = 'COMISION_PA'; // ID único para este tipo de cargo.
+    const commissionFreeLimit = 3;
+    const commissionPerItem = 4.00;
+
+    // 1. Remover la comisión existente para recalcularla desde cero.
+    const existingCommissionIndex = cartItems.findIndex(item => item.optionId === commissionId);
+    if (existingCommissionIndex > -1) {
+        cartItems.splice(existingCommissionIndex, 1);
+    }
+
+    // 2. Contar los Productos Adicionales.
+    const paCount = cartItems.filter(item => item.productId === 'PA').length;
+
+    // 3. Si se excede el límite, calcular y añadir la comisión.
+    if (paCount > commissionFreeLimit) {
+        const commissionableItems = paCount - commissionFreeLimit;
+        const commissionCost = commissionableItems * commissionPerItem;
+
+        const commissionItem = {
+            productId: 'CARGO', // Usamos el tipo 'CARGO' para que se renderice correctamente.
+            optionId: commissionId, // ID único para poder encontrarlo y removerlo.
+            optionName: 'Comisión por Productos Adicionales',
+            quantity: 1,
+            cost: commissionCost,
+            priceType: null,
+            pricePerKg: null,
+            personalizations: { descripcion: [`${commissionableItems} PA(s) extra ( $${commissionPerItem.toFixed(2)} c/u)`] }
+        };
+        cartItems.push(commissionItem); // Añadir al final del carrito.
+    }
+    // --- FIN: Lógica de Comisión ---
+
+
     // 1. CALCULAR TOTALES Y CONTEOS PRIMERO
     // El total es la suma del costo de TODOS los items, incluyendo el envío.
     const total = cartItems.reduce((acc, item) => acc + item.cost, 0);

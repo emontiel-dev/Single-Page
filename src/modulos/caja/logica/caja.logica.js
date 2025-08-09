@@ -2,6 +2,7 @@ import { openAñadirIngresoModal } from './caja.añadir.ingreso.modal.js';
 import { openAñadirEgresoModal } from './caja.añadir.egreso.modal.js';
 import { openRecargarDenominacionesModal } from './caja.recargar.denominaciones.modal.js';
 import { openCorteCajaModal } from './caja.corte.caja.modal.js';
+import { openMovimientoDetalleModal } from './movimiento.detalle.modal.js'; // <-- AÑADIR
 import { ventasDelDia } from './caja.ventas.datos.js'; // <-- MODIFICADO: Importación local
 
 // Datos de ejemplo
@@ -62,9 +63,10 @@ function renderMovimientos() {
     if (!lista) return;
 
     lista.innerHTML = '';
-    movimientos.forEach(mov => {
+    movimientos.forEach((mov, index) => { // <-- AÑADIR 'index'
         const item = document.createElement('div');
         item.className = 'movimiento-item';
+        item.dataset.index = index; // <-- AÑADIR: Vincular el elemento con su dato
         const montoFormateado = mov.monto < 0 ? `-$${Math.abs(mov.monto).toFixed(2)}` : `$${mov.monto.toFixed(2)}`;
         
         // --- MODIFICACIÓN: Separar tipo y concepto ---
@@ -111,7 +113,12 @@ export function registrarIngresoManual(concepto, monto, denominacionesIngresadas
         hora: new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }),
         tipo: `Ingreso (${concepto})`,
         monto: monto,
-        tipoMonto: 'ingreso'
+        tipoMonto: 'ingreso',
+        // --- AÑADIDO: Guardar detalles ---
+        detalles: {
+            pagoCon: denominacionesIngresadas,
+            cambioEntregado: denominacionesDeCambio
+        }
     };
     movimientos.unshift(nuevoMovimiento);
 
@@ -136,7 +143,12 @@ export function registrarEgresoManual(concepto, monto, denominacionesEgresadas, 
         hora: new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }),
         tipo: `Egreso (${concepto})`,
         monto: -monto,
-        tipoMonto: 'egreso'
+        tipoMonto: 'egreso',
+        // --- AÑADIDO: Guardar detalles ---
+        detalles: {
+            egresadoDeCaja: denominacionesEgresadas,
+            cambioRecibido: denominacionesDeCambioRecibido
+        }
     };
     movimientos.unshift(nuevoMovimiento);
 
@@ -329,7 +341,13 @@ export function registrarVenta(ventaData, denominacionesIngreso, denominacionesE
         hora: new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }),
         tipo: `Ingreso (Venta)`,
         monto: ventaData.total,
-        tipoMonto: 'ingreso'
+        tipoMonto: 'ingreso',
+        // --- AÑADIDO: Guardar detalles ---
+        detalles: {
+            pagoCon: denominacionesIngreso,
+            cambioEntregado: denominacionesEgreso,
+            ventaId: ventaData.id // Referencia a la venta en el historial
+        }
     };
     movimientos.unshift(nuevoMovimiento);
 
@@ -358,4 +376,18 @@ export function initCajaLogic() {
     renderStock();
     renderMovimientos();
     setupActionButtons();
+
+    // --- AÑADIDO: Listener para los detalles del movimiento ---
+    const movimientosLista = document.getElementById('caja-movimientos-lista');
+    if (movimientosLista) {
+        movimientosLista.addEventListener('click', (e) => {
+            const item = e.target.closest('.movimiento-item');
+            if (item && item.dataset.index) {
+                const movimiento = movimientos[item.dataset.index];
+                if (movimiento && movimiento.detalles) {
+                    openMovimientoDetalleModal(movimiento);
+                }
+            }
+        });
+    }
 }
