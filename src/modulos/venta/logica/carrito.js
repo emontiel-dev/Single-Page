@@ -342,17 +342,22 @@ function handleCobrar() {
     }
 
     const total = cartItems.reduce((acc, item) => acc + item.cost, 0);
+    
+    // AÑADIDO: Crear el objeto de venta completo
+    const ventaData = {
+        id: `VTA-${Date.now()}`, // ID de venta único
+        cliente: selectedClient,
+        items: [...cartItems], // Copia inmutable de los items
+        total: Math.round(total)
+    };
 
-    // Abrir el modal de cobro, pasando el total y una función callback para cuando la venta sea exitosa
-    openCobrarModal(Math.round(total), () => {
+    // MODIFICADO: Abrir el modal de cobro, pasando el objeto de venta y el callback
+    openCobrarModal(ventaData, () => {
         console.log('Venta completada con éxito desde el callback.');
         
         // Limpiar el carrito actual
         cartItems.length = 0;
-        setCliente(null); // Esto también llama a updateCarritoDisplay para ocultar el carrito
-
-        // Opcional: navegar a otra vista o simplemente quedarse en la venta para un nuevo pedido.
-        // router.navigate('/venta'); 
+        setCliente(null);
     });
 }
 

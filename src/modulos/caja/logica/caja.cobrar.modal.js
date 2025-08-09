@@ -3,6 +3,7 @@ import { stockDenominaciones, registrarVenta, calcularCambioGreedy, denominacion
 let modalElement = null;
 const denominaciones = [1000, 500, 200, 100, 50, 20, 10, 5, 2, 1, 0.5];
 let totalPedido = 0;
+let ventaActualData = null; // NUEVO: Para almacenar los datos de la venta
 let pagoSeleccionado = [];
 let onVentaSuccessCallback = null;
 
@@ -155,16 +156,18 @@ function handleConfirmarVenta() {
         return acc;
     }, {});
 
-    registrarVenta(totalPedido, denominacionesPago, resultadoCambio.cambioDenominaciones);
+    // MODIFICADO: Pasar el objeto ventaActualData completo a registrarVenta
+    registrarVenta(ventaActualData, denominacionesPago, resultadoCambio.cambioDenominaciones);
+    
     if (onVentaSuccessCallback) {
         onVentaSuccessCallback();
     }
     closeCobrarModal();
 }
 
-export async function openCobrarModal(pedidoTotal, onVentaSuccess) {
-    if (document.getElementById('caja-cobrar-modal-container')) return;
-    totalPedido = pedidoTotal;
+export async function openCobrarModal(ventaData, onVentaSuccess) {
+    ventaActualData = ventaData; // Guardar los datos de la venta
+    totalPedido = ventaData.total; // Usar el total del objeto de venta
     onVentaSuccessCallback = onVentaSuccess;
 
     const response = await fetch('src/modulos/caja/views/caja.cobrar.modal.html');

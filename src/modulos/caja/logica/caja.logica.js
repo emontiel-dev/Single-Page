@@ -2,6 +2,7 @@ import { openAñadirIngresoModal } from './caja.añadir.ingreso.modal.js';
 import { openAñadirEgresoModal } from './caja.añadir.egreso.modal.js';
 import { openRecargarDenominacionesModal } from './caja.recargar.denominaciones.modal.js';
 import { openCorteCajaModal } from './caja.corte.caja.modal.js';
+import { ventasDelDia } from './caja.ventas.datos.js'; // <-- MODIFICADO: Importación local
 
 // Datos de ejemplo
 export const stockDenominaciones = {
@@ -313,32 +314,38 @@ export function calcularCambioGreedy(montoCambio) {
     return { success: true, cambioDenominaciones, faltante: 0 };
 }
 
-export function registrarVenta(pedidoTotal, denominacionesIngreso, denominacionesEgreso) {
-    // 1. Registrar ingreso del pago
+export function registrarVenta(ventaData, denominacionesIngreso, denominacionesEgreso) {
+    // 1. Actualizar stock de caja (ingreso del pago, egreso del cambio)
     for (const valor in denominacionesIngreso) {
         stockDenominaciones[valor] = (stockDenominaciones[valor] || 0) + denominacionesIngreso[valor];
     }
-
-    // 2. Registrar egreso del cambio
     for (const valor in denominacionesEgreso) {
         stockDenominaciones[valor] -= denominacionesEgreso[valor];
     }
 
-    // 3. Añadir movimiento de venta al historial
+    // 2. Crear el movimiento para el historial de caja
     const nuevoMovimiento = {
         origen: 'Sistema',
         hora: new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }),
         tipo: `Ingreso (Venta)`,
-        monto: pedidoTotal,
+        monto: ventaData.total,
         tipoMonto: 'ingreso'
     };
     movimientos.unshift(nuevoMovimiento);
+
+    // 3. CREAR Y GUARDAR LA INSTANTÁNEA COMPLETA DE LA VENTA
+    const ventaCompleta = {
+        ...ventaData,
+        fechaCompletado: new Date().toISOString(),
+        pagoCon: denominacionesIngreso,
+        cambioEntregado: denominacionesEgreso
+    };
+    ventasDelDia.unshift(ventaCompleta); // Guardar en el módulo de historial
 
     // 4. Re-renderizar la UI de caja
     renderStock();
     renderMovimientos();
 }
-
 
 function setupActionButtons() {
     document.getElementById('btn-añadir-ingreso')?.addEventListener('click', openAñadirIngresoModal);

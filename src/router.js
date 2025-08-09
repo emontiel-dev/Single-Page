@@ -5,7 +5,8 @@ import { renderClientes } from './modulos/clientes/clientes.js';
 import { renderPedidosGuardados } from './modulos/pedidos/logica/pedidos.guardados.js';
 import { renderItemsTablajero } from './modulos/items.tablajero/logica/items.tablajero.js';
 import { renderCaja } from './modulos/caja/caja.js';
-import { renderTrabajadores } from './modulos/trabajadores/trabajadores.js'; // <-- CORREGIDO
+import { renderTrabajadores } from './modulos/trabajadores/trabajadores.js';
+import { renderHistorial } from './modulos/historial/historial.js';
 
 const routes = {
     '/': renderInicio,
@@ -15,6 +16,7 @@ const routes = {
     '/items-tablajero': renderItemsTablajero,
     '/caja': renderCaja,
     '/trabajadores': renderTrabajadores,
+    '/historial': renderHistorial,
     // Agrega más rutas aquí
 };
 

@@ -25,6 +25,7 @@
 @import url('./modules/_items.tablajero.css');
 @import url('./modules/_caja.css');
 @import url('./modules/_trabajadores.css');
+@import url('./modules/_historial.css'); /* <-- AÑADIR ESTA LÍNEA */
 
 /* 5. UTILITIES */
 @import url('./utils/_utilities.css');
