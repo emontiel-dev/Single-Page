@@ -1,22 +1,31 @@
+// 1. Importar los datos locales del archivo de datos estáticos.
+import { clientes as clientesData } from './clientes.datos.js';
+
 let clientes = [];
 let datosCargados = false;
 
 /**
- * Carga los clientes desde la API si no han sido cargados previamente.
- * Se asegura de que los datos se carguen solo una vez.
+ * Carga los clientes desde el archivo local si no han sido cargados previamente.
  */
 export async function cargarClientes() {
     if (datosCargados) {
         return; // Evita recargar si ya los tenemos
     }
     try {
+        // 2. Lógica de fetch comentada para usar datos locales en su lugar.
+        /*
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/clientes`);
         if (!response.ok) {
             throw new Error('No se pudo obtener la lista de clientes del backend.');
         }
         clientes = await response.json();
+        */
+
+        // Asignar los datos importados del archivo local.
+        clientes = clientesData;
         datosCargados = true;
-        console.log('Clientes cargados desde la API:', clientes);
+        console.log('Clientes cargados desde el archivo local (modo temporal):', clientes);
+
     } catch (error) {
         console.error('Error al cargar clientes:', error);
         clientes = []; // En caso de error, asegúrate de que clientes sea un array vacío.
@@ -38,22 +47,22 @@ export function getClientes() {
  */
 export function findClienteById(id) {
     if (!id) return null;
-    // El ID de Supabase puede ser un número grande, así que usamos '==' para una comparación flexible.
     return clientes.find(c => c.id == id) || null;
 }
 
 /**
- * Elimina un cliente por su ID a través de la API.
+ * Elimina un cliente por su ID del array local.
  * @param {number} id - El ID del cliente a eliminar.
  */
 export async function deleteClienteById(id) {
+    // 3. Lógica de fetch comentada para operar sobre el array local.
+    /*
     try {
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/clientes/${id}`, {
             method: 'DELETE',
         });
 
         if (!response.ok) {
-            // Si el servidor envía un mensaje de error específico (ej. 409 Conflict)
             if (response.status === 409) {
                 const errorData = await response.json();
                 throw new Error(errorData.message);
@@ -61,12 +70,18 @@ export async function deleteClienteById(id) {
             throw new Error(`Error del servidor: ${response.status}`);
         }
         
-        // Forzar la recarga de datos en la próxima llamada a cargarClientes
         datosCargados = false; 
 
     } catch (error) {
         console.error('Error al eliminar cliente:', error);
-        // Re-lanzar el error para que la UI pueda manejarlo (ej. mostrar una alerta)
         throw error;
+    }
+    */
+
+    // Lógica para eliminar del array local
+    const index = clientes.findIndex(c => c.id == id);
+    if (index > -1) {
+        clientes.splice(index, 1);
+        console.log(`Cliente con ID ${id} eliminado del array local.`);
     }
 }

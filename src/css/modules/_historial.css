@@ -92,6 +92,30 @@
     color: var(--gris-texto-secundario);
 }
 
+/* --- AÑADIDO: Estilos para las secciones de items en el detalle --- */
+.items-section {
+    margin-top: var(--espacio-m);
+}
+
+.items-section.hidden {
+    display: none;
+}
+
+.items-section .section-title {
+    border-bottom: 1px solid var(--gris-borde-sutil);
+    padding-bottom: var(--espacio-s);
+    margin-bottom: var(--espacio-s);
+}
+
+.items-section .section-title h5 {
+    margin: 0;
+    font-size: 1em;
+    color: var(--gris-texto-secundario);
+    font-weight: 600;
+}
+/* --- FIN DE AÑADIDO --- */
+
+
 /* --- Estilos de la Vista de Detalle (Reutilizados) --- */
 /* La mayoría de los estilos de detalle son reutilizados de _pedidos.css */
 #detalle-pago {

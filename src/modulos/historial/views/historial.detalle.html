@@ -8,15 +8,39 @@
         </button>
     </header>
     <div class="detalle-body">
+        <!-- Sección de Información del Cliente -->
         <div id="detalle-cliente-info" class="detalle-card"></div>
+
+        <!-- Sección de Items Vendidos (ahora con sub-secciones) -->
         <div class="detalle-card">
             <h4>Items Vendidos</h4>
-            <ul id="detalle-items-lista" class="items-list-ui"></ul>
+            
+            <!-- Items de Pollo -->
+            <section class="items-section pollo-items hidden">
+                <div class="section-title"><h5>Productos de Pollo:</h5></div>
+                <ul class="items-list-ui" id="detalle-items-pollo"></ul>
+            </section>
+
+            <!-- Items de Productos Adicionales -->
+            <section class="items-section pa-items hidden">
+                <div class="section-title"><h5>Productos Adicionales:</h5></div>
+                <ul class="items-list-ui" id="detalle-items-pa"></ul>
+            </section>
+
+            <!-- Items de Cargos -->
+            <section class="items-section cargo-items hidden">
+                <div class="section-title"><h5>Cargos:</h5></div>
+                <ul class="items-list-ui" id="detalle-items-cargo"></ul>
+            </section>
         </div>
+
+        <!-- Sección de Totales -->
         <div class="detalle-card">
             <h4>Totales</h4>
             <div id="detalle-totales" class="totals-section"></div>
         </div>
+
+        <!-- Sección de Detalles del Pago -->
         <div class="detalle-card">
             <h4>Detalles del Pago</h4>
             <div id="detalle-pago" class="payment-details-section"></div>

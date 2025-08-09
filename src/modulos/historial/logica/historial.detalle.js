@@ -3,7 +3,11 @@
 import { ventasDelDia } from '../../caja/logica/caja.ventas.datos.js';
 import { renderHistorial } from '../historial.js';
 
+// Referencias a los elementos del DOM
+let containerElement;
+
 export async function renderVentaDetalle(container, ventaId) {
+    containerElement = container;
     const venta = ventasDelDia.find(v => v.id === ventaId);
     if (!venta) {
         alert('Venta no encontrada.');
@@ -17,11 +21,28 @@ export async function renderVentaDetalle(container, ventaId) {
     document.getElementById('detalle-venta-id').textContent = `Detalle Venta: ${venta.id}`;
     document.getElementById('btn-volver-historial').addEventListener('click', () => renderHistorial(container));
 
-    // Renderizar las diferentes secciones (cliente, items, totales, pago)
-    // (Esta lógica sería similar a la de `pedido.guardado.detalle.js` pero adaptada a los datos de la venta)
+    // Función principal que orquesta el renderizado del contenido
+    renderDetalleContent(venta);
+}
+
+function renderDetalleContent(venta) {
+    // Clasificar items
+    const polloItems = [];
+    const paItems = [];
+    const cargoItems = [];
+    let envioItem = null;
+
+    venta.items.forEach(item => {
+        if (item.productId === 'ENVIO') envioItem = item;
+        else if (item.productId === 'CARGO') cargoItems.push(item);
+        else if (item.productId === 'PA') paItems.push(item);
+        else polloItems.push(item);
+    });
+
+    // Renderizar cada sección
     renderClienteInfo(venta.cliente);
-    renderItems(venta.items);
-    renderTotales(venta);
+    renderItemsSections(polloItems, paItems, cargoItems);
+    renderTotales(venta.items, envioItem);
     renderPago(venta);
 }
 
@@ -40,63 +61,46 @@ function renderClienteInfo(cliente) {
     }
 }
 
-function renderItems(items) {
-    const container = document.getElementById('detalle-items-lista');
-    if (!container) return;
+function renderItemsSections(polloItems, paItems, cargoItems) {
+    const polloSection = containerElement.querySelector('.items-section.pollo-items');
+    const paSection = containerElement.querySelector('.items-section.pa-items');
+    const cargoSection = containerElement.querySelector('.items-section.cargo-items');
 
-    container.innerHTML = items.map(item => {
-        let nombre = '';
-        let detalles = '';
+    if (polloItems.length > 0 && polloSection) {
+        const list = polloSection.querySelector('ul');
+        list.innerHTML = '';
+        polloItems.forEach(item => list.appendChild(renderPolloItemDetalle(item)));
+        polloSection.classList.remove('hidden');
+    }
 
-        // Lógica diferenciada para cada tipo de item
-        if (item.productId === 'PA') {
-            // Para Productos Adicionales, el nombre es la descripción
-            nombre = (item.personalizations?.descripcion?.[0] || 'Producto Adicional').trim();
-            detalles = item.optionName || '';
-        } else if (item.productId === 'ENVIO' || item.productId === 'CARGO') {
-            // Para Envío o Cargos, el nombre es fijo y el detalle es la descripción
-            nombre = item.optionName;
-            detalles = (item.personalizations?.descripcion?.[0] || '').trim();
-        } else {
-            // Lógica para productos normales del catálogo
-            nombre = item.optionName || item.productId;
-            
-            const detallesPartes = [];
-            // CORRECCIÓN: Usar 'quantity' y verificar que exista
-            if (typeof item.quantity === 'number') {
-                detallesPartes.push(`${item.quantity.toFixed(3)}(kg)`);
-            }
-            if (item.personalizations) {
-                const allPersonalizations = Object.values(item.personalizations).flat().join(', ');
-                if (allPersonalizations) {
-                    detallesPartes.push(allPersonalizations);
-                }
-            }
-            detalles = detallesPartes.join(' | ');
-        }
+    if (paItems.length > 0 && paSection) {
+        const list = paSection.querySelector('ul');
+        list.innerHTML = '';
+        paItems.forEach(item => list.appendChild(renderPaItemDetalle(item)));
+        paSection.classList.remove('hidden');
+    }
 
-        // Usar una estructura de renderizado más robusta y consistente
-        return `
-            <li class="item-row-ui">
-                <div class="item-info">
-                    <div class="name">${nombre}</div>
-                    <div class="details">${detalles}</div>
-                </div>
-                <div class="item-price">$${item.cost.toFixed(2)}</div>
-            </li>
-        `;
-    }).join('');
+    if (cargoItems.length > 0 && cargoSection) {
+        const list = cargoSection.querySelector('ul');
+        list.innerHTML = '';
+        cargoItems.forEach(item => list.appendChild(renderCargoItemDetalle(item)));
+        cargoSection.classList.remove('hidden');
+    }
 }
 
-function renderTotales(venta) {
+function renderTotales(items, envioItem) {
     const container = document.getElementById('detalle-totales');
     if (!container) return;
-    container.innerHTML = `
-        <div class="total-row-ui grand-total-ui">
-            <span class="label">TOTAL</span>
-            <span class="value">$${venta.total.toFixed(2)}</span>
-        </div>
-    `;
+    container.innerHTML = '';
+
+    const subtotal = items.reduce((acc, item) => (item.productId !== 'ENVIO' ? acc + item.cost : acc), 0);
+    const total = items.reduce((acc, item) => acc + item.cost, 0);
+
+    container.appendChild(createTotalRow('Subtotal', subtotal.toFixed(2)));
+    if (envioItem) {
+        container.appendChild(createTotalRow(envioItem.optionName, envioItem.cost.toFixed(2)));
+    }
+    container.appendChild(createTotalRow('TOTAL', Math.round(total).toFixed(2), true));
 }
 
 function renderPago(venta) {
@@ -117,4 +121,98 @@ function renderPago(venta) {
             <ul>${cambioHtml}</ul>
         </div>
     `;
+}
+
+// --- Funciones Auxiliares de Renderizado de Items (Inspiradas en carrito.ver.items.js) ---
+
+function createBaseItemRow(item) {
+    const li = document.createElement('li');
+    li.className = 'item-row-ui';
+    li.innerHTML = `
+        <div class="item-info">
+            <div class="name"></div>
+            <div class="details"></div>
+        </div>
+        <span class="item-price">$${item.cost.toFixed(2)}</span>
+    `;
+    return li;
+}
+
+function renderPolloItemDetalle(item) {
+    const li = createBaseItemRow(item);
+    const nameDiv = li.querySelector('.name');
+    const detailsDiv = li.querySelector('.details');
+
+    let nameText = item.optionName || item.productId;
+    if (item.personalizations) {
+        const allPersonalizations = Object.values(item.personalizations).flat().join(', ');
+        if (allPersonalizations) nameText += ` | ${allPersonalizations}`;
+    }
+    nameDiv.textContent = nameText;
+
+    // --- LÓGICA MEJORADA PARA MOSTRAR DESCUENTOS ---
+
+    // 1. Calcular el precio unitario original (antes de cualquier descuento)
+    const originalUnitPrice = item.pricePerKg !== undefined && item.pricePerKg !== null
+        ? item.pricePerKg
+        : (item.discount && item.discount.originalCost && item.quantity > 0 ? (item.discount.originalCost / item.quantity) : (item.cost > 0 && item.quantity > 0 ? (item.cost / item.quantity) : 0));
+
+    // 2. Mostrar siempre la línea de cantidad y precio original
+    detailsDiv.innerHTML = `<div>${item.quantity.toFixed(3)}(kg) * $${originalUnitPrice.toFixed(2)}</div>`;
+
+    // 3. Si hay un descuento, renderizar sus detalles
+    if (item.discount) {
+        const discountType = item.discount.tipoDescuentoAplicado;
+        const originalCost = item.discount.originalCost;
+        const discountAmount = item.discount.monto;
+        const newPricePerKg = item.discount.newPricePerKg;
+
+        const discountLabelLine = document.createElement('div');
+        discountLabelLine.className = 'item-discount';
+        detailsDiv.appendChild(discountLabelLine);
+
+        switch (discountType) {
+            case 'Cantidad':
+                discountLabelLine.textContent = `Descuento por cantidad: $${originalCost.toFixed(2)} - $${discountAmount.toFixed(2)}`;
+                break;
+            case 'Porcentaje':
+                const percentageApplied = originalCost > 0 ? (discountAmount / originalCost) * 100 : 0;
+                discountLabelLine.textContent = `Descuento por porcentaje: $${originalCost.toFixed(2)} - ${percentageApplied.toFixed(2)}%`;
+                break;
+            case 'Precio por Kg':
+                discountLabelLine.textContent = 'Descuento por kg:';
+                const priceChangeLine = document.createElement('div');
+                priceChangeLine.textContent = `$${originalUnitPrice.toFixed(2)} > $${newPricePerKg.toFixed(2)}`;
+                detailsDiv.appendChild(priceChangeLine);
+                break;
+            default:
+                discountLabelLine.textContent = `Descuento: ${item.discount.descripcion}`;
+        }
+    }
+
+    return li;
+}
+
+function renderPaItemDetalle(item) {
+    const li = createBaseItemRow(item);
+    li.querySelector('.name').textContent = item.personalizations?.descripcion?.[0] || 'Producto Adicional';
+    li.querySelector('.details').textContent = item.optionName;
+    return li;
+}
+
+function renderCargoItemDetalle(item) {
+    const li = createBaseItemRow(item);
+    li.querySelector('.name').textContent = item.personalizations?.descripcion?.[0] || 'Cargo Manual';
+    li.querySelector('.details').textContent = item.optionName;
+    return li;
+}
+
+function createTotalRow(label, value, isGrandTotal = false) {
+    const row = document.createElement('div');
+    row.className = isGrandTotal ? 'total-row-ui grand-total-ui' : 'total-row-ui';
+    row.innerHTML = `
+        <span class="label">${label}</span>
+        <span class="value">$${value}</span>
+    `;
+    return row;
 }

@@ -1,5 +1,7 @@
 import { initSearchBar } from './clientes.barra.busqueda.js';
-import { setCliente } from '../../venta/logica/carrito.js'; // <-- IMPORTAR setCliente
+import { setCliente } from '../../venta/logica/carrito.js';
+// <-- MODIFICADO: Importar las funciones del módulo de datos
+import { cargarClientes, getClientes } from './clientes.data.js';
 
 let modalElement = null;
 let selectedClient = null;
@@ -9,7 +11,8 @@ export async function openClienteModal() {
     if (document.getElementById('cliente-modal-container')) return;
 
     try {
-        const response = await fetch('src/modulos/clientes/views/cliente.modal.html');
+        // CORRECCIÓN: La ruta correcta al HTML del modal está en el módulo 'venta'.
+        const response = await fetch('src/modulos/venta/views/cliente.modal.html');
         const modalHtml = await response.text();
         document.body.insertAdjacentHTML('beforeend', modalHtml);
         modalElement = document.getElementById('cliente-modal-container');
@@ -35,20 +38,17 @@ function closeClienteModal() {
     selectedClient = null;
 }
 
-// Configura la barra de búsqueda reutilizando la lógica existente
+// <-- MODIFICADO: Ahora consume datos a través del módulo de datos
 async function setupSearch() {
     const searchArea = modalElement.querySelector('#cliente-modal-search-area');
-    // El HTML de la barra de búsqueda ahora está directamente en cliente.modal.html
     const searchInput = searchArea.querySelector('#cliente-search-input');
     
-    // Obtenemos los clientes desde el backend para la búsqueda
-    const clientesResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/clientes`);
-    if (!clientesResponse.ok) {
-        console.error('No se pudo obtener la lista de clientes para el modal.');
-        return;
-    }
-    const clientes = await clientesResponse.json();
+    // Cargar los clientes usando la función centralizada
+    await cargarClientes();
+    // Obtener la lista ya cargada
+    const clientes = getClientes();
 
+    // Inicializar la barra de búsqueda con los datos obtenidos
     initSearchBar(searchInput, clientes, renderSearchResults);
 }
 
