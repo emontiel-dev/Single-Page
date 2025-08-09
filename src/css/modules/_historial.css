@@ -2,14 +2,16 @@
 /* MODULE: Historial                                                         */
 /* =========================================================================== */
 
-/* --- Contenedores Principales --- */
-.historial-container {
+/* --- Contenedores Principales (Lista y Detalle) --- */
+.historial-container,
+.venta-detalle-container {
     display: flex;
     flex-direction: column;
     height: 100%;
     background-color: var(--gris-fondo-app);
 }
 
+/* --- Vista de Lista de Ventas --- */
 .historial-list-container {
     flex-grow: 1;
     background-color: var(--blanco);
@@ -39,14 +41,11 @@
     padding-top: var(--espacio-s);
 }
 
-/* --- Estilos de cada Fila de Venta --- */
 .venta-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--espacio-m);
+    background-color: var(--blanco);
     border: 1px solid var(--gris-borde-sutil);
     border-radius: var(--radio-borde-m);
+    padding: var(--espacio-m);
     cursor: pointer;
     transition: background-color var(--transicion-rapida);
 }
@@ -62,87 +61,177 @@
     gap: 4px;
 }
 
-.linea-superior, .linea-inferior {
+.venta-item .linea-superior,
+.venta-item .linea-inferior {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
 }
 
-.cliente-nombre {
+.venta-item .cliente-nombre {
     font-weight: 700;
     font-size: 1.1em;
     color: var(--negro-azabache);
 }
 
-.venta-total {
-    font-size: 1.2em;
+.venta-item .venta-total {
     font-weight: 700;
-    color: var(--morado-historial);
+    font-size: 1.1em;
+    color: var(--verde-exito);
 }
 
-.venta-id, .venta-hora {
+.venta-item .venta-id {
     font-size: 0.9em;
     color: var(--gris-texto-secundario);
 }
 
-.empty-message {
-    text-align: center;
-    padding: var(--espacio-xl);
-    color: var(--gris-texto-secundario);
+.venta-item .venta-hora {
+    font-weight: 500;
+    font-size: 0.9em;
+    color: var(--gris-texto-terciario);
 }
 
-/* --- AÑADIDO: Estilos para las secciones de items en el detalle --- */
-.items-section {
-    margin-top: var(--espacio-m);
-}
-
-.items-section.hidden {
-    display: none;
-}
-
-.items-section .section-title {
+/* --- Vista de Detalle de Venta --- */
+.venta-detalle-container .detalle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--espacio-m);
+    background-color: var(--blanco);
     border-bottom: 1px solid var(--gris-borde-sutil);
-    padding-bottom: var(--espacio-s);
-    margin-bottom: var(--espacio-s);
+    flex-shrink: 0;
 }
 
-.items-section .section-title h5 {
+.venta-detalle-container .detalle-header h3 {
     margin: 0;
-    font-size: 1em;
+    font-size: 1.2em;
     color: var(--gris-texto-secundario);
-    font-weight: 600;
 }
-/* --- FIN DE AÑADIDO --- */
 
-
-/* --- Estilos de la Vista de Detalle (Reutilizados) --- */
-/* La mayoría de los estilos de detalle son reutilizados de _pedidos.css */
-#detalle-pago {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+.venta-detalle-container .detalle-body {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: var(--espacio-l);
+    display: flex;
+    flex-direction: column;
     gap: var(--espacio-l);
 }
 
-.payment-section strong {
-    display: block;
-    margin-bottom: var(--espacio-s);
-    font-weight: 600;
-    color: var(--gris-texto-secundario);
+.venta-detalle-container .detalle-card {
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde-sutil);
+    border-radius: var(--radio-borde-m);
+    padding: var(--espacio-m);
+    box-shadow: var(--sombra-sm);
 }
 
-.payment-section ul {
+.venta-detalle-container .detalle-card h4 {
+    margin-top: 0;
+    border-bottom: 1px solid var(--gris-borde-sutil);
+    padding-bottom: var(--espacio-s);
+    margin-bottom: var(--espacio-m);
+    font-size: 1.1em;
+}
+
+.venta-detalle-container .items-section {
+    margin-top: var(--espacio-m);
+    padding-top: var(--espacio-m);
+    border-top: 1px solid var(--gris-borde-sutil);
+}
+.venta-detalle-container .items-section:first-of-type {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+.venta-detalle-container .section-title h5 {
+    margin: 0 0 var(--espacio-s) 0;
+    font-size: 0.9em;
+    color: var(--gris-texto-secundario);
+    font-weight: 600;
+}
+
+.venta-detalle-container .items-list-ui {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: var(--espacio-xs);
+    gap: 16px;
 }
 
-.payment-section li {
-    background-color: var(--gris-elemento-claro);
-    padding: var(--espacio-s);
-    border-radius: var(--radio-borde-m);
+.venta-detalle-container .item-row-ui {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.venta-detalle-container .item-info .name {
     font-weight: 500;
+    color: var(--negro-azabache);
+    font-size: 1.05em;
+}
+
+.venta-detalle-container .item-info .details {
+    font-size: 0.85em;
+    color: var(--gris-texto-secundario);
+}
+
+.venta-detalle-container .item-price {
+    font-size: 1.05em;
+    font-weight: 600;
+    color: var(--negro-azabache);
+    white-space: nowrap;
+    padding-left: 10px;
+}
+
+.venta-detalle-container .totals-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.venta-detalle-container .total-row-ui {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1em;
+}
+
+.venta-detalle-container .total-row-ui .label {
+    color: var(--gris-texto-secundario);
+}
+
+.venta-detalle-container .total-row-ui .value {
+    font-weight: 600;
+}
+
+.venta-detalle-container .grand-total-ui {
+    margin-top: 10px;
+    padding-top: 15px;
+    border-top: 2px solid var(--negro-azabache);
+    font-size: 1.6em;
+    font-weight: 700;
+}
+
+.payment-details-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-m);
+}
+
+.payment-section {
+    font-size: 0.95em;
+}
+
+.payment-section strong {
+    display: block;
+    margin-bottom: var(--espacio-s);
+}
+
+.payment-section ul {
+    list-style: disc;
+    padding-left: var(--espacio-l);
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-xs);
 }
