@@ -121,6 +121,12 @@ function handleDeletePedido(pedidoId, itemElement) {
 
 function renderListaPedidos(container, pedidos) {
     const pedidosListBody = container;
+
+    if (!pedidos || pedidos.length === 0) {
+        pedidosListBody.innerHTML = '<p class="empty-message">No hay pedidos guardados actualmente.</p>';
+        return;
+    }
+
     pedidosListBody.innerHTML = '';
 
     pedidos.forEach(pedido => {

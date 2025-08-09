@@ -105,8 +105,9 @@ async function handleConfirmarAsignacion() {
         return;
     }
 
-    const repartidor = trabajadores.find(t => t.id === repartidorId);
-    
+    // CORRECCIÓN: Usar '==' para comparar el ID del repartidor, ya que el valor del select es un string.
+    const repartidor = trabajadores.find(t => t.id == repartidorId);
+
     // Guardar información en el pedido
     currentPedido.repartidorAsignado = { id: repartidor.id, nombre: repartidor.nombre };
     currentPedido.cambioPreparado = resultadoCambio.cambioDenominaciones;

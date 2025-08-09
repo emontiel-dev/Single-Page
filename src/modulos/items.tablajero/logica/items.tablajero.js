@@ -77,9 +77,16 @@ export function getItemDisplayDetails(item) {
 function renderLista() {
     const container = mainContainer.querySelector('#tablajero-list-body');
     if (!container) return;
-    container.innerHTML = '';
 
     const items = getTablajeroItems();
+
+    if (items.length === 0) {
+        container.innerHTML = '<p class="empty-message">No hay items pendientes de procesar.</p>';
+        return;
+    }
+
+    container.innerHTML = '';
+
     items.forEach(item => {
         // Usar la nueva función de utilidad para obtener los textos
         const { displayName, detailsString } = getItemDisplayDetails(item);
