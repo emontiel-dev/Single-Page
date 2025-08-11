@@ -137,7 +137,7 @@
     color: var(--gris-texto-secundario);
 }
 
-.venta-detalle-container .btn {
+/*.venta-detalle-container .btn {
     background-color: transparent;
     border: none;
     padding: var(--espacio-xs);
@@ -150,7 +150,7 @@
     border-radius: var(--radio-borde-m);
     transition: background-color var(--transicion-rapida);
     width: auto;
-}
+}*/
 
 /* --- Cuerpo del Recibo --- */
 .venta-detalle-container .detalle-body-historial {

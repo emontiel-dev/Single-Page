@@ -16,6 +16,44 @@
 .btn-remove-field { background-color: var(--gris-elemento-claro); color: var(--rojo-peligro-texto); border: 1px solid var(--gris-borde-sutil); border-radius: 50%; width: 28px; height: 28px; font-size: 1.5em; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; padding-bottom: 4px; flex-shrink: 0; transition: background-color var(--transicion-suave), color var(--transicion-suave), border-color var(--transicion-suave); }
 .btn-remove-field:hover { background-color: var(--rojo-peligro-texto); color: var(--blanco); border-color: var(--rojo-peligro-texto); }
 
+/* Botones Minimalistas 'Small': Botón de tamaño pequeño con ícono y texto --- */
+.btn-s {
+    display: inline-flex;
+    flex-direction: column; /* Coloca el icono y el texto uno debajo del otro */
+    align-items: center; /* Centra el contenido horizontalmente */
+    justify-content: center; /* Centra el contenido verticalmente */
+    gap: var(--espacio-xxs, 4px); /* Espacio reducido entre el ícono y el texto */
+    padding: var(--espacio-s, 8px) var(--espacio-xs, 4px); /* Padding para un botón compacto */
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.8em; /* Tamaño de fuente más pequeño para el texto */
+    color: var(--gris-texto-secundario);
+    border-radius: var(--radio-borde-m);
+    transition: background-color var(--transicion-rapida), color var(--transicion-rapida);
+}
+
+.btn-s:hover {
+    background-color: var(--gris-hover-sutil);
+    color: var(--negro-azabache); /* Cambia el color del texto y del ícono al hacer hover */
+}
+
+/* Estilos específicos para el ícono SVG dentro del botón */
+.btn-s svg {
+    width: 20px; /* Tamaño del ícono */
+    height: 20px;
+    color: inherit; /* Hereda el color del texto para el ícono */
+    transition: color var(--transicion-rapida);
+}
+
+/* Modificador para un estado activo o seleccionado */
+.btn-s.active {
+    background-color: var(--amarillo-polleria);
+    color: var(--texto-sobre-amarillo);
+}
+
 /* --- Floating Action Button (FAB) --- */
 .fab-add-cliente { position: fixed; bottom: 110px; right: var(--espacio-l); width: 56px; height: 56px; background-color: var(--amarillo-polleria); color: var(--texto-sobre-amarillo); border-radius: 50%; border: none; box-shadow: var(--sombra-md); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s ease-in-out; z-index: 1000; }
 .fab-add-cliente:hover { transform: scale(1.05) }
