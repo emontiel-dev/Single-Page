@@ -17,6 +17,7 @@
 
 /* 3. COMPONENTS */
 @import url('./components/_components.css');
+@import url('./components/_navbar.css');
 
 /* 4. MODULES (Vistas específicas) */
 @import url('./modules/_clientes.css');

@@ -1,0 +1,108 @@
+/* =========================================================================== */
+/* COMPONENTE: Navigation Bar (Navbars)                                      */
+/* =========================================================================== */
+
+/*
+ * Contenedor principal de la barra de navegación.
+ * Usa Flexbox para distribuir los ítems uniformemente.
+ */
+nav {
+  background: var(--gris-elemento-claro);
+  height: 85px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: var(--sombra-md);
+
+  /* Configuración de Flexbox para el contenedor */
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-top: var(--espacio-xs);
+
+  /* Permite el scroll si hay muchos ítems, sin afectar el diseño principal */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+/* Ocultar scrollbar en navegadores WebKit */
+nav::-webkit-scrollbar {
+  display: none;
+}
+
+/*
+ * Estilo para cada ítem de navegación.
+ * Ahora son los hijos directos de la nav.
+ */
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+
+  padding: var(--espacio-xs) var(--espacio-xs) 0;
+  width: 4.5rem;
+  height: 80%;
+  text-decoration: none;
+  color: var(--gris-texto-secundario);
+  transition: transform 0.15s ease-in-out,
+              box-shadow 0.15s ease-in-out,
+              background-color 0.15s ease-in-out;
+}
+
+/* Estilo para el icono */
+.nav-icon svg {
+  width: 1.8rem;
+  height: 1.8rem;
+  stroke-width: 1.8;
+  transition: color 0.15s ease-in-out;
+}
+
+/* Estilo para la etiqueta */
+.nav-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9em;
+  max-width: 90%;
+  text-align: center;
+  transition: color 0.15s ease-in-out;
+}
+
+.nav-item.active-link {
+  /* Agregamos una sombra sutil */
+
+  /* Opcional: para que la sombra se vea mejor */
+  transform: translateY(-8px); /* Mueve el ítem 8px hacia arriba */
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--blanco);
+  border-radius: 0 0 var(--radio-borde-l) var(--radio-borde-l);
+}
+
+/* Estilos para el ítem activo */
+.nav-item.active-link .nav-icon svg,
+.nav-item.active-link .nav-label {
+  color: var(--amarillo-polleria);
+  font-weight: 600;
+}
+
+/* Media query para pantallas grandes */
+@media (min-width: 768px) {
+  nav {
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+  .nav-item {
+    /*
+         * En pantallas grandes, podrías usar `flex-grow` aquí para
+         * distribuir el espacio uniformemente.
+         */
+    /*flex-grow: 1;*/
+  }
+}

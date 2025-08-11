@@ -31,6 +31,8 @@
     --sombra-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
     --sombra-md: 0 4px 12px rgba(0, 0, 0, 0.06);
     --transicion-suave: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --radio-borde-xs: 4px;
+    --radio-borde-s: 6px;
     --radio-borde-m: 10px;
     --radio-borde-l: 16px;
     --radio-borde-xl: 20px;

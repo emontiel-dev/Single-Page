@@ -284,7 +284,7 @@ function renderPersonalizaciones(container, personalizaciones, selectedPersonali
             // Verificar si la opción está seleccionada en el estado actual (selectedPersonalizationsState)
             const isSelected = (selectedPersonalizationsState[grupo.grupo] || []).includes(opcion.id); // <-- Use the passed state
 
-            console.log(`Rendering option: ${opcion.id} in group ${grupo.grupo}. isSelected: ${isSelected}`); // Log each option's selection status
+            //console.log(`Rendering option: ${opcion.id} in group ${grupo.grupo}. isSelected: ${isSelected}`); // Log each option's selection status
 
             // Crear el input (checkbox o radio)
             const input = document.createElement('input');

@@ -99,6 +99,7 @@ function renderMovimientos() {
 
 // --- MODIFICADA: Acepta denominaciones de ingreso y egreso (cambio) ---
 export function registrarIngresoManual(concepto, monto, denominacionesIngresadas, denominacionesDeCambio) {
+    console.log('[Caja Lógica] Registrando ingreso manual:', { concepto, monto, denominacionesIngresadas, denominacionesDeCambio });
     // 1. Actualizar el stock: entra el pago, sale el cambio
     for (const valor in denominacionesIngresadas) {
         stockDenominaciones[valor] = (stockDenominaciones[valor] || 0) + denominacionesIngresadas[valor];
@@ -129,6 +130,7 @@ export function registrarIngresoManual(concepto, monto, denominacionesIngresadas
 
 // --- MODIFICADA: Acepta denominaciones de egreso y de ingreso (cambio recibido) ---
 export function registrarEgresoManual(concepto, monto, denominacionesEgresadas, denominacionesDeCambioRecibido) {
+    console.log('[Caja Lógica] Registrando egreso manual:', { concepto, monto, denominacionesEgresadas, denominacionesDeCambioRecibido });
     // 1. Actualizar el stock: sale el pago, entra el cambio
     for (const valor in denominacionesEgresadas) {
         stockDenominaciones[valor] -= denominacionesEgresadas[valor];
@@ -327,6 +329,7 @@ export function calcularCambioGreedy(montoCambio) {
 }
 
 export function registrarVenta(ventaData, denominacionesIngreso, denominacionesEgreso) {
+    console.log('[Caja Lógica] Registrando venta:', { ventaData, denominacionesIngreso, denominacionesEgreso });
     // 1. Actualizar stock de caja (ingreso del pago, egreso del cambio)
     for (const valor in denominacionesIngreso) {
         stockDenominaciones[valor] = (stockDenominaciones[valor] || 0) + denominacionesIngreso[valor];
@@ -373,6 +376,7 @@ function setupActionButtons() {
 }
 
 export function initCajaLogic() {
+    console.log('[Caja Lógica] Inicializando lógica de caja.');
     renderStock();
     renderMovimientos();
     setupActionButtons();

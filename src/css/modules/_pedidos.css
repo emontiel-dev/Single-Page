@@ -144,7 +144,6 @@
     justify-content: space-between;
     align-items: center;
     padding: var(--espacio-m);
-    background-color: var(--blanco);
     border-bottom: 1px solid var(--gris-borde-sutil);
     flex-shrink: 0;
     position: sticky;
@@ -163,7 +162,6 @@
     display: flex;
     align-items: center;
     gap: var(--espacio-s);
-    background-color: var(--gris-elemento-claro);
     border-color: var(--gris-borde-input);
     color: var(--negro-azabache);
     flex-grow: 0;
@@ -180,9 +178,6 @@
 }
 
 .detalle-card {
-    background: var(--blanco);
-    border: 1px solid var(--gris-borde-sutil);
-    border-radius: var(--radio-borde-m);
     padding: var(--espacio-m);
     box-shadow: var(--sombra-sm);
 }

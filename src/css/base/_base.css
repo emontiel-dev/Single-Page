@@ -3,7 +3,7 @@
 /* =========================================================================== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: var(--tamano-fuente-base); }
-body { font-family: var(--fuente-principal); line-height: var(--line-height-base); background-color: var(--gris-fondo-claro); color: var(--negro-azabache); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body { padding-bottom: 90px; font-family: var(--fuente-principal); line-height: var(--line-height-base); background-color: var(--gris-fondo-claro); color: var(--negro-azabache); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 h1, h2, h3 { font-family: var(--fuente-principal); line-height: var(--line-height-titulo); color: var(--negro-azabache); margin-bottom: var(--espacio-m); font-weight: 700; }
 main { padding: var(--espacio-s) var(--espacio-l); padding-bottom: 80px; display: flex; flex-direction: column; gap: var(--espacio-m); }
 table { width: 100%; border-collapse: separate; border-spacing: 0; }

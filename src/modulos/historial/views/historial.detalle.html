@@ -1,49 +1,59 @@
 <!-- filepath: src/modulos/historial/views/historial.detalle.html -->
 <div class="venta-detalle-container">
     <header class="detalle-header">
-        <h3 id="detalle-venta-id"></h3>
-        <button id="btn-volver-historial" class="btn volver">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-            <span>Volver</span>
-        </button>
+        <div class="venta-id-fecha">
+            <h3 data-js-id="venta-id"></h3>
+            <span data-js-id="venta-fecha"></span>
+        </div>
+        <div class="acciones">
+            <button class="btn volver" data-action="volver-historial">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                <span>Volver</span>
+            </button>
+            <button class="btn imprimir" data-action="imprimir-venta">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                <span>Imprimir</span>
+            </button>
+            <button class="btn whatsapp" data-action="enviar-whatsapp">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-whatsapp">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Whatsapp</span>
+            </button>
+            <button class="btn cancelar-venta" data-action="cancelar-venta">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+                <span>Cancelar</span>
+            </button>
+        </div>
     </header>
-    <div class="detalle-body">
-        <!-- Sección de Información del Cliente -->
-        <div id="detalle-cliente-info" class="detalle-card"></div>
 
-        <!-- Sección de Items Vendidos (ahora con sub-secciones) -->
-        <div class="detalle-card">
-            <h4>Items Vendidos</h4>
-            
-            <!-- Items de Pollo -->
-            <section class="items-section pollo-items hidden">
-                <div class="section-title"><h5>Productos de Pollo:</h5></div>
-                <ul class="items-list-ui" id="detalle-items-pollo"></ul>
-            </section>
+    <div class="detalle-body-historial">
+        <section data-js-id="cliente-info" class="detalle-section"></section>
 
-            <!-- Items de Productos Adicionales -->
-            <section class="items-section pa-items hidden">
-                <div class="section-title"><h5>Productos Adicionales:</h5></div>
-                <ul class="items-list-ui" id="detalle-items-pa"></ul>
-            </section>
+        <section class="detalle-section items-section-container">
+            <div class="items-subsection pollo-items hidden">
+                <h4 class="subsection-title">Productos de Pollo</h4>
+                <ul class="items-list-ui" data-js-id="items-pollo"></ul>
+            </div>
+            <div class="items-subsection pa-items hidden">
+                <h4 class="subsection-title">Productos Adicionales</h4>
+                <ul class="items-list-ui" data-js-id="items-pa"></ul>
+            </div>
+        </section>
 
-            <!-- Items de Cargos -->
-            <section class="items-section cargo-items hidden">
-                <div class="section-title"><h5>Cargos:</h5></div>
-                <ul class="items-list-ui" id="detalle-items-cargo"></ul>
-            </section>
-        </div>
-
-        <!-- Sección de Totales -->
-        <div class="detalle-card">
-            <h4>Totales</h4>
-            <div id="detalle-totales" class="totals-section"></div>
-        </div>
-
-        <!-- Sección de Detalles del Pago -->
-        <div class="detalle-card">
-            <h4>Detalles del Pago</h4>
-            <div id="detalle-pago" class="payment-details-section"></div>
-        </div>
+        <section data-js-id="totales" class="detalle-section totals-section"></section>
+        <section data-js-id="pago" class="detalle-section payment-details-section"></section>
     </div>
 </div>
