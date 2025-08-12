@@ -3798,12 +3798,10 @@ img {
 /* =========================================================================== */
 /* --- Contenedores Principales (estilos compartidos) --- */
 .historial-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background-color: var(--blanco);
-  width: 100%;
-  position: relative;
+  padding-bottom: var(--espacio-m);
+  background-color: transparent;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
 /* --- Vista de Lista de Ventas --- */
@@ -3987,7 +3985,20 @@ body {
   border-top: 2px solid var(--gris-borde-sutil);
 }
 .grand-total-ui .value {
-  color: var(--azul-info);
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.307);
+  color: var(--negro-azabache);
+}
+
+.payment-section ul {
+  display: flex;
+  flex-direction: row;
+  gap: var(--espacio-s);
+}
+.payment-section ul li {
+  background-color: var(--gris-fondo-claro);
+  border: 1px solid var(--gris-borde-sutil);
+  border-radius: var(--radio-borde-m);
+  padding: var(--espacio-xs);
 }
 
 .acciones-header {

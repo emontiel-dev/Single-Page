@@ -4,12 +4,10 @@
 
 /* --- Contenedores Principales (estilos compartidos) --- */
 .historial-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background-color: var(--blanco);
-  width: 100%;
-  position: relative;
+  padding-bottom: var(--espacio-m); // Espacio para que el recibo no toque los bordes
+  background-color: transparent; // El fondo lo maneja el body
+  min-height: 100vh; // Asegura altura completa en móviles
+  box-sizing: border-box;
 }
 
 /* --- Vista de Lista de Ventas --- */
@@ -220,7 +218,21 @@ body {
   border-top: 2px solid var(--gris-borde-sutil);
 
   .value {
-    color: var(--azul-info);
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.307);
+    color: var(--negro-azabache);
+  }
+}
+
+.payment-section ul {
+ display: flex;
+ flex-direction: row;
+ gap: var(--espacio-s);
+
+  li {
+    background-color: var(--gris-fondo-claro);
+    border: 1px solid var(--gris-borde-sutil);
+    border-radius: var(--radio-borde-m);
+    padding: var(--espacio-xs);
   }
 }
 
