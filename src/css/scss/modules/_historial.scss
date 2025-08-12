@@ -1,0 +1,243 @@
+/* =========================================================================== */
+/* MODULO: Historial                                                         */
+/* =========================================================================== */
+
+/* --- Contenedores Principales (estilos compartidos) --- */
+.historial-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--blanco);
+  width: 100%;
+  position: relative;
+}
+
+/* --- Vista de Lista de Ventas --- */
+.historial-list-container {
+  flex-grow: 1;
+  background-color: var(--blanco);
+  border-radius: var(--radio-borde-l);
+  box-shadow: var(--sombra-sm);
+  overflow-y: auto;
+  padding: var(--espacio-s);
+
+  // Anidamos los elementos que están DENTRO de .historial-list-container
+  .historial-list-header {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--espacio-s) var(--espacio-m);
+    color: var(--gris-texto-secundario);
+    font-weight: 600;
+    border-bottom: 2px solid var(--gris-borde-sutil);
+    position: sticky;
+    top: 0;
+    background: var(--blanco);
+    z-index: 1;
+  }
+
+  #historial-list-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-s);
+    padding-top: var(--espacio-s);
+  }
+}
+
+// Anidamos todos los estilos relacionados a .venta-item para agruparlos
+.venta-item {
+  background-color: var(--blanco);
+  border: 1px solid var(--gris-borde-sutil);
+  border-radius: var(--radio-borde-m);
+  padding: var(--espacio-m);
+  cursor: pointer;
+  transition: background-color var(--transicion-rapida);
+
+  // Usamos '&' para referirnos al selector padre (.venta-item)
+  // Es perfecto para pseudo-clases como :hover
+  &:hover {
+    background-color: var(--gris-hover-sutil);
+  }
+
+  // Todos estos selectores estaban anidados en el CSS original,
+  // ahora lo reflejamos en el código.
+  .venta-info {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 4px;
+  }
+
+  .linea-superior,
+  .linea-inferior {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .cliente-nombre {
+    font-weight: 700;
+    font-size: 1.1em;
+    color: var(--negro-azabache);
+  }
+
+  .venta-total {
+    font-weight: 700;
+    font-size: 1.1em;
+    color: var(--verde-exito);
+  }
+
+  .venta-id {
+    font-size: 0.9em;
+    color: var(--gris-texto-secundario);
+  }
+
+  .venta-hora {
+    font-weight: 500;
+    font-size: 0.9em;
+    color: var(--gris-texto-terciario);
+  }
+}
+
+/* ======================================================================== */
+/* --- NUEVO DISEÑO: Vista de Detalle de Venta (Estilo Recibo) --- */
+/* ======================================================================== */
+
+body {
+  background-color: var(--gris-fondo-claro);
+  // Puedes quitar el padding/margin global si lo tienes
+}
+
+.venta-detalle-container {
+  padding-bottom: var(--espacio-m); // Espacio para que el recibo no toque los bordes
+  background-color: transparent; // El fondo lo maneja el body
+  min-height: 100vh; // Asegura altura completa en móviles
+  box-sizing: border-box;
+}
+
+.detalle-body-historial {
+  background-color: var(--blanco);
+  border: 1px solid var(--gris-borde-sutil);
+  border-radius: var(--radio-borde-l);
+  box-shadow: var(--sombra-sm);
+  padding: var(--espacio-m) var(--espacio-m);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-m);
+
+  // Unifica el recibo: separadores sutiles entre secciones
+  & > .detalle-section:not(:first-child) {
+    border-top: 1px solid var(--gris-borde-sutil);
+    margin-top: var(--espacio-s);
+    padding-top: var(--espacio-s);
+  }
+}
+
+// Elimina sombras y bordes individuales de las secciones
+.detalle-section {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-s);
+
+  &[data-js-id="cliente-info"] {
+    font-weight: 500;
+    font-size: 1.05em;
+    color: var(--negro-azabache);
+  }
+}
+
+// Tipografía y espaciado para títulos y totales
+.subsection-title {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: var(--gris-texto-secundario);
+  margin-bottom: var(--espacio-xs);
+}
+
+.items-list-ui {
+  gap: var(--espacio-s);
+}
+
+.item-row-ui {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--espacio-xs) 0;
+
+  .item-info {
+    .name {
+      font-weight: 600;
+      color: var(--negro-azabache);
+      font-size: 1em;
+    }
+    .details {
+      font-size: 0.92em;
+      color: var(--gris-texto-secundario);
+    }
+    .discount-details {
+      color: var(--rojo-peligro-texto);
+      font-size: 0.92em;
+      font-weight: 500;
+    }
+  }
+  .item-price {
+    font-weight: 700;
+    color: var(--negro-azabache);
+    font-size: 1em;
+    white-space: nowrap;
+    margin-left: var(--espacio-s);
+  }
+}
+
+// Totales
+.totals-section {
+  gap: var(--espacio-s);
+  margin-top: var(--espacio-m);
+}
+
+.total-row-ui {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1em;
+
+  .label {
+    color: var(--gris-texto-secundario);
+  }
+  .value {
+    font-weight: 600;
+    color: var(--negro-azabache);
+  }
+}
+
+.grand-total-ui {
+  font-size: 1.2em;
+  font-weight: 700;
+  padding-top: var(--espacio-s);
+  border-top: 2px solid var(--gris-borde-sutil);
+
+  .value {
+    color: var(--azul-info);
+  }
+}
+
+// Acciones arriba del recibo
+.acciones-header {
+  position: sticky;
+  top: var(--espacio-s);
+  z-index: 2;
+  background: var(--blanco);
+  border: 1px solid var(--gris-borde-sutil);
+  border-radius: var(--radio-borde-l);
+  margin-bottom: var(--espacio-s);
+  box-shadow: var(--sombra-md);
+
+  .acciones {
+    display: flex;
+    justify-content: space-around;
+    gap: var(--espacio-s);
+  }
+}

@@ -1,0 +1,32 @@
+/* =========================================================================== */
+/* STYLES.CSS - ARCHIVO PRINCIPAL DE IMPORTACIÓN                             */
+/* =========================================================================== */
+/* El orden de importación es fundamental:                                   */
+/* 1. Abstracts: Variables y herramientas.                                   */
+/* 2. Base: Estilos globales y reseteos.                                     */
+/* 3. Components: Componentes reutilizables (botones, tarjetas, etc.).      */
+/* 4. Modules: Estilos específicos de cada vista o "módulo" de la app.     */
+/* 5. Utilities: Clases de ayuda para sobreescribir estilos.                 */
+/* =========================================================================== */
+
+// 1. ABSTRACTS
+@use 'base/abstracts';
+
+// 2. BASE
+@use 'base/base';
+
+// 3. COMPONENTS
+@use 'components/components';
+@use 'components/navbar';
+
+// 4. MODULES (Vistas específicas)
+@use 'modules/clientes';
+@use 'modules/venta';
+@use 'modules/pedidos';
+@use 'modules/items.tablajero';
+@use 'modules/caja';
+@use 'modules/trabajadores';
+@use 'modules/historial';
+
+// 5. UTILITIES
+@use 'utils/utilities';

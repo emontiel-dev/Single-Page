@@ -1,10 +1,6 @@
 <!-- filepath: src/modulos/historial/views/historial.detalle.html -->
 <div class="venta-detalle-container">
-    <header class="detalle-header">
-        <div class="venta-id-fecha">
-            <h3 data-js-id="venta-id"></h3>
-            <span data-js-id="venta-fecha"></span>
-        </div>
+    <header class="acciones-header">
         <div class="acciones">
             <button class="btn-s volver" data-action="volver-historial">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
@@ -36,6 +32,13 @@
     </header>
 
     <div class="detalle-body-historial">
+        <section data-js-id="ticket-info" class="detalle-section">
+            <div class="venta-id-fecha">
+            <h3 data-js-id="venta-id"></h3>
+            <span data-js-id="venta-fecha"></span>
+        </div>
+        </section>
+
         <section data-js-id="cliente-info" class="detalle-section"></section>
 
         <section class="detalle-section items-section-container">

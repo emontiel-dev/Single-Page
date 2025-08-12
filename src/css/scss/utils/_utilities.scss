@@ -14,3 +14,10 @@
 .text-gris-secundario { color: var(--gris-texto-secundario); }
 .text-negro-azabache { color: var(--negro-azabache); }
 .text-success { color: var(--verde-exito); }
+
+/* separador*/
+.separador {
+  border-bottom: 2px solid var(--amarillo-polleria-hover);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
