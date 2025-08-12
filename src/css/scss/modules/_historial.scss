@@ -2,98 +2,86 @@
 /* MODULO: Historial                                                         */
 /* =========================================================================== */
 
-/* --- Contenedores Principales (estilos compartidos) --- */
 .historial-container {
-  padding-bottom: var(--espacio-m); // Espacio para que el recibo no toque los bordes
-  background-color: transparent; // El fondo lo maneja el body
-  min-height: 100vh; // Asegura altura completa en móviles
-  box-sizing: border-box;
+  background-color: var(--blanco);
+  height: calc(100vh - var(--espacio-navbar));
+  width: 100%;
+  /*border: 1px solid var(--gris-borde-sutil);*/
 }
 
-/* --- Vista de Lista de Ventas --- */
-.historial-list-container {
-  flex-grow: 1;
-  background-color: var(--blanco);
-  border-radius: var(--radio-borde-l);
-  box-shadow: var(--sombra-sm);
-  overflow-y: auto;
-  padding: var(--espacio-s);
+.historial {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--gris-fondo-claro);
+  width: 100%;
+  padding: var(--espacio-m) 0 0;
+  border-radius: 0 0 var(--radio-borde-l) var(--radio-borde-l);
 
-  // Anidamos los elementos que están DENTRO de .historial-list-container
-  .historial-list-header {
+  .historial-header {
     display: flex;
     justify-content: space-between;
+    background-color: var(--blanco);
     padding: var(--espacio-s) var(--espacio-m);
-    color: var(--gris-texto-secundario);
-    font-weight: 600;
-    border-bottom: 2px solid var(--gris-borde-sutil);
-    position: sticky;
-    top: 0;
-    background: var(--blanco);
-    z-index: 1;
-  }
 
-  #historial-list-body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--espacio-s);
-    padding-top: var(--espacio-s);
+    border-bottom: 1px solid var(--gris-borde-sutil);
+    border-radius: var(--radio-borde-l) var(--radio-borde-l) 0 0;
+    margin-bottom: var(--espacio-xs);
+    box-shadow: var(--sombra-xs);
+
+    span {
+      font-weight: 600;
+      color: var(--gris-texto-primario);
+      font-size: 1.1rem;
+    }
   }
 }
 
-// Anidamos todos los estilos relacionados a .venta-item para agruparlos
-.venta-item {
-  background-color: var(--blanco);
-  border: 1px solid var(--gris-borde-sutil);
-  border-radius: var(--radio-borde-m);
-  padding: var(--espacio-m);
-  cursor: pointer;
-  transition: background-color var(--transicion-rapida);
+#historial-list-body {
+  display: flex;
+  flex-direction: column;
+  padding: var(--espacio-s);
+  gap: var(--espacio-s);
+  justify-content: space-around;
+  overflow: auto;
 
-  // Usamos '&' para referirnos al selector padre (.venta-item)
-  // Es perfecto para pseudo-clases como :hover
-  &:hover {
-    background-color: var(--gris-hover-sutil);
-  }
+  .venta-item {
+    padding: var(--espacio-s);
+    border: 1px solid var(--gris-borde-sutil);
+    border-radius: var(--radio-borde-l);
+    background-color: var(--blanco);
+    box-shadow: var(--sombra-xs);
+    cursor: pointer;
+    transition: background-color var(--transicion-rapida);
 
-  // Todos estos selectores estaban anidados en el CSS original,
-  // ahora lo reflejamos en el código.
-  .venta-info {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 4px;
-  }
-
-  .linea-superior,
-  .linea-inferior {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-
-  .cliente-nombre {
-    font-weight: 700;
-    font-size: 1.1em;
-    color: var(--negro-azabache);
-  }
-
-  .venta-total {
-    font-weight: 700;
-    font-size: 1.1em;
-    color: var(--verde-exito);
-  }
-
-  .venta-id {
-    font-size: 0.9em;
-    color: var(--gris-texto-secundario);
-  }
-
-  .venta-hora {
-    font-weight: 500;
-    font-size: 0.9em;
-    color: var(--gris-texto-terciario);
+    &:hover {
+      background-color: var(--gris-hover-sutil);
+    }
+    .venta-info {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: var(--espacio-xs);
+    }
+    .cliente-nombre {
+      font-weight: 700;
+      font-size: 1.1em;
+      color: var(--negro-azabache);
+    }
+    .venta-total {
+      font-weight: 700;
+      font-size: 1.1em;
+      color: var(--verde-exito);
+    }
+    .venta-id {
+      font-size: 0.9em;
+      color: var(--gris-texto-secundario);
+    }
+    .venta-hora {
+      font-weight: 500;
+      font-size: 0.9em;
+      color: var(--gris-texto-terciario);
+    }
   }
 }
 
@@ -107,7 +95,9 @@ body {
 }
 
 .venta-detalle-container {
-  padding-bottom: var(--espacio-m); // Espacio para que el recibo no toque los bordes
+  padding-bottom: var(
+    --espacio-m
+  ); // Espacio para que el recibo no toque los bordes
   background-color: transparent; // El fondo lo maneja el body
   min-height: 100vh; // Asegura altura completa en móviles
   box-sizing: border-box;
@@ -224,9 +214,9 @@ body {
 }
 
 .payment-section ul {
- display: flex;
- flex-direction: row;
- gap: var(--espacio-s);
+  display: flex;
+  flex-direction: row;
+  gap: var(--espacio-s);
 
   li {
     background-color: var(--gris-fondo-claro);
@@ -239,17 +229,22 @@ body {
 // Acciones arriba del recibo
 .acciones-header {
   position: sticky;
-  top: var(--espacio-s);
-  z-index: 2;
-  background: var(--blanco);
-  border: 1px solid var(--gris-borde-sutil);
-  border-radius: var(--radio-borde-l);
-  margin-bottom: var(--espacio-s);
-  box-shadow: var(--sombra-md);
+  top: 0;
+  z-index: 10;
+  background: var(--gris-fondo-claro);
+  width: 100%;
+  padding: var(--espacio-m) 0 0;
+  border-radius: 0 0 var(--radio-borde-l) var(--radio-borde-l);
 
   .acciones {
     display: flex;
     justify-content: space-around;
+    background-color: var(--blanco);
     gap: var(--espacio-s);
+
+    border: 1px solid var(--gris-borde-sutil);
+    border-radius: var(--radio-borde-l);
+    margin-bottom: var(--espacio-s);
+    box-shadow: var(--sombra-md);
   }
 }
