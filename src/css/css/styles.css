@@ -3800,10 +3800,12 @@ img {
 /* MODULO: Historial                                                         */
 /* =========================================================================== */
 .historial-container {
+  display: flex;
+  flex-direction: column;
   background-color: var(--blanco);
   height: calc(100vh - var(--espacio-navbar));
   width: 100%;
-  /*border: 1px solid var(--gris-borde-sutil);*/
+  gap: var(--espacio-xs);
 }
 
 .historial {
@@ -3834,6 +3836,8 @@ img {
 #historial-list-body {
   display: flex;
   flex-direction: column;
+  height: calc(100% - var(--espacio-navbar));
+  width: 100%;
   padding: var(--espacio-s);
   gap: var(--espacio-s);
   justify-content: space-around;
@@ -3856,6 +3860,13 @@ img {
   flex-direction: column;
   width: 100%;
   gap: var(--espacio-xs);
+}
+#historial-list-body .venta-item .linea-superior,
+#historial-list-body .venta-item .linea-inferior {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 #historial-list-body .venta-item .cliente-nombre {
   font-weight: 700;
@@ -3993,6 +4004,7 @@ body {
 .payment-section ul {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: var(--espacio-s);
 }
 .payment-section ul li {

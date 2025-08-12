@@ -3,10 +3,12 @@
 /* =========================================================================== */
 
 .historial-container {
+  display: flex;
+  flex-direction: column;
   background-color: var(--blanco);
   height: calc(100vh - var(--espacio-navbar));
   width: 100%;
-  /*border: 1px solid var(--gris-borde-sutil);*/
+  gap: var(--espacio-xs);
 }
 
 .historial {
@@ -40,6 +42,8 @@
 #historial-list-body {
   display: flex;
   flex-direction: column;
+  height: calc(100% - var(--espacio-navbar));
+  width: 100%;
   padding: var(--espacio-s);
   gap: var(--espacio-s);
   justify-content: space-around;
@@ -62,6 +66,13 @@
       flex-direction: column;
       width: 100%;
       gap: var(--espacio-xs);
+    }
+    .linea-superior,
+    .linea-inferior {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
     }
     .cliente-nombre {
       font-weight: 700;
@@ -216,6 +227,7 @@ body {
 .payment-section ul {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: var(--espacio-s);
 
   li {
