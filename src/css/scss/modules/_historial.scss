@@ -46,7 +46,7 @@
   width: 100%;
   padding: var(--espacio-s);
   gap: var(--espacio-s);
-  justify-content: space-around;
+  /*justify-content: space-between;*/
   overflow: auto;
 
   .venta-item {
@@ -258,5 +258,11 @@ body {
     border-radius: var(--radio-borde-l);
     margin-bottom: var(--espacio-s);
     box-shadow: var(--sombra-md);
+    
+    span {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+    }
   }
 }

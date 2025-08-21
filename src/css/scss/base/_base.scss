@@ -11,3 +11,26 @@ th, td { padding: var(--espacio-m); text-align: left; font-size: .95em; vertical
 th { background-color: var(--gris-hover-sutil); color: var(--gris-texto-secundario); font-weight: 600; text-transform: uppercase; font-size: .8em; white-space: nowrap; border-bottom: 1px solid var(--gris-borde-sutil); }
 td { color: var(--negro-azabache); border-bottom: 1px solid var(--gris-borde-sutil); }
 tbody tr:last-child td { border-bottom: none; }
+
+/* =========================================================================== */
+/* MODO OSCURO (Dark Mode)                                                    */
+/* =========================================================================== */
+
+/* Estilos por defecto (Modo Claro) */
+body {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* --- Estilos para el Modo Oscuro --- */
+/* Se activarán cuando el elemento <html> tenga el atributo data-theme="dark" */
+html[data-theme="dark"] body {
+  background-color: #121212;
+  color: #eeeeee;
+}
+
+/* Ejemplo para un componente */
+html[data-theme="dark"] .mi-componente {
+  background-color: #333333;
+  border-color: #555555;
+}

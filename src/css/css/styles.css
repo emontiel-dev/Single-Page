@@ -139,6 +139,28 @@ tbody tr:last-child td {
 }
 
 /* =========================================================================== */
+/* MODO OSCURO (Dark Mode)                                                    */
+/* =========================================================================== */
+/* Estilos por defecto (Modo Claro) */
+body {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* --- Estilos para el Modo Oscuro --- */
+/* Se activarán cuando el elemento <html> tenga el atributo data-theme="dark" */
+html[data-theme=dark] body {
+  background-color: #121212;
+  color: #eeeeee;
+}
+
+/* Ejemplo para un componente */
+html[data-theme=dark] .mi-componente {
+  background-color: #333333;
+  border-color: #555555;
+}
+
+/* =========================================================================== */
 /* COMPONENTS (Styled, reusable UI elements)                                 */
 /* =========================================================================== */
 /* --- Buttons --- */
@@ -262,6 +284,7 @@ tbody tr:last-child td {
   color: var(--gris-texto-secundario);
   border-radius: var(--radio-borde-m);
   transition: background-color var(--transicion-rapida), color var(--transicion-rapida);
+  max-width: 55px;
 }
 
 .btn-s:hover {
@@ -2287,71 +2310,62 @@ img {
 /* MODULE: Pedidos                                                           */
 /* =========================================================================== */
 /* --- Contenedores Principales (Lista y Detalle) --- */
-.pedidos-container,
-.pedido-detalle-container {
+.pedidos-container {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  background-color: var(--gris-fondo-app);
+  background-color: var(--blanco);
+  gap: var(--espacio-xs);
+  height: calc(100vh - var(--espacio-navbar));
 }
 
 /* --- Vista de Lista de Pedidos --- */
 .pedidos-list-container {
-  flex-grow: 1;
-  background-color: var(--blanco);
-  border-radius: var(--radio-borde-l);
-  box-shadow: var(--sombra-sm);
-  overflow-y: auto;
-  padding: var(--espacio-s);
-}
-
-.pedidos-list-header {
-  display: flex;
-  justify-content: space-between;
-  padding: var(--espacio-s) var(--espacio-m);
-  color: var(--gris-texto-secundario);
-  font-weight: 600;
-  border-bottom: 2px solid var(--gris-borde-sutil);
   position: sticky;
   top: 0;
-  background: var(--blanco);
-  z-index: 1;
+  z-index: 10;
+  background: var(--gris-fondo-claro);
+  width: 100%;
+  padding: var(--espacio-m) 0 0;
+  border-radius: 0 0 var(--radio-borde-l) var(--radio-borde-l);
 }
-
-#pedidos-list-body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--espacio-s);
-  padding-top: var(--espacio-s);
-}
-
-.pedido-item {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radio-borde-m);
-  background-color: var(--blanco);
-}
-
-.pedido-item-content {
-  position: relative;
-  z-index: 2;
-  background-color: inherit;
-  transition: transform 0.2s ease-out;
+.pedidos-list-container .pedidos-list-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: var(--espacio-m);
-  border: 1px solid var(--gris-borde-sutil);
-  border-radius: var(--radio-borde-m);
-  cursor: pointer;
-  touch-action: pan-y;
+  background: var(--blanco);
+  padding: var(--espacio-s) var(--espacio-m);
+  border-bottom: 1px solid var(--gris-borde-sutil);
+  border-radius: var(--radio-borde-l) var(--radio-borde-l) 0 0;
+  margin-bottom: var(--espacio-xs);
+  box-shadow: var(--sombra-xs);
+}
+.pedidos-list-container .pedidos-list-header span {
+  font-weight: 600;
+  color: var(--gris-texto-primario);
+  font-size: 1.1rem;
 }
 
-.pedido-item.swiping .pedido-item-content {
+.pedidos-list-body {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - var(--espacio-navbar));
+  width: 100%;
+  padding: var(--espacio-s);
+  gap: var(--espacio-s);
+  justify-content: flex-start;
+  overflow: auto;
+}
+.pedidos-list-body .pedido-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radio-borde-xl);
+  background-color: var(--blanco);
+  box-shadow: var(--sombra-xs);
+  cursor: pointer;
+}
+.pedidos-list-body .pedido-item .pedido-item.swiping {
   transition: none;
 }
-
-.swipe-action-bg {
+.pedidos-list-body .pedido-item .swipe-action-bg {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -2366,30 +2380,43 @@ img {
   font-weight: 600;
   gap: 4px;
 }
-
-.swipe-right-bg {
+.pedidos-list-body .pedido-item .swipe-right-bg {
   left: 0;
   background-color: var(--azul-info);
 }
-
-.swipe-left-bg {
+.pedidos-list-body .pedido-item .swipe-left-bg {
   right: 0;
   background-color: var(--verde-accion);
 }
-
-.swipe-action-bg svg {
+.pedidos-list-body .pedido-item .swipe-action-bg svg {
   width: 24px;
   height: 24px;
+}
+
+.pedido-item-content {
+  position: relative;
+  z-index: 2;
+  background-color: inherit;
+  transition: transform 0.2s ease-out;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--espacio-s) var(--espacio-m);
+  border: 0.8px solid var(--gris-borde-sutil);
+  border-radius: var(--radio-borde-xl);
+  touch-action: pan-y;
+  transition: none;
 }
 
 .pedido-info {
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 4px;
+  gap: var(--espacio-xs);
 }
 
-.linea-superior, .linea-inferior {
+.linea-superior,
+.linea-inferior {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -2404,25 +2431,55 @@ img {
 
 .estado-badge {
   font-size: 0.9em;
-  font-weight: 700;
+  font-weight: 600;
   padding: 6px 12px;
   border-radius: var(--radio-borde-pill);
   text-align: center;
 }
 
-.resumen-pedido {
-  font-size: 0.9em;
+span.resumen-pedido {
+  font-size: 1em;
   color: var(--gris-texto-secundario);
 }
 
-.hora-registro {
+span.hora-registro {
   font-weight: 500;
-  font-size: 0.9em;
+  font-size: 1em;
   color: var(--gris-texto-terciario);
   white-space: nowrap;
 }
 
+/* ======================================================================== */
+/* --- NUEVO DISEÑO: Vista de Detalle de Venta (Estilo Recibo) --- */
+/* ======================================================================== */
+body {
+  background-color: var(--gris-fondo-claro);
+}
+
 /* --- Vista de Detalle de Pedido --- */
+.pedido-detalle-container {
+  padding-bottom: var(--espacio-m);
+  background-color: transparent;
+  min-height: calc(100vh - var(--espacio-navbar));
+  box-sizing: border-box;
+}
+
+.detalle-body-pedidos {
+  background-color: var(--blanco);
+  border: 1px solid var(--gris-borde-sutil);
+  border-radius: var(--radio-borde-l);
+  box-shadow: var(--sombra-sm);
+  padding: var(--espacio-m) var(--espacio-m);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-m);
+}
+.detalle-body-pedidos > .detalle-section:not(:first-child) {
+  border-top: 1px solid var(--gris-borde-sutil);
+  margin-top: var(--espacio-s);
+  padding-top: var(--espacio-s);
+}
+
 .detalle-header {
   display: flex;
   justify-content: space-between;
@@ -2450,15 +2507,6 @@ img {
   color: var(--negro-azabache);
   flex-grow: 0;
   width: 125px; /* Ancho fijo para el botón */
-}
-
-.detalle-body {
-  overflow-y: visible;
-  flex-grow: 0;
-  padding: var(--espacio-l);
-  display: flex;
-  flex-direction: column;
-  gap: var(--espacio-l);
 }
 
 .detalle-card {
@@ -2538,6 +2586,32 @@ img {
   border-top: 2px solid var(--negro-azabache);
   font-size: 1.6em;
   font-weight: 700;
+}
+
+.acciones-header-pedido {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--gris-fondo-claro);
+  width: 100%;
+  padding: var(--espacio-m) 0 0;
+  border-radius: 0 0 var(--radio-borde-l) var(--radio-borde-l);
+}
+.acciones-header-pedido .acciones-pedido {
+  display: flex;
+  overflow: auto;
+  justify-content: space-around;
+  background-color: var(--blanco);
+  gap: var(--espacio-s);
+  border: 1px solid var(--gris-borde-sutil);
+  border-radius: var(--radio-borde-l);
+  margin-bottom: var(--espacio-s);
+  box-shadow: var(--sombra-md);
+}
+.acciones-header-pedido .acciones-pedido span {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 /* --- Media Queries para Pantallas Grandes --- */
@@ -3840,7 +3914,7 @@ img {
   width: 100%;
   padding: var(--espacio-s);
   gap: var(--espacio-s);
-  justify-content: space-around;
+  /*justify-content: space-between;*/
   overflow: auto;
 }
 #historial-list-body .venta-item {
@@ -4032,6 +4106,11 @@ body {
   border-radius: var(--radio-borde-l);
   margin-bottom: var(--espacio-s);
   box-shadow: var(--sombra-md);
+}
+.acciones-header .acciones span {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 /* =========================================================================== */

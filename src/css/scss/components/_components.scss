@@ -33,6 +33,7 @@
     color: var(--gris-texto-secundario);
     border-radius: var(--radio-borde-m);
     transition: background-color var(--transicion-rapida), color var(--transicion-rapida);
+    max-width: 55px;
 }
 
 .btn-s:hover {
